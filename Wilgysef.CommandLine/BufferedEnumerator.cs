@@ -2,6 +2,10 @@
 
 namespace Wilgysef.CommandLine;
 
+/// <summary>
+/// Enumerator that keeps a buffered history of past items for rolling back the current enumerator value.
+/// </summary>
+/// <typeparam name="T">Item type.</typeparam>
 internal class BufferedEnumerator<T> : IEnumerator<T>
 {
     private readonly IEnumerator<T> _enumerator;
@@ -11,6 +15,12 @@ internal class BufferedEnumerator<T> : IEnumerator<T>
     private int _queueIndex = -1;
     private int _rollbackCount = 0;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BufferedEnumerator{T}"/> class.
+    /// </summary>
+    /// <param name="enumerator">Enumerator.</param>
+    /// <param name="buffer">Number of previous items to buffer.</param>
+    /// <exception cref="ArgumentException">Thrown if <paramref name="buffer"/> is 0.</exception>
     public BufferedEnumerator(IEnumerator<T> enumerator, int buffer)
     {
         if (buffer <= 0)
@@ -23,12 +33,20 @@ internal class BufferedEnumerator<T> : IEnumerator<T>
         _queue = new Queue<T>(_bufferLimit);
     }
 
+    /// <inheritdoc/>
     public T Current => _queueIndex != -1
         ? _queue.ElementAt(_queueIndex)
         : _enumerator.Current;
 
-    object IEnumerator.Current => Current;
+    /// <inheritdoc/>
+    object? IEnumerator.Current => Current;
 
+    /// <summary>
+    /// Tries to rollback <see cref="Current"/> to a previous value.
+    /// </summary>
+    /// <param name="count">Number of values to rollback to.</param>
+    /// <returns>Number of values rolled back.</returns>
+    /// <exception cref="ArgumentException">Thrown if <paramref name="count"/> is less than or equal to 0.</exception>
     public int TryRollback(int count)
     {
         if (count <= 0)
@@ -49,6 +67,11 @@ internal class BufferedEnumerator<T> : IEnumerator<T>
         }
     }
 
+    /// <summary>
+    /// Rolls back <see cref="Current"/> to a previous value.
+    /// </summary>
+    /// <param name="count">Number of values to rollback.</param>
+    /// <exception cref="Exception">Thrown if <paramref name="count"/> exceeds the number of values buffered.</exception>
     public void Rollback(int count)
     {
         var oldRollbackCount = _rollbackCount;
@@ -59,11 +82,13 @@ internal class BufferedEnumerator<T> : IEnumerator<T>
         }
     }
 
+    /// <inheritdoc/>
     public void Dispose()
     {
         _enumerator.Dispose();
     }
 
+    /// <inheritdoc/>
     public bool MoveNext()
     {
         if (_rollbackCount != 0)
@@ -95,6 +120,7 @@ internal class BufferedEnumerator<T> : IEnumerator<T>
         return false;
     }
 
+    /// <inheritdoc/>
     public void Reset()
     {
         _queue.Clear();

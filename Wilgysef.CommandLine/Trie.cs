@@ -1,26 +1,36 @@
 ﻿namespace Wilgysef.CommandLine;
 
+/// <summary>
+/// Trie.
+/// </summary>
+/// <typeparam name="T">Value type.</typeparam>
 internal class Trie<T>
 {
-    private readonly Node _root = Node.Root();
+    private readonly Node _root = new();
 
+    /// <summary>
+    /// Adds the value to the trie.
+    /// </summary>
+    /// <param name="key">Key.</param>
+    /// <param name="value">Value.</param>
     public void Add(string key, T value)
     {
-        if (key.Length == 0)
-        {
-            throw new ArgumentException("Key length must be greater than 0", nameof(key));
-        }
-
         var node = GetOrCreate(_root, key);
         node.AddLeaf(value);
     }
 
-    public IEnumerable<T>? GetValues(string str, out int? prefix)
+    /// <summary>
+    /// Gets values by key.
+    /// </summary>
+    /// <param name="lookup">Key lookup.</param>
+    /// <param name="prefix">Prefix length of key match.</param>
+    /// <returns>Values.</returns>
+    public IEnumerable<T>? GetValues(string lookup, out int? prefix)
     {
         var nodes = new Stack<Node>();
         nodes.Push(_root);
 
-        foreach (var ch in str)
+        foreach (var ch in lookup)
         {
             var next = nodes.Peek().Get(ch);
             if (next == null)
@@ -57,23 +67,11 @@ internal class Trie<T>
         return current;
     }
 
-    public class Node
+    private class Node
     {
         private readonly Dictionary<char, Node> _children = [];
 
-        public Node(char value)
-        {
-            Value = value;
-        }
-
-        public char Value { get; }
-
         public List<T> LeafValues { get; } = [];
-
-        public static Node Root()
-        {
-            return new Node((char)0);
-        }
 
         public Node? Get(char ch)
         {
@@ -89,7 +87,7 @@ internal class Trie<T>
         {
             if (!_children.TryGetValue(ch, out var node))
             {
-                node = new Node(ch);
+                node = new Node();
                 _children[ch] = node;
             }
 
