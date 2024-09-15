@@ -21,4 +21,9 @@ public interface IInstanceHandlerOptions
     /// Whether to throw if a property to be set is missing.
     /// </summary>
     bool? ThrowOnMissingProperty { get; set; }
+
+    /// <summary>
+    /// Whether to throw if more values are given than expected.
+    /// </summary>
+    bool? ThrowOnTooManyValues { get; set; }
 }

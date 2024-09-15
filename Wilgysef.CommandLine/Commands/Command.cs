@@ -108,6 +108,9 @@ public abstract class Command : ICommand
     public bool? ThrowOnMissingProperty { get; set; }
 
     /// <inheritdoc/>
+    public bool? ThrowOnTooManyValues { get; set; }
+
+    /// <inheritdoc/>
     public abstract void Execute(CommandExecutionContext context);
 
     /// <inheritdoc/>

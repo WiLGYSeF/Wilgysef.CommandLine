@@ -57,6 +57,11 @@ internal class ParserInstanceFactory<TInstance>
     public bool ThrowOnMissingProperty { get; set; }
 
     /// <summary>
+    /// Throw if more values are given than expected.
+    /// </summary>
+    public bool ThrowOnTooManyValues { get; set; }
+
+    /// <summary>
     /// Parse argument tokens to instance.
     /// </summary>
     /// <param name="argTokens">Argument tokens.</param>
@@ -64,7 +69,7 @@ internal class ParserInstanceFactory<TInstance>
     /// <returns>Instance.</returns>
     public TInstance Parse(IEnumerable<ArgumentToken> argTokens, Func<TInstance>? factory)
     {
-        var instance = (factory != null ? factory() : Activator.CreateInstance<TInstance>())
+        var instance = (factory?.Invoke() ?? Activator.CreateInstance<TInstance>())
             ?? throw new Exception($"Argument parser instance is unexpectedly null");
 
         var context = new DeserializationContext(
@@ -75,20 +80,23 @@ internal class ParserInstanceFactory<TInstance>
             InstanceValueHandler,
             instance);
 
+        var valueMax = _parser.Values.Count > 0
+            ? _parser.Values.Select(v => v.PositionRange.Max ?? int.MaxValue).Max()
+            : -1;
         var valueIdx = 0;
 
         foreach (var result in argTokens)
         {
             if (result.Option == null)
             {
-                var value = GetValue(valueIdx++);
+                var value = GetValue(valueIdx);
                 if (value != null)
                 {
                     if (!InstanceValueHandler.HasValueName(value.Name))
                     {
                         if (ThrowOnMissingProperty)
                         {
-                            throw new ArgumentParseException(result.Argument, result.ArgumentPosition, $"The instance \"{typeof(TInstance).Name}\" is missing the property {value.Name}");
+                            throw new InstanceMissingPropertyException(result.Argument, result.ArgumentPosition, typeof(TInstance).Name, value.Name);
                         }
                     }
                     else
@@ -96,7 +104,12 @@ internal class ParserInstanceFactory<TInstance>
                         context.Deserialize(result, value.Name, false);
                     }
                 }
+                else if (ThrowOnTooManyValues && valueIdx > valueMax)
+                {
+                    throw new TooManyValuesException(result.Argument, result.ArgumentPosition, valueMax + 1, result.Argument);
+                }
 
+                valueIdx++;
                 continue;
             }
 
@@ -104,7 +117,7 @@ internal class ParserInstanceFactory<TInstance>
             {
                 if (ThrowOnMissingProperty)
                 {
-                    throw new ArgumentParseException(result.Argument, result.ArgumentPosition, $"The instance \"{typeof(TInstance).Name}\" is missing the property {result.Option.Name}");
+                    throw new InstanceMissingPropertyException(result.Argument, result.ArgumentPosition, typeof(TInstance).Name, result.Option.Name);
                 }
             }
             else

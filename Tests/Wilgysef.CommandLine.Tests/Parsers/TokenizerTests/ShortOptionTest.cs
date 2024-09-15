@@ -135,7 +135,7 @@ public class ShortOptionTest
         };
 
         var act = () => parser.Tokenize(args);
-        act.Should().Throw<ArgumentValuesOutOfRangeException>()
+        act.Should().Throw<OptionValuesOutOfRangeException>()
             .Where(e => e.Argument == "-a"
                 && e.ArgumentPosition == 1
                 && e.ExpectedMinValues == 1
@@ -176,7 +176,7 @@ public class ShortOptionTest
         };
 
         var act = () => parser.Tokenize(args);
-        act.Should().Throw<ArgumentValuesOutOfRangeException>()
+        act.Should().Throw<OptionValuesOutOfRangeException>()
             .Where(e => e.Argument == "-a"
                 && e.ArgumentPosition == 1
                 && e.ExpectedMinValues == 1
@@ -469,7 +469,7 @@ public class ShortOptionTest
         };
 
         var act = () => parser.Tokenize(args);
-        act.Should().Throw<ArgumentValuesOutOfRangeException>()
+        act.Should().Throw<OptionValuesOutOfRangeException>()
             .Where(e => e.Argument == "-a"
                 && e.ArgumentPosition == 1
                 && e.ExpectedMinValues == 1
@@ -493,7 +493,7 @@ public class ShortOptionTest
         };
 
         var act = () => parser.Tokenize(args);
-        act.Should().Throw<ArgumentValuesOutOfRangeException>()
+        act.Should().Throw<OptionValuesOutOfRangeException>()
             .Where(e => e.Argument == "-a"
                 && e.ArgumentPosition == 1
                 && e.ExpectedMinValues == 1

@@ -264,7 +264,7 @@ internal class Tokenizer(ArgumentParser argumentParser)
 
         if (!option.ValueCountRange!.InRange(values.Count))
         {
-            throw new ArgumentValuesOutOfRangeException(arg, argStartPos, option.ValueCountRange.Min, option.ValueCountRange.Max, values.Count);
+            throw new OptionValuesOutOfRangeException(arg, argStartPos, option.ValueCountRange.Min, option.ValueCountRange.Max, values.Count);
         }
 
         return ArgumentToken.WithValues(option, arg, argPos, argMatch, values);
@@ -334,7 +334,7 @@ internal class Tokenizer(ArgumentParser argumentParser)
 
             if (!option.ValueCountRange!.InRange(values.Count))
             {
-                throw new ArgumentValuesOutOfRangeException(arg, argStartPos, option.ValueCountRange.Min, option.ValueCountRange.Max, values.Count);
+                throw new OptionValuesOutOfRangeException(arg, argStartPos, option.ValueCountRange.Min, option.ValueCountRange.Max, values.Count);
             }
 
             argTokens.Add(ArgumentToken.WithValues(option, arg, argPos, shortOpt.ToString(), values));

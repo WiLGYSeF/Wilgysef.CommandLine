@@ -1,19 +1,19 @@
 ﻿namespace Wilgysef.CommandLine.Exceptions;
 
 /// <summary>
-/// Thrown if an argument value count was out of range.
+/// Thrown if an option value count was out of range.
 /// </summary>
-public class ArgumentValuesOutOfRangeException : ArgumentParseException
+public class OptionValuesOutOfRangeException : ArgumentParseException
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="ArgumentValuesOutOfRangeException"/> class.
+    /// Initializes a new instance of the <see cref="OptionValuesOutOfRangeException"/> class.
     /// </summary>
     /// <param name="argument">Argument.</param>
     /// <param name="argumentPosition">Argument postion.</param>
     /// <param name="expectedMin">Expected minimum values.</param>
     /// <param name="expectedMax">Expected maximum values.</param>
     /// <param name="actual">Actual value count.</param>
-    public ArgumentValuesOutOfRangeException(
+    public OptionValuesOutOfRangeException(
         string argument,
         int argumentPosition,
         int expectedMin,

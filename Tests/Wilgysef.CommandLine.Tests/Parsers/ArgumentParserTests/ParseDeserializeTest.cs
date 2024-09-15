@@ -241,11 +241,29 @@ public class ParseDeserializeTest : ParserBaseTest
         };
 
         var act = () => parser.ParseTo<StringTest>(args);
-        act.Should().ThrowExactly<ArgumentParseException>();
+        act.Should().ThrowExactly<InstanceMissingPropertyException>();
 
         parser.ThrowOnMissingProperty = false;
         act = () => parser.ParseTo<StringTest>(args);
         act.Should().NotThrow();
+    }
+
+    [Fact]
+    public void Value_TooMany()
+    {
+        string[] args = ["abc", "def"];
+        var parser = new ArgumentParser
+        {
+            Values =
+            [
+                Value.Single("Test", 0),
+            ],
+            ThrowOnTooManyValues = true,
+        };
+
+        var act = () => ParseToAnonymous(new { Test = (string?)null }, parser, args);
+        act.Should().ThrowExactly<TooManyValuesException>()
+            .Where(e => e.Argument == "def" && e.ArgumentPosition == 2 && e.MaxValuesExpected == 1 && e.UnexpectedValue == "def");
     }
 
     [Fact]
@@ -283,7 +301,7 @@ public class ParseDeserializeTest : ParserBaseTest
     [Fact]
     public void Enum()
     {
-        string[] args = ["abc", "--test", "Tuesday"];
+        string[] args = ["--test", "Tuesday"];
         var parser = new ArgumentParser
         {
             Options =
@@ -629,7 +647,7 @@ public class ParseDeserializeTest : ParserBaseTest
         };
 
         var act = () => ParseToAnonymous(new { Test = (string[]?)null }, parser, args);
-        act.Should().ThrowExactly<ArgumentValuesOutOfRangeException>()
+        act.Should().ThrowExactly<OptionValuesOutOfRangeException>()
             .Where(e => e.Argument == "--test"
                 && e.ArgumentPosition == 1
                 && e.ExpectedMinValues == 3
@@ -650,7 +668,7 @@ public class ParseDeserializeTest : ParserBaseTest
         };
 
         var act = () => ParseToAnonymous(new { Test = (string[]?)null }, parser, args);
-        act.Should().ThrowExactly<ArgumentValuesOutOfRangeException>()
+        act.Should().ThrowExactly<OptionValuesOutOfRangeException>()
             .Where(e => e.Argument == "--test"
                 && e.ArgumentPosition == 1
                 && e.ExpectedMinValues == 3
@@ -672,8 +690,8 @@ public class ParseDeserializeTest : ParserBaseTest
         };
 
         var act = () => ParseToAnonymous(new { Prop = (bool?)null }, parser, args);
-        act.Should().ThrowExactly<ArgumentParseException>()
-            .Where(e => e.Argument == "--test" && e.ArgumentPosition == 1);
+        act.Should().ThrowExactly<InstanceMissingPropertyException>()
+            .Where(e => e.Argument == "--test" && e.ArgumentPosition == 1 && e.InstanceName != null && e.Property == "Test");
     }
 
     [Fact]

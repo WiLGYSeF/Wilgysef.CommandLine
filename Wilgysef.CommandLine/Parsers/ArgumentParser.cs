@@ -121,6 +121,11 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
     public bool ThrowOnMissingProperty { get; set; } = true;
 
     /// <summary>
+    /// Throw if more values are given than expected.
+    /// </summary>
+    public bool ThrowOnTooManyValues { get; set; }
+
+    /// <summary>
     /// Help option to determine if the help menu provider should be invoked.
     /// </summary>
     public Option? HelpOption { get; set; } = new Option("Help")
@@ -280,6 +285,7 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
                     Deserializers.Concat(command.Deserializers),
                     ListDeserializers.Concat(command.ListDeserializers),
                     command.ThrowOnMissingProperty ?? ThrowOnMissingProperty,
+                    command.ThrowOnTooManyValues ?? ThrowOnTooManyValues,
                     command.ValueAggregators ?? Enumerable.Empty<IArgumentValueAggregator>(),
                     command.InstanceValueHandler,
                 ])!;
@@ -566,6 +572,7 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
             Deserializers,
             ListDeserializers,
             ThrowOnMissingProperty,
+            ThrowOnTooManyValues,
             valueAggregators,
             instanceValueHandler);
     }
@@ -574,6 +581,7 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
         IEnumerable<IArgumentDeserializerStrategy> deserializers,
         IEnumerable<ArgumentValueListDeserializerStrategy> listDeserializers,
         bool throwOnMissingProperty,
+        bool throwOnTooManyValues,
         IEnumerable<IArgumentValueAggregator>? valueAggregators,
         IInstanceValueHandler? instanceValueHandler)
         where T : class
@@ -583,6 +591,7 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
             Deserializers = deserializers,
             ListDeserializers = listDeserializers,
             ThrowOnMissingProperty = throwOnMissingProperty,
+            ThrowOnTooManyValues = throwOnTooManyValues,
         };
 
         if (valueAggregators != null)

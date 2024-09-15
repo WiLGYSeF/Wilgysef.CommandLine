@@ -80,7 +80,7 @@ public class LongOptionTest
         };
 
         var act = () => parser.Tokenize(args);
-        act.Should().ThrowExactly<ArgumentValuesOutOfRangeException>()
+        act.Should().ThrowExactly<OptionValuesOutOfRangeException>()
             .Where(e => e.Argument == "--a"
                 && e.ArgumentPosition == 1
                 && e.ExpectedMinValues == 1
@@ -122,7 +122,7 @@ public class LongOptionTest
         };
 
         var act = () => parser.Tokenize(args);
-        act.Should().ThrowExactly<ArgumentValuesOutOfRangeException>()
+        act.Should().ThrowExactly<OptionValuesOutOfRangeException>()
             .Where(e => e.Argument == "--a"
                 && e.ArgumentPosition == 1
                 && e.ExpectedMinValues == 1
@@ -186,7 +186,7 @@ public class LongOptionTest
         };
 
         var act = () => parser.Tokenize(args);
-        act.Should().ThrowExactly<ArgumentValuesOutOfRangeException>()
+        act.Should().ThrowExactly<OptionValuesOutOfRangeException>()
             .Where(e => e.Argument == "--a"
                 && e.ArgumentPosition == 1
                 && e.ExpectedMinValues == 2
@@ -209,7 +209,7 @@ public class LongOptionTest
         parser.AddCommand("b", context => { });
 
         var act = () => parser.Tokenize(args);
-        act.Should().ThrowExactly<ArgumentValuesOutOfRangeException>()
+        act.Should().ThrowExactly<OptionValuesOutOfRangeException>()
             .Where(e => e.Argument == "--a"
                 && e.ArgumentPosition == 1
                 && e.ExpectedMinValues == 2
@@ -231,7 +231,7 @@ public class LongOptionTest
         };
 
         var act = () => parser.Tokenize(args);
-        act.Should().ThrowExactly<ArgumentValuesOutOfRangeException>()
+        act.Should().ThrowExactly<OptionValuesOutOfRangeException>()
             .Where(e => e.Argument == "--a"
                 && e.ArgumentPosition == 1
                 && e.ExpectedMinValues == 2
