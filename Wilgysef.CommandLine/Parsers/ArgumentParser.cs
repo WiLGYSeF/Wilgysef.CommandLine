@@ -259,13 +259,13 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
                 ?? throw new ArgumentException("Command unexpectedly null in argument group", nameof(tokenizedArgs));
 
             var commandType = command.GetType();
-            if (commandType.InheritsGeneric(typeof(IAsyncCommand<>), out var asyncSettingsType))
+            if (commandType.InheritsGeneric(typeof(IAsyncCommand<>), out var asyncOptionsType))
             {
-                instances.Add(Parse(commandType, command, asyncSettingsType, group));
+                instances.Add(Parse(commandType, command, asyncOptionsType, group));
             }
-            else if (commandType.InheritsGeneric(typeof(ICommand<>), out var settingsType))
+            else if (commandType.InheritsGeneric(typeof(ICommand<>), out var optionsType))
             {
-                instances.Add(Parse(commandType, command, settingsType, group));
+                instances.Add(Parse(commandType, command, optionsType, group));
             }
             else
             {
@@ -275,10 +275,10 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
 
         return instances;
 
-        object Parse(Type commandType, ICommand command, Type settingsType, ArgumentTokenGroup argGroup)
+        object Parse(Type commandType, ICommand command, Type optionsType, ArgumentTokenGroup argGroup)
         {
             var createParserResultFactoryMethod = typeof(ArgumentParser).GetMethod(nameof(CreateParserInstanceFactory), BindingFlags.Instance | BindingFlags.NonPublic)!
-                .MakeGenericMethod(settingsType)!;
+                .MakeGenericMethod(optionsType)!;
             var argParserResultFactory = createParserResultFactoryMethod.Invoke(
                 this,
                 [
@@ -292,10 +292,10 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
             var parseMethod = argParserResultFactory.GetType().GetMethod(nameof(ParserInstanceFactory<object>.Parse))!;
 
             var makeMethod = typeof(ArgumentParser).GetMethod(nameof(MakeMethod), BindingFlags.Static | BindingFlags.NonPublic)!
-                .MakeGenericMethod(settingsType);
-            var settingsTypeFactory = makeMethod.Invoke(null, [command, commandType.GetMethod(nameof(ICommand<object>.SettingsFactory))!]);
+                .MakeGenericMethod(optionsType);
+            var optionsTypeFactory = makeMethod.Invoke(null, [command, commandType.GetMethod(nameof(ICommand<object>.OptionsFactory))!]);
 
-            return parseMethod.Invoke(argParserResultFactory, [argGroup.Arguments, settingsTypeFactory])!;
+            return parseMethod.Invoke(argParserResultFactory, [argGroup.Arguments, optionsTypeFactory])!;
         }
     }
 

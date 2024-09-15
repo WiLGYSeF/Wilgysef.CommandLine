@@ -5,22 +5,22 @@ namespace Wilgysef.CommandLine.Commands;
 /// <summary>
 /// Command interface.
 /// </summary>
-/// <typeparam name="T">Command settings type.</typeparam>
+/// <typeparam name="T">Command options type.</typeparam>
 public interface ICommand<T> : ICommand
     where T : class
 {
     /// <summary>
-    /// Factory for the command settings.
+    /// Factory for the command options.
     /// </summary>
-    /// <returns>Settings instance.</returns>
-    T SettingsFactory();
+    /// <returns>Options instance.</returns>
+    T OptionsFactory();
 
     /// <summary>
     /// Executes the command.
     /// </summary>
     /// <param name="context">Execution context.</param>
-    /// <param name="settings">Command settings.</param>
-    void Execute(CommandExecutionContext context, T settings);
+    /// <param name="options">Command options.</param>
+    void Execute(CommandExecutionContext context, T options);
 }
 
 /// <summary>

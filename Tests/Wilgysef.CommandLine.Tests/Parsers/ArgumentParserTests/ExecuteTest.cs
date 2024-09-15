@@ -75,14 +75,14 @@ public class ExecuteTest
         {
             Commands =
             [
-                new ExecuteTestCommand((context, settings) =>
+                new ExecuteTestCommand((context, options) =>
                 {
                     context.Arguments.Should().BeEquivalentTo(args, o => o.WithStrictOrdering());
                     context.Command.Should().Be("abc");
                     context.ArgumentPosition.Should().Be(1);
 
                     commandsRun.Add(context.Command!);
-                    settings.ShortOptA.Should().BeTrue();
+                    options.ShortOptA.Should().BeTrue();
                 }),
             ],
         };
@@ -182,10 +182,10 @@ public class ExecuteTest
         {
             Commands =
             [
-                new ExecuteAsyncTestCommand((context, settings) =>
+                new ExecuteAsyncTestCommand((context, options) =>
                 {
                     commandsRun.Add(context.Command!);
-                    settings.ShortOptA.Should().BeTrue();
+                    options.ShortOptA.Should().BeTrue();
                 }),
             ],
         };
@@ -205,10 +205,10 @@ public class ExecuteTest
         {
             Commands =
             [
-                new ExecuteAsyncTestCommand((context, settings) =>
+                new ExecuteAsyncTestCommand((context, options) =>
                 {
                     commandsRun.Add(context.Command!);
-                    settings.ShortOptA.Should().BeTrue();
+                    options.ShortOptA.Should().BeTrue();
                 }),
             ],
         };
@@ -219,7 +219,7 @@ public class ExecuteTest
     }
 
     [Fact]
-    public async Task Execute_NoSettings()
+    public async Task Execute_NoOptions()
     {
         string[] args = ["abc"];
         var commandsRun = new List<string>();
@@ -233,7 +233,7 @@ public class ExecuteTest
     }
 
     [Fact]
-    public async Task ExecuteAsync_NoSettings()
+    public async Task ExecuteAsync_NoOptions()
     {
         string[] args = ["abc"];
         var commandsRun = new List<string>();
@@ -251,7 +251,7 @@ public class ExecuteTest
     }
 
     [Fact]
-    public void ExecuteAsync_NoSettings_AsSync()
+    public void ExecuteAsync_NoOptions_AsSync()
     {
         string[] args = ["abc"];
         var commandsRun = new List<string>();
@@ -275,7 +275,7 @@ public class ExecuteTest
         var commandsRun = new List<string>();
 
         var parser = new ArgumentParser();
-        parser.AddCommand<ExecuteTestSettings>("abc", (context, settings) =>
+        parser.AddCommand<ExecuteTestOptions>("abc", (context, options) =>
         {
             commandsRun.Add(context.Command!);
             return Task.CompletedTask;
@@ -293,7 +293,7 @@ public class ExecuteTest
         var commandsRun = new List<string>();
 
         var parser = new ArgumentParser();
-        parser.AddCommand<ExecuteTestSettings>("abc", (context, settings) =>
+        parser.AddCommand<ExecuteTestOptions>("abc", (context, options) =>
         {
             commandsRun.Add(context.Command!);
         });
@@ -309,7 +309,7 @@ public class ExecuteTest
         string[] args = ["abc", "-a"];
 
         var parser = new ArgumentParser();
-        parser.AddCommand<ExecuteTestSettings>("abc", (context, settings) => { });
+        parser.AddCommand<ExecuteTestOptions>("abc", (context, options) => { });
         parser.ThrowOnUnknownOptions = true;
 
         var result = await parser.ExecuteAsync<object>(args, null);
@@ -322,7 +322,7 @@ public class ExecuteTest
         string[] args = ["abc", "-a"];
 
         var parser = new ArgumentParser();
-        parser.AddCommand<ExecuteTestSettings>("abc", (context, settings) => { });
+        parser.AddCommand<ExecuteTestOptions>("abc", (context, options) => { });
         parser.ThrowOnUnknownOptions = true;
 
         var result = parser.Execute<object>(args, null);
@@ -380,11 +380,11 @@ public class ExecuteTest
         }
     }
 
-    private class ExecuteTestCommand : Command<ExecuteTestSettings>
+    private class ExecuteTestCommand : Command<ExecuteTestOptions>
     {
-        private readonly Action<CommandExecutionContext, ExecuteTestSettings> _executeCallback;
+        private readonly Action<CommandExecutionContext, ExecuteTestOptions> _executeCallback;
 
-        public ExecuteTestCommand(Action<CommandExecutionContext, ExecuteTestSettings> executeCallback)
+        public ExecuteTestCommand(Action<CommandExecutionContext, ExecuteTestOptions> executeCallback)
         {
             _executeCallback = executeCallback;
 
@@ -396,17 +396,17 @@ public class ExecuteTest
 
         public override string Name => "abc";
 
-        public override void Execute(CommandExecutionContext context, ExecuteTestSettings settings)
+        public override void Execute(CommandExecutionContext context, ExecuteTestOptions options)
         {
-            _executeCallback(context, settings);
+            _executeCallback(context, options);
         }
     }
 
-    private class ExecuteAsyncTestCommand : AsyncCommand<ExecuteTestSettings>
+    private class ExecuteAsyncTestCommand : AsyncCommand<ExecuteTestOptions>
     {
-        private readonly Action<CommandExecutionContext, ExecuteTestSettings> _executeCallback;
+        private readonly Action<CommandExecutionContext, ExecuteTestOptions> _executeCallback;
 
-        public ExecuteAsyncTestCommand(Action<CommandExecutionContext, ExecuteTestSettings> executeCallback)
+        public ExecuteAsyncTestCommand(Action<CommandExecutionContext, ExecuteTestOptions> executeCallback)
         {
             _executeCallback = executeCallback;
 
@@ -418,14 +418,14 @@ public class ExecuteTest
 
         public override string Name => "abc";
 
-        public override Task ExecuteAsync(CommandExecutionContext context, ExecuteTestSettings settings)
+        public override Task ExecuteAsync(CommandExecutionContext context, ExecuteTestOptions options)
         {
-            _executeCallback(context, settings);
+            _executeCallback(context, options);
             return Task.CompletedTask;
         }
     }
 
-    private class ExecuteTestSettings
+    private class ExecuteTestOptions
     {
         public bool ShortOptA { get; set; }
     }

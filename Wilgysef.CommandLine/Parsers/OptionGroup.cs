@@ -36,7 +36,7 @@ public class OptionGroup
     public int? Min { get; set; }
 
     /// <summary>
-    /// Maximum number of expected options specified for the group, or <see langword="null"/> if at least <paramref name="min"/> options are expected.
+    /// Maximum number of expected options specified for the group, or <see langword="null"/> if at least <see name="Min"/> options are expected.
     /// </summary>
     public int? Max { get; set; }
 

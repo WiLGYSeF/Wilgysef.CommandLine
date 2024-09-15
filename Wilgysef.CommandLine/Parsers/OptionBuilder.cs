@@ -17,9 +17,9 @@ public static class OptionBuilder
         => BuildOptions(typeof(T));
 
     /// <summary>
-    /// Creates <see cref="Option"/>s from an object type <typeparamref name="T"/> with <see cref="OptionAttribute"/>s.
+    /// Creates <see cref="Option"/>s from an object type with <see cref="OptionAttribute"/>s.
     /// </summary>
-    /// <param name="type">Object type.</typeparam>
+    /// <param name="type">Object type.</param>
     /// <returns>Options.</returns>
     public static List<Option> BuildOptions(Type type)
     {

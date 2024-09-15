@@ -3,16 +3,16 @@
 /// <summary>
 /// Asynchronous command interface.
 /// </summary>
-/// <typeparam name="T">Command settings type.</typeparam>
+/// <typeparam name="T">Command options type.</typeparam>
 public interface IAsyncCommand<T> : ICommand
 {
     /// <summary>
     /// Executes the command.
     /// </summary>
     /// <param name="context">Execution context.</param>
-    /// <param name="settings">Command settings.</param>
+    /// <param name="options">Command options.</param>
     /// <returns>Task.</returns>
-    Task ExecuteAsync(CommandExecutionContext context, T settings);
+    Task ExecuteAsync(CommandExecutionContext context, T options);
 }
 
 /// <summary>

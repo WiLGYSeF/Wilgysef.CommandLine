@@ -89,7 +89,7 @@ public static class ArgumentRegistrationPropertiesExtensions
     /// <summary>
     /// Configures <paramref name="registration"/> with a new command.
     /// </summary>
-    /// <typeparam name="T">Command settings type.</typeparam>
+    /// <typeparam name="T">Command options type.</typeparam>
     /// <param name="registration">Registration.</param>
     /// <param name="name">Command name.</param>
     /// <param name="action">Command execution action.</param>
@@ -112,7 +112,7 @@ public static class ArgumentRegistrationPropertiesExtensions
     /// <summary>
     /// Configures <paramref name="registration"/> with a new command.
     /// </summary>
-    /// <typeparam name="T">Command settings type.</typeparam>
+    /// <typeparam name="T">Command options type.</typeparam>
     /// <param name="registration">Registration.</param>
     /// <param name="name">Command name.</param>
     /// <param name="action">Command execution action.</param>
@@ -135,7 +135,6 @@ public static class ArgumentRegistrationPropertiesExtensions
     /// <summary>
     /// Configures <paramref name="registration"/> with a new command.
     /// </summary>
-    /// <typeparam name="T">Command settings type.</typeparam>
     /// <param name="registration">Registration.</param>
     /// <param name="name">Command name.</param>
     /// <param name="action">Command execution action.</param>
@@ -157,7 +156,6 @@ public static class ArgumentRegistrationPropertiesExtensions
     /// <summary>
     /// Configures <paramref name="registration"/> with a new command.
     /// </summary>
-    /// <typeparam name="T">Command settings type.</typeparam>
     /// <param name="registration">Registration.</param>
     /// <param name="name">Command name.</param>
     /// <param name="action">Command execution action.</param>

@@ -7,20 +7,20 @@ namespace Wilgysef.CommandLine.Commands;
 /// <summary>
 /// Command-line command.
 /// </summary>
-/// <typeparam name="T">Settings type.</typeparam>
+/// <typeparam name="T">Command options type.</typeparam>
 #pragma warning disable SA1402 // File may only contain a single type
 public abstract class Command<T> : Command, ICommand<T>
 #pragma warning restore SA1402 // File may only contain a single type
     where T : class
 {
     /// <inheritdoc/>
-    public virtual T SettingsFactory()
+    public virtual T OptionsFactory()
     {
         return Activator.CreateInstance<T>();
     }
 
     /// <inheritdoc/>
-    public abstract void Execute(CommandExecutionContext context, T settings);
+    public abstract void Execute(CommandExecutionContext context, T options);
 
     /// <inheritdoc/>
     public override void Execute(CommandExecutionContext context)

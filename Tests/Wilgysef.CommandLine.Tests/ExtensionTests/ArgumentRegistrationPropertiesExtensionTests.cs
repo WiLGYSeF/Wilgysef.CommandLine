@@ -88,10 +88,10 @@ public class ArgumentRegistrationPropertiesExtensionTests
     }
 
     [Fact]
-    public void AddCommand_Settings()
+    public void AddCommand_Options()
     {
         var parser = new ArgumentParser();
-        parser.AddCommand<CommandSettings>("test", Nop, cmd =>
+        parser.AddCommand<CommandOptions>("test", Nop, cmd =>
         {
             cmd.Description = "test command";
         });
@@ -118,10 +118,10 @@ public class ArgumentRegistrationPropertiesExtensionTests
     }
 
     [Fact]
-    public void AddCommand_AsyncSettings()
+    public void AddCommand_AsyncOptions()
     {
         var parser = new ArgumentParser();
-        parser.AddCommand<CommandSettings>("test", NopAsync, cmd =>
+        parser.AddCommand<CommandOptions>("test", NopAsync, cmd =>
         {
             cmd.Description = "test command";
         });
@@ -139,11 +139,11 @@ public class ArgumentRegistrationPropertiesExtensionTests
     private Task NopAsync(CommandExecutionContext context)
         => Task.CompletedTask;
 
-    private void Nop(CommandExecutionContext context, CommandSettings settings)
+    private void Nop(CommandExecutionContext context, CommandOptions options)
     {
     }
 
-    private Task NopAsync(CommandExecutionContext context, CommandSettings settings)
+    private Task NopAsync(CommandExecutionContext context, CommandOptions options)
         => Task.CompletedTask;
 
     private class Instance
@@ -155,7 +155,7 @@ public class ArgumentRegistrationPropertiesExtensionTests
         public string? ValueA { get; set; }
     }
 
-    private class CommandSettings
+    private class CommandOptions
     {
     }
 }

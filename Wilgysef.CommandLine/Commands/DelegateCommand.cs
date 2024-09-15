@@ -7,7 +7,7 @@
 /// </summary>
 /// <param name="name">Command name.</param>
 /// <param name="action">Action invoked on command execution.</param>
-/// <typeparam name="T">Command settings type.</typeparam>
+/// <typeparam name="T">Command options type.</typeparam>
 #pragma warning disable SA1649 // File name should match first type name
 public class AsyncDelegateCommand<T>(string name, Func<CommandExecutionContext, T, Task> action) : AsyncCommand<T>
 #pragma warning restore SA1649 // File name should match first type name
@@ -17,8 +17,8 @@ public class AsyncDelegateCommand<T>(string name, Func<CommandExecutionContext, 
     public override string Name => name;
 
     /// <inheritdoc/>
-    public override Task ExecuteAsync(CommandExecutionContext context, T settings)
-        => action(context, settings);
+    public override Task ExecuteAsync(CommandExecutionContext context, T options)
+        => action(context, options);
 }
 
 /// <summary>
@@ -41,7 +41,7 @@ public class AsyncDelegateCommand(string name, Func<CommandExecutionContext, Tas
 /// </summary>
 /// <param name="name">Command name.</param>
 /// <param name="action">Action invoked on command execution.</param>
-/// <typeparam name="T">Command settings type.</typeparam>
+/// <typeparam name="T">Command options type.</typeparam>
 public class DelegateCommand<T>(string name, Action<CommandExecutionContext, T> action) : Command<T>
     where T : class
 {
@@ -49,8 +49,8 @@ public class DelegateCommand<T>(string name, Action<CommandExecutionContext, T> 
     public override string Name => name;
 
     /// <inheritdoc/>
-    public override void Execute(CommandExecutionContext context, T settings)
-        => action(context, settings);
+    public override void Execute(CommandExecutionContext context, T options)
+        => action(context, options);
 }
 
 /// <summary>

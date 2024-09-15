@@ -1,4 +1,6 @@
-﻿namespace Wilgysef.CommandLine.Attributes;
+﻿using Wilgysef.CommandLine.Parsers;
+
+namespace Wilgysef.CommandLine.Attributes;
 
 /// <summary>
 /// Attribute to designate a property as an <see cref="Option"/>.

@@ -1,4 +1,6 @@
-﻿namespace Wilgysef.CommandLine.Exceptions;
+﻿using Wilgysef.CommandLine.Parsers;
+
+namespace Wilgysef.CommandLine.Exceptions;
 
 /// <summary>
 /// Thrown if a duplicate <see cref="Option"/> is encountered.
