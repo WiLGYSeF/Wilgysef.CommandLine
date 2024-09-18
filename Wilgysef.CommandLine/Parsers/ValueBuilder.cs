@@ -33,7 +33,7 @@ public class ValueBuilder
                 continue;
             }
 
-            values.Add(new Value(prop.Name, new ValueRange(valueAttr.Min, valueAttr.Max))
+            values.Add(new Value(prop.Name, valueAttr.StartIndex, valueAttr.EndIndex)
             {
                 Description = valueAttr.Description,
                 ValueName = valueAttr.ValueName,

@@ -11,22 +11,22 @@ public class ValueAttribute : Attribute
     /// <summary>
     /// Initializes a new instance of the <see cref="ValueAttribute"/> class.
     /// </summary>
-    /// <param name="position">Value position.</param>
-    public ValueAttribute(int position)
+    /// <param name="index">Value position index.</param>
+    public ValueAttribute(int index)
     {
-        Min = position;
-        Max = position;
+        StartIndex = index;
+        EndIndex = index;
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ValueAttribute"/> class.
     /// </summary>
-    /// <param name="min">Value position range minimum.</param>
-    /// <param name="max">Value position range maximum.</param>
-    public ValueAttribute(int min, int max)
+    /// <param name="startIndex">Value position start index.</param>
+    /// <param name="endIndex">Value position end index.</param>
+    public ValueAttribute(int startIndex, int endIndex)
     {
-        Min = min;
-        Max = max == int.MaxValue ? null : max;
+        StartIndex = startIndex;
+        EndIndex = endIndex == int.MaxValue ? null : endIndex;
     }
 
     /// <summary>
@@ -40,12 +40,12 @@ public class ValueAttribute : Attribute
     public string? ValueName { get; set; }
 
     /// <summary>
-    /// Value position range minimum.
+    /// Value position start index.
     /// </summary>
-    public int Min { get; }
+    public int StartIndex { get; }
 
     /// <summary>
-    /// Value position range maximum.
+    /// Value position end index.
     /// </summary>
-    public int? Max { get; }
+    public int? EndIndex { get; }
 }

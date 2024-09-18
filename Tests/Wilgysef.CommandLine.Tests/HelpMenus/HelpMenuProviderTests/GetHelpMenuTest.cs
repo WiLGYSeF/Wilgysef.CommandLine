@@ -3,9 +3,9 @@ using Wilgysef.CommandLine.Commands;
 using Wilgysef.CommandLine.HelpMenus;
 using Wilgysef.CommandLine.Parsers;
 
-namespace Wilgysef.CommandLine.Tests.HelpMenus;
+namespace Wilgysef.CommandLine.Tests.HelpMenus.HelpMenuProviderTests;
 
-public class HelpMenuProviderTest
+public class GetHelpMenuTest
 {
     [Fact]
     public void LongOption()
@@ -41,7 +41,7 @@ Options:
                 {
                     Description = "Test option",
                     LongNames = ["test"],
-                    ValueCountRange = new ValueRange(1, 1),
+                    ValueCountRange = ValueRange.Exactly(1),
                     ValueNames = ["input"],
                 },
             ],
@@ -128,7 +128,7 @@ Options:
                 {
                     Description = "Test option",
                     LongNames = ["test"],
-                    ValueCountRange = new ValueRange(1, null),
+                    ValueCountRange = ValueRange.AtLeast(1),
                     ValueNames = ["file"],
                 },
             ],
@@ -239,8 +239,12 @@ Options:
     }
 
     [Fact]
-    public void Value()
+    public void Value_Single()
     {
+        var pathValue = Value.Single("Path", 0);
+        pathValue.Description = "Test value";
+        pathValue.ValueName = "path";
+
         var parser = new ArgumentParser
         {
             Options =
@@ -251,14 +255,7 @@ Options:
                     LongNames = ["test"],
                 },
             ],
-            Values =
-            [
-                new Value("Path", new ValueRange(0))
-                {
-                    Description = "Test value",
-                    ValueName = "path",
-                },
-            ],
+            Values = [pathValue],
         };
 
         var helpProvider = new HelpMenuProvider(parser);
@@ -290,7 +287,7 @@ Options:
                 },
             ],
             Values = [
-                new Value("Path", new ValueRange(0))
+                new Value("Path", 0, 0)
                 {
                     Description = "Test value",
                 },
@@ -327,7 +324,7 @@ Options:
             ],
             Values =
             [
-                new Value("Path", new ValueRange(1))
+                new Value("Path", 1, 1)
                 {
                     Description = "Test value",
                     ValueName = "path",
@@ -353,6 +350,10 @@ Options:
     [Fact]
     public void Usage_ValueInfinite()
     {
+        var pathValue = Value.All("Path");
+        pathValue.Description = "Test value";
+        pathValue.ValueName = "path";
+
         var parser = new ArgumentParser
         {
             Options =
@@ -363,14 +364,7 @@ Options:
                     LongNames = ["test"],
                 },
             ],
-            Values =
-            [
-                new Value("Path", new ValueRange(0, null))
-                {
-                    Description = "Test value",
-                    ValueName = "path",
-                },
-            ],
+            Values = [pathValue],
         };
 
         var helpProvider = new HelpMenuProvider(parser);
@@ -391,25 +385,27 @@ Options:
     [Fact]
     public void Usage_ValueMultiple()
     {
+        var pathValue = new Value("Path", 0, 2)
+        {
+            Description = "Test value",
+            ValueName = "path",
+        };
+
+        var otherValue = Value.Single("OtherVal", 5);
+        otherValue.Description = "Other value";
+        otherValue.ValueName = "other";
+
+        var abcValue = Value.Single("Abc", 4);
+        abcValue.Description = "Abc value";
+        abcValue.ValueName = "abc";
+
         var parser = new ArgumentParser
         {
             Values =
             [
-                new Value("Path", new ValueRange(0, 2))
-                {
-                    Description = "Test value",
-                    ValueName = "path",
-                },
-                new Value("OtherVal", new ValueRange(5))
-                {
-                    Description = "Other value",
-                    ValueName = "other",
-                },
-                new Value("Abc", new ValueRange(4))
-                {
-                    Description = "Abc value",
-                    ValueName = "abc",
-                },
+                pathValue,
+                otherValue,
+                abcValue,
             ],
         };
 
@@ -459,7 +455,8 @@ Options:
     --test      Test option
 "));
 
-        helpProvider.SetCommandList([command]);
+        helpProvider = new HelpMenuProvider(parser, [command]);
+        helpProvider.ApplicationName = "TestApp";
         result = string.Join("\n", helpProvider.GetHelpMenu());
         result.Should().Be(Prep(
 @"Usage:

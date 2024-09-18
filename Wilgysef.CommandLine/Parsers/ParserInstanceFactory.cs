@@ -11,7 +11,11 @@ namespace Wilgysef.CommandLine.Parsers;
 /// Parser instance factory.
 /// </summary>
 /// <typeparam name="TInstance">Instance type.</typeparam>
-internal class ParserInstanceFactory<TInstance>
+/// <remarks>
+/// Initializes a new instance of the <see cref="ParserInstanceFactory{TInstance}"/> class.
+/// </remarks>
+/// <param name="parser">Argument parser.</param>
+internal class ParserInstanceFactory<TInstance>(ArgumentParser parser)
     where TInstance : class
 {
     private static readonly IArgumentDeserializerStrategy[] DefaultDeserializers = PrimitiveDeserializerStrategies
@@ -19,17 +23,6 @@ internal class ParserInstanceFactory<TInstance>
         .Append(new EnumDeserializerStrategy())
         .Concat(DateTimeDeserializerStrategies.GetDateTimeDeserializerStrategies())
         .ToArray();
-
-    private readonly ArgumentParser _parser;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="ParserInstanceFactory{TInstance}"/> class.
-    /// </summary>
-    /// <param name="parser">Argument parser.</param>
-    public ParserInstanceFactory(ArgumentParser parser)
-    {
-        _parser = parser;
-    }
 
     /// <summary>
     /// Value deserializers.
@@ -50,6 +43,11 @@ internal class ParserInstanceFactory<TInstance>
     /// Instance value handler.
     /// </summary>
     public IInstanceValueHandler InstanceValueHandler { get; set; } = new InstancePropertyHandler<TInstance>();
+
+    /// <summary>
+    /// Propagate deserialization exceptions.
+    /// </summary>
+    public bool PropagateDeserializationExceptions { get; set; }
 
     /// <summary>
     /// Throw if a property to be set is missing.
@@ -73,21 +71,22 @@ internal class ParserInstanceFactory<TInstance>
             ?? throw new Exception($"Argument parser instance is unexpectedly null");
 
         var context = new DeserializationContext(
-            _parser,
+            parser,
             Deserializers.Concat(DefaultDeserializers),
             ListDeserializers,
             ValueAggregators,
             InstanceValueHandler,
-            instance);
+            instance,
+            PropagateDeserializationExceptions);
 
-        var valueMax = _parser.Values.Count > 0
-            ? _parser.Values.Select(v => v.PositionRange.Max ?? int.MaxValue).Max()
+        var valueMax = parser.Values.Count > 0
+            ? parser.Values.Select(v => v.EndIndex ?? int.MaxValue).Max()
             : -1;
         var valueIdx = 0;
 
         foreach (var result in argTokens)
         {
-            if (result.Option == null)
+            if (result.IsValue)
             {
                 var value = GetValue(valueIdx);
                 if (value != null)
@@ -113,19 +112,22 @@ internal class ParserInstanceFactory<TInstance>
                 continue;
             }
 
-            if (!InstanceValueHandler.HasValueName(result.Option.Name))
+            if (result.IsOption)
             {
-                if (ThrowOnMissingProperty)
+                if (!InstanceValueHandler.HasValueName(result.Option!.Name))
                 {
-                    throw new InstanceMissingPropertyException(result.Argument, result.ArgumentPosition, typeof(TInstance).Name, result.Option.Name);
+                    if (ThrowOnMissingProperty)
+                    {
+                        throw new InstanceMissingPropertyException(result.Argument, result.ArgumentPosition, typeof(TInstance).Name, result.Option.Name);
+                    }
                 }
-            }
-            else
-            {
-                context.Deserialize(
-                    result,
-                    result.Option.Name,
-                    result.Option.KeepFirstValue ?? _parser.KeepFirstValue);
+                else
+                {
+                    context.Deserialize(
+                        result,
+                        result.Option.Name,
+                        result.Option.KeepFirstValue ?? parser.KeepFirstValue);
+                }
             }
         }
 
@@ -133,9 +135,10 @@ internal class ParserInstanceFactory<TInstance>
 
         Value? GetValue(int index)
         {
-            foreach (var value in _parser.Values)
+            foreach (var value in parser.Values)
             {
-                if (value.PositionRange.InRange(index))
+                if (index >= value.StartIndex
+                    && (!value.EndIndex.HasValue || index <= value.EndIndex.Value))
                 {
                     return value;
                 }
@@ -145,36 +148,16 @@ internal class ParserInstanceFactory<TInstance>
         }
     }
 
-    private class DeserializationContext
+    private class DeserializationContext(
+        ArgumentParser parser,
+        IEnumerable<IArgumentDeserializerStrategy> deserializers,
+        IEnumerable<ArgumentValueListDeserializerStrategy> listDeserializers,
+        IEnumerable<IArgumentValueAggregator> valueAggregators,
+        IInstanceValueHandler instanceValueHandler,
+        TInstance instance,
+        bool propagateDeserializationExceptions)
     {
-        private readonly ArgumentParser _parser;
         private readonly HashSet<string> _valueNamesSet = [];
-
-        public DeserializationContext(
-            ArgumentParser parser,
-            IEnumerable<IArgumentDeserializerStrategy> deserializers,
-            IEnumerable<ArgumentValueListDeserializerStrategy> listDeserializers,
-            IEnumerable<IArgumentValueAggregator> valueAggregators,
-            IInstanceValueHandler instanceValueHandler,
-            TInstance instance)
-        {
-            _parser = parser;
-            Deserializers = deserializers;
-            ListDeserializers = listDeserializers;
-            ValueAggregators = valueAggregators;
-            InstanceValueHandler = instanceValueHandler;
-            Instance = instance;
-        }
-
-        public TInstance Instance { get; }
-
-        public IEnumerable<IArgumentDeserializerStrategy> Deserializers { get; }
-
-        public IEnumerable<ArgumentValueListDeserializerStrategy> ListDeserializers { get; }
-
-        public IEnumerable<IArgumentValueAggregator> ValueAggregators { get; }
-
-        public IInstanceValueHandler InstanceValueHandler { get; }
 
         public ArgumentToken ArgumentToken { get; private set; } = null!;
 
@@ -188,7 +171,7 @@ internal class ParserInstanceFactory<TInstance>
             ValueName = valueName;
             KeepFirstValue = keepFirstValue;
 
-            var instanceValueType = InstanceValueHandler.GetValueType(Instance, ValueName);
+            var instanceValueType = instanceValueHandler.GetValueType(instance, ValueName);
             var option = ArgumentToken.Option;
 
             if (ArgumentToken.Values != null)
@@ -204,7 +187,7 @@ internal class ParserInstanceFactory<TInstance>
             else if (option?.Switch ?? false)
             {
                 if (option.HasLongNames
-                    && option.MatchesLongName(ArgumentToken.ArgumentMatch, out bool switchNegated, _parser.LongNameCaseInsensitiveDefault))
+                    && option.MatchesLongName(ArgumentToken.ArgumentMatch, out bool switchNegated, parser.LongNameCaseInsensitiveDefault))
                 {
                     SetValue(!switchNegated);
                 }
@@ -216,7 +199,7 @@ internal class ParserInstanceFactory<TInstance>
             }
             else if (option?.Counter ?? false)
             {
-                var propValue = (int?)InstanceValueHandler.GetValue(Instance, ValueName) ?? 0;
+                var propValue = (int?)instanceValueHandler.GetValue(instance, ValueName) ?? 0;
                 SetValue(propValue + 1);
             }
             else if (instanceValueType == typeof(bool) || instanceValueType == typeof(bool?))
@@ -228,13 +211,13 @@ internal class ParserInstanceFactory<TInstance>
 
         private void SetValue(object? value)
         {
-            foreach (var valueAggregate in ValueAggregators)
+            foreach (var valueAggregate in valueAggregators)
             {
                 if (valueAggregate.MatchesInstanceType(typeof(TInstance))
                     && valueAggregate.SetValue(new ArgumentValueAggregatorContext(
-                        Instance,
+                        instance,
                         ArgumentToken,
-                        InstanceValueHandler,
+                        instanceValueHandler,
                         ValueName,
                         value,
                         SetValue)))
@@ -248,8 +231,8 @@ internal class ParserInstanceFactory<TInstance>
 
         private void SetValue(string valueName, object? value)
         {
-            var propValue = InstanceValueHandler.GetValue(Instance, valueName);
-            var propValueType = propValue?.GetType() ?? InstanceValueHandler.GetValueType(Instance, valueName);
+            var propValue = instanceValueHandler.GetValue(instance, valueName);
+            var propValueType = propValue?.GetType() ?? instanceValueHandler.GetValueType(instance, valueName);
             var setProp = true;
 
             if (propValue != null)
@@ -293,8 +276,8 @@ internal class ParserInstanceFactory<TInstance>
             if (setProp
                 && (!_valueNamesSet.Contains(valueName) || !KeepFirstValue))
             {
-                ThrowIfCannotCast(InstanceValueHandler.GetValueType(Instance, valueName), value);
-                InstanceValueHandler.SetValue(Instance, valueName, value);
+                ThrowIfCannotCast(instanceValueHandler.GetValueType(instance, valueName), value);
+                instanceValueHandler.SetValue(instance, valueName, value);
                 _valueNamesSet.Add(valueName);
             }
 
@@ -341,7 +324,7 @@ internal class ParserInstanceFactory<TInstance>
 
         private bool Deserialize(Type type, IReadOnlyList<string> values, out object? result)
         {
-            foreach (var deserializer in ListDeserializers)
+            foreach (var deserializer in listDeserializers)
             {
                 if (deserializer.Deserialize(
                     new ArgumentValueListDeserializerStrategy.Context(
@@ -350,7 +333,7 @@ internal class ParserInstanceFactory<TInstance>
                         values,
                         ValueName,
                         KeepFirstValue,
-                        Deserializers),
+                        deserializers),
                     out result))
                 {
                     return true;
@@ -544,7 +527,7 @@ internal class ParserInstanceFactory<TInstance>
 
         private List<object?>? DeserializeValues(Type type, IEnumerable<string> values)
         {
-            foreach (var deserializer in Deserializers)
+            foreach (var deserializer in deserializers)
             {
                 try
                 {
@@ -556,7 +539,10 @@ internal class ParserInstanceFactory<TInstance>
                 }
                 catch
                 {
-                    // continue if an exception was thrown while deserializing
+                    if (propagateDeserializationExceptions)
+                    {
+                        throw;
+                    }
                 }
             }
 
@@ -565,7 +551,7 @@ internal class ParserInstanceFactory<TInstance>
 
         private string?[]? DeserializeValues(IEnumerable<string> values)
         {
-            foreach (var deserializer in Deserializers)
+            foreach (var deserializer in deserializers)
             {
                 try
                 {
@@ -577,7 +563,10 @@ internal class ParserInstanceFactory<TInstance>
                 }
                 catch
                 {
-                    // continue if an exception was thrown while deserializing
+                    if (propagateDeserializationExceptions)
+                    {
+                        throw;
+                    }
                 }
             }
 

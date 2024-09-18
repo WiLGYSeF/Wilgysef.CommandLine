@@ -1,4 +1,6 @@
-﻿namespace Wilgysef.CommandLine.Exceptions;
+﻿using Wilgysef.CommandLine.Parsers;
+
+namespace Wilgysef.CommandLine.Exceptions;
 
 /// <summary>
 /// Thrown if an unknown short option was encountered during parsing.
@@ -11,9 +13,20 @@ public class UnknownShortOptionException : UnknownOptionException
     /// <param name="argument">Argument.</param>
     /// <param name="argumentPosition">Argument position.</param>
     /// <param name="shortOpt">Short option.</param>
+    /// <param name="expectedOptions">Expected options.</param>
     /// <param name="innerException">Inner exception.</param>
-    public UnknownShortOptionException(string argument, int argumentPosition, char shortOpt, Exception? innerException = null)
-        : base(argument, argumentPosition, $"The argument \"{argument}\" at position {argumentPosition} contains an unknown option {shortOpt}", innerException)
+    public UnknownShortOptionException(
+        string argument,
+        int argumentPosition,
+        char shortOpt,
+        IEnumerable<Option> expectedOptions,
+        Exception? innerException = null)
+        : base(
+            argument,
+            argumentPosition,
+            expectedOptions,
+            $"The argument \"{argument}\" at position {argumentPosition} contains an unknown option {shortOpt}",
+            innerException)
     {
         ShortName = shortOpt;
     }

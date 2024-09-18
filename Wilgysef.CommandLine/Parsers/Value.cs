@@ -3,7 +3,7 @@
 namespace Wilgysef.CommandLine.Parsers;
 
 /// <summary>
-/// Used to parse argument values at position/range.
+/// Used to parse argument values at positions.
 /// </summary>
 public class Value
 {
@@ -11,9 +11,9 @@ public class Value
     /// Initializes a new instance of the <see cref="Value"/> class.
     /// </summary>
     /// <param name="name">Value name.</param>
-    /// <param name="positionRange">Argument position range.</param>
-    /// <exception cref="ArgumentException">Thrown if <paramref name="name"/> is empty.</exception>
-    public Value(string name, ValueRange positionRange)
+    /// <param name="startIndex">Argument position start index.</param>
+    /// <param name="endIndex">Argument position end index.</param>
+    public Value(string name, int startIndex, int? endIndex)
     {
         if (name.Length == 0)
         {
@@ -21,7 +21,8 @@ public class Value
         }
 
         Name = name;
-        PositionRange = positionRange;
+        StartIndex = startIndex;
+        EndIndex = endIndex;
     }
 
     /// <summary>
@@ -43,20 +44,50 @@ public class Value
     public string? ValueName { get; set; }
 
     /// <summary>
-    /// Specifies the argument positions used to map values from.
+    /// Argument position start index.
     /// </summary>
-    public ValueRange PositionRange { get; set; }
+    public int StartIndex { get; set; }
 
     /// <summary>
-    /// Creates a <see cref="Value"/> with one argument at <paramref name="position"/>.
+    /// Argument position end index.
+    /// </summary>
+    public int? EndIndex { get; set; }
+
+    /// <summary>
+    /// Creates a <see cref="Value"/> with one argument at <paramref name="index"/>.
     /// </summary>
     /// <param name="name">Value name.</param>
-    /// <param name="position">Argument position.</param>
+    /// <param name="index">Argument position index.</param>
     /// <returns>Value.</returns>
-    public static Value Single(string name, int position)
-    {
-        return new Value(name, new ValueRange(position, position));
-    }
+    public static Value Single(string name, int index)
+        => new(name, index, index);
+
+    /// <summary>
+    /// Creates a <see cref="Value"/> with argument position indexes at <paramref name="index"/> and beyond.
+    /// </summary>
+    /// <param name="name">Value name.</param>
+    /// <param name="index">Argument position start index.</param>
+    /// <returns>Value.</returns>
+    public static Value StartingAt(string name, int index)
+        => new(name, index, null);
+
+    /// <summary>
+    /// Creates a <see cref="Value"/> with argument position indexes at <paramref name="index"/> for <paramref name="count"/> arguments.
+    /// </summary>
+    /// <param name="name">Value name.</param>
+    /// <param name="index">Argument position start index.</param>
+    /// <param name="count">Number of arguments to include.</param>
+    /// <returns>Value.</returns>
+    public static Value AtForNext(string name, int index, int count)
+        => new(name, index, index + count);
+
+    /// <summary>
+    /// Creates a <see cref="Value"/> with all argument position indexes.
+    /// </summary>
+    /// <param name="name">Value name.</param>
+    /// <returns>Value.</returns>
+    public static Value All(string name)
+        => new(name, 0, null);
 
     /// <summary>
     /// Validates the value.
@@ -64,7 +95,7 @@ public class Value
     /// <exception cref="InvalidOptionException">Thrown if the value is invalid.</exception>
     public void Validate()
     {
-        ThrowIf(PositionRange != null && PositionRange.Max.HasValue && PositionRange.Min > PositionRange.Max, "Minimum value range cannot be greater than maximum");
+        ThrowIf(EndIndex.HasValue && StartIndex > EndIndex.Value, "Start index cannot be greater than end index");
 
         void ThrowIf(bool value, string message)
         {

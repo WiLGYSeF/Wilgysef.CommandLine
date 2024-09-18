@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Text;
+﻿using System.Text;
 using Wilgysef.CommandLine.Commands;
 using Wilgysef.CommandLine.Parsers;
 
@@ -18,7 +17,21 @@ public class HelpMenuProvider
     public HelpMenuProvider(ArgumentParser argParser, IReadOnlyList<ICommand>? commandList = null)
     {
         Parser = argParser;
-        SetCommandList(commandList);
+        CommandList = commandList;
+
+        if (CommandList != null && CommandList.Count > 0)
+        {
+            var lastCommand = CommandList[^1];
+            Options = lastCommand.Options;
+            Values = lastCommand.Values;
+            Commands = lastCommand.Commands;
+        }
+        else
+        {
+            Options = Parser.Options;
+            Values = Parser.Values;
+            Commands = Parser.Commands;
+        }
     }
 
     /// <summary>
@@ -134,22 +147,22 @@ public class HelpMenuProvider
     /// <summary>
     /// The command list for which the help should be provided for.
     /// </summary>
-    protected IReadOnlyList<ICommand>? CommandList { get; set; }
+    protected IReadOnlyList<ICommand>? CommandList { get; }
 
     /// <summary>
     /// Options to describe in help provider.
     /// </summary>
-    protected ICollection<Option> Options { get; set; } = null!;
+    protected ICollection<Option> Options { get; }
 
     /// <summary>
     /// Values to describe in help provider.
     /// </summary>
-    protected ICollection<Value> Values { get; set; } = null!;
+    protected ICollection<Value> Values { get; }
 
     /// <summary>
     /// Commands to describe in help provider.
     /// </summary>
-    protected ICollection<ICommand> Commands { get; set; } = null!;
+    protected ICollection<ICommand> Commands { get; }
 
     /// <summary>
     /// Gets the help menu.
@@ -174,25 +187,50 @@ public class HelpMenuProvider
     }
 
     /// <summary>
-    /// Sets the command list for which the help should be provided for.
+    /// Gets the unknown command message.
     /// </summary>
-    /// <param name="commandList">Command list.</param>
-    public virtual void SetCommandList(IReadOnlyList<ICommand>? commandList)
+    /// <param name="value">Unknown command.</param>
+    /// <param name="expectedCommands">Expected commands.</param>
+    /// <returns>Unknown command message lines.</returns>
+    public virtual IEnumerable<string> GetUnknownCommandMessage(string value, IEnumerable<ICommand> expectedCommands)
     {
-        CommandList = commandList;
+        yield return $"Error: \"{value}\" is not a known command.";
 
-        if (CommandList != null && CommandList.Count > 0)
+        var similarCommands = GetSimilarCommands(value, expectedCommands).ToList();
+
+        if (similarCommands.Count > 0)
         {
-            var lastCommand = CommandList[^1];
-            Options = lastCommand.Options;
-            Values = lastCommand.Values;
-            Commands = lastCommand.Commands;
+            yield return "";
+            yield return "The most similar commands are:";
+
+            foreach (var similar in similarCommands)
+            {
+                yield return $"        {similar.Name}";
+            }
         }
-        else
+    }
+
+    /// <summary>
+    /// Gets the unknown option message.
+    /// </summary>
+    /// <param name="value">Unknown option.</param>
+    /// <param name="expectedOptions">Expected options.</param>
+    /// <returns>Unknown option message lines.</returns>
+    public virtual IEnumerable<string> GetUnknownOptionMessage(string value, IEnumerable<Option> expectedOptions)
+    {
+        yield return $"Error: \"{value}\" is not a known option.";
+
+        var similarOptions = GetSimilarOptions(value, expectedOptions).ToList();
+
+        if (similarOptions.Count > 0)
         {
-            Options = Parser.Options;
-            Values = Parser.Values;
-            Commands = Parser.Commands;
+            yield return "";
+            yield return "The most similar options are:";
+
+            foreach (var similar in similarOptions)
+            {
+                yield return $"        {similar.GetOptionArgument(Parser.ShortNamePrefixDefault, Parser.LongNamePrefixDefault)}";
+            }
         }
     }
 
@@ -263,7 +301,7 @@ public class HelpMenuProvider
                     .Append(ValueNameSuffix);
             }
 
-            if (Values.Any(v => !v.PositionRange.Max.HasValue))
+            if (Values.Any(v => !v.EndIndex.HasValue))
             {
                 builder.Append(' ')
                     .Append(ValueContinued);
@@ -296,21 +334,21 @@ public class HelpMenuProvider
     /// <returns>Value names.</returns>
     protected virtual IEnumerable<string> GetValuesValueNames()
     {
-        var sortedValues = Values.OrderBy(v => v.PositionRange.Min);
+        var sortedValues = Values.OrderBy(v => v.StartIndex);
         var lastPos = 0;
 
         foreach (var value in sortedValues)
         {
-            for (; lastPos < value.PositionRange.Min; lastPos++)
+            for (; lastPos < value.StartIndex; lastPos++)
             {
                 yield return ValueUsagePlaceholder;
             }
 
             var name = GetValueName(value);
 
-            if (value.PositionRange.Max.HasValue)
+            if (value.EndIndex.HasValue)
             {
-                for (; lastPos <= value.PositionRange.Max; lastPos++)
+                for (; lastPos <= value.EndIndex.Value; lastPos++)
                 {
                     yield return name;
                 }
@@ -330,7 +368,7 @@ public class HelpMenuProvider
     protected virtual IEnumerable<string> GetValues()
     {
         return GetTwoColumnTable(
-            Values.OrderBy(v => v.PositionRange.Min),
+            Values.OrderBy(v => v.StartIndex),
             ValuesHeader,
             GetValueName,
             GetValueDescription);
@@ -649,5 +687,204 @@ public class HelpMenuProvider
         }
 
         yield return builder.ToString();
+    }
+
+    /// <summary>
+    /// Gets a list of similar commands to <paramref name="value"/>.
+    /// </summary>
+    /// <param name="value">Value.</param>
+    /// <param name="expectedCommands">Expected commands.</param>
+    /// <returns>Similar commands.</returns>
+    protected virtual IEnumerable<ICommand> GetSimilarCommands(string value, IEnumerable<ICommand> expectedCommands)
+    {
+        var threshold = 3;
+
+        var similar = new List<(ICommand Command, int Distance)>();
+
+        foreach (var command in expectedCommands)
+        {
+            var distance = DamerauLevenshteinDistance(value, command.Name, threshold, command.CaseInsensitiveNameMatch);
+            if (distance <= threshold)
+            {
+                similar.Add((command, distance));
+            }
+        }
+
+        return similar.OrderBy(e => e.Distance)
+            .Select(e => e.Command);
+    }
+
+    /// <summary>
+    /// Gets a list of similar commands to <paramref name="value"/>.
+    /// </summary>
+    /// <param name="value">Value.</param>
+    /// <param name="expectedOptions">Expected options.</param>
+    /// <returns>Similar commands.</returns>
+    protected virtual IEnumerable<Option> GetSimilarOptions(string value, IEnumerable<Option> expectedOptions)
+    {
+        var threshold = 3;
+
+        var similar = new List<(Option Option, int Distance)>();
+
+        foreach (var option in expectedOptions)
+        {
+            var distance = GetOptionDistance(option, value);
+            if (distance <= threshold)
+            {
+                similar.Add((option, distance));
+            }
+        }
+
+        return similar.OrderBy(e => e.Distance)
+            .Select(e => e.Option);
+
+        int GetOptionDistance(Option option, string value)
+        {
+            var minDistance = int.MaxValue;
+
+            var keyValueSeparators = option.KeyValueSeparators ?? Parser.KeyValueSeparatorsDefault;
+
+            if (keyValueSeparators.Count == 0)
+            {
+                GetOptionDistanceInternal(option, value);
+                return minDistance;
+            }
+
+            foreach (var sep in keyValueSeparators)
+            {
+                var sepIdx = value.IndexOf(sep);
+                GetOptionDistanceInternal(option, sepIdx != -1 ? value[..sepIdx] : value);
+            }
+
+            return minDistance;
+
+            void GetOptionDistanceInternal(Option option, string value)
+            {
+                if (option.LongNames != null)
+                {
+                    var longPrefix = option.LongNamePrefix ?? Parser.LongNamePrefixDefault;
+                    foreach (var longName in option.LongNames)
+                    {
+                        UpdateDistance(value, $"{longPrefix}{longName}");
+                    }
+
+                    if (option.Switch && option.SwitchNegateLongPrefix != null)
+                    {
+                        foreach (var longName in option.LongNames)
+                        {
+                            UpdateDistance(value, $"{longPrefix}{option.SwitchNegateLongPrefix}{longName}");
+                        }
+                    }
+                }
+            }
+
+            void UpdateDistance(string s, string t)
+            {
+                var distance = DamerauLevenshteinDistance(s, t, threshold, option.LongNameCaseInsensitive ?? Parser.LongNameCaseInsensitiveDefault);
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                }
+            }
+        }
+    }
+
+    // https://stackoverflow.com/a/9454016
+    private static int DamerauLevenshteinDistance(
+        string source,
+        string target,
+        int threshold,
+        bool ignoreCase)
+    {
+        int length1 = source.Length;
+        int length2 = target.Length;
+
+        if (Math.Abs(length1 - length2) > threshold)
+        {
+            return int.MaxValue;
+        }
+
+        // ensure arrays [i] / length1 use shorter length
+        if (length1 > length2)
+        {
+            (target, source) = (source, target);
+            (length2, length1) = (length1, length2);
+        }
+
+        int maxi = length1;
+        int maxj = length2;
+
+        int[] dCurrent = new int[maxi + 1];
+        int[] dMinus1 = new int[maxi + 1];
+        int[] dMinus2 = new int[maxi + 1];
+        int[] dSwap;
+
+        for (int i = 0; i <= maxi; i++)
+        {
+            dCurrent[i] = i;
+        }
+
+        int jm1 = 0;
+        int im1 = 0;
+        int im2 = -1;
+
+        for (int j = 1; j <= maxj; j++)
+        {
+            // Rotate
+            dSwap = dMinus2;
+            dMinus2 = dMinus1;
+            dMinus1 = dCurrent;
+            dCurrent = dSwap;
+
+            // Initialize
+            int minDistance = int.MaxValue;
+            dCurrent[0] = j;
+            im1 = 0;
+            im2 = -1;
+
+            for (int i = 1; i <= maxi; i++)
+            {
+                int cost = Equal(source[im1], target[jm1]) ? 0 : 1;
+
+                int del = dCurrent[im1] + 1;
+                int ins = dMinus1[i] + 1;
+                int sub = dMinus1[im1] + cost;
+
+                int min = (del > ins)
+                    ? (ins > sub ? sub : ins)
+                    : (del > sub ? sub : del);
+
+                if (i > 1
+                    && j > 1
+                    && Equal(source[im2], target[jm1])
+                    && Equal(source[im1], target[j - 2]))
+                {
+                    min = Math.Min(min, dMinus2[im2] + cost);
+                }
+
+                dCurrent[i] = min;
+                if (min < minDistance)
+                {
+                    minDistance = min;
+                }
+
+                im1++;
+                im2++;
+            }
+
+            jm1++;
+            if (minDistance > threshold)
+            {
+                return int.MaxValue;
+            }
+        }
+
+        int result = dCurrent[maxi];
+        return (result > threshold) ? int.MaxValue : result;
+
+        bool Equal(char a, char b)
+            => ignoreCase
+                ? char.ToUpperInvariant(a) == char.ToUpperInvariant(b)
+                : a == b;
     }
 }

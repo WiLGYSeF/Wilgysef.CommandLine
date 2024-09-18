@@ -3,20 +3,12 @@
 /// <summary>
 /// Attribute to set option groups.
 /// </summary>
+/// <param name="groups">Option group names.</param>
 [AttributeUsage(AttributeTargets.Property)]
-public class GroupAttribute : Attribute
+public class GroupAttribute(params string[] groups) : Attribute
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="GroupAttribute"/> class.
-    /// </summary>
-    /// <param name="groups">Option group names.</param>
-    public GroupAttribute(params string[] groups)
-    {
-        OptionGroups = groups;
-    }
-
     /// <summary>
     /// Option group names.
     /// </summary>
-    public IReadOnlyList<string> OptionGroups { get; }
+    public IReadOnlyList<string> OptionGroups { get; } = groups;
 }

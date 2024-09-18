@@ -22,7 +22,26 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
     {
         ArgumentParseErrorHandler = ex =>
         {
-            OutputWriter.WriteLine($"Error: {ex.Message}");
+            if (ex is UnknownCommandException unknownCommand)
+            {
+                var helpMenu = HelpMenuProviderFactory(this, Array.Empty<ICommand>());
+                foreach (var line in helpMenu.GetUnknownCommandMessage(unknownCommand.Argument, unknownCommand.ExpectedCommands))
+                {
+                    OutputWriter.WriteLine(line);
+                }
+            }
+            else if (ex is UnknownOptionException unknownOption)
+            {
+                var helpMenu = HelpMenuProviderFactory(this, Array.Empty<ICommand>());
+                foreach (var line in helpMenu.GetUnknownOptionMessage(unknownOption.Argument, unknownOption.ExpectedOptions))
+                {
+                    OutputWriter.WriteLine(line);
+                }
+            }
+            else
+            {
+                OutputWriter.WriteLine($"Error: {ex.Message}");
+            }
         };
     }
 
@@ -116,6 +135,11 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
     public ICollection<ArgumentValueListDeserializerStrategy> ListDeserializers { get; set; } = [];
 
     /// <summary>
+    /// Propagate deserialization exceptions.
+    /// </summary>
+    public bool PropagateDeserializationExceptions { get; set; }
+
+    /// <summary>
     /// Throw if a property to be set is missing.
     /// </summary>
     public bool ThrowOnMissingProperty { get; set; } = true;
@@ -180,6 +204,7 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
     {
         var result = Tokenize(args);
 
+        // take the first argument group with arguments
         var startIdx = result.ArgumentGroups.Count - 1;
         for (var i = 0; i < result.ArgumentGroups.Count; i++)
         {
@@ -197,8 +222,11 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
             throw new ArgumentParseException(command.Argument, command.ArgumentPosition, $"{nameof(ParseTo)}() was called, but multiple argument groups were parsed");
         }
 
-        return CreateRootParserInstanceFactory<TInstance>(valueAggregators, instanceValueHandler)
-            .Parse(result.ArgumentGroups[startIdx].Arguments, factory);
+        return ParseTo(
+            result.ArgumentGroups[startIdx].Arguments,
+            factory,
+            valueAggregators,
+            instanceValueHandler);
     }
 
     /// <summary>
@@ -277,6 +305,7 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
 
         object Parse(Type commandType, ICommand command, Type optionsType, ArgumentTokenGroup argGroup)
         {
+            // we need to create instance factories with dynamic types
             var createParserResultFactoryMethod = typeof(ArgumentParser).GetMethod(nameof(CreateParserInstanceFactory), BindingFlags.Instance | BindingFlags.NonPublic)!
                 .MakeGenericMethod(optionsType)!;
             var argParserResultFactory = createParserResultFactoryMethod.Invoke(
@@ -291,6 +320,7 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
                 ])!;
             var parseMethod = argParserResultFactory.GetType().GetMethod(nameof(ParserInstanceFactory<object>.Parse))!;
 
+            // get the command's options factory method
             var makeMethod = typeof(ArgumentParser).GetMethod(nameof(MakeMethod), BindingFlags.Static | BindingFlags.NonPublic)!
                 .MakeGenericMethod(optionsType);
             var optionsTypeFactory = makeMethod.Invoke(null, [command, commandType.GetMethod(nameof(ICommand<object>.OptionsFactory))!]);
@@ -376,7 +406,7 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
         rootHandler?.Invoke(context, (TRootInstance)instances[0]!);
 
         // not actually async here
-        _ = ExecuteCommandAsync(tokenizedArgs, context, instances, false);
+        _ = ExecuteCommandAsync(tokenizedArgs, context, instances, async: false);
         return context.ExitCode;
     }
 
@@ -590,6 +620,7 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
         {
             Deserializers = deserializers,
             ListDeserializers = listDeserializers,
+            PropagateDeserializationExceptions = PropagateDeserializationExceptions,
             ThrowOnMissingProperty = throwOnMissingProperty,
             ThrowOnTooManyValues = throwOnTooManyValues,
         };

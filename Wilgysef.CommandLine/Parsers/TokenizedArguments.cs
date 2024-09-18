@@ -81,6 +81,16 @@ public record ArgumentToken
     public bool ArgumentIsKeyValue => Argument != ArgumentMatch;
 
     /// <summary>
+    /// Indicates whether the argument is an option.
+    /// </summary>
+    public bool IsOption => Option != null;
+
+    /// <summary>
+    /// Indicates whether the argument is a value.
+    /// </summary>
+    public bool IsValue => Option == null;
+
+    /// <summary>
     /// Creates an unparsed argument.
     /// </summary>
     /// <param name="value">Unparsed argument value.</param>

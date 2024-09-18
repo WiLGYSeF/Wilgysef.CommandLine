@@ -264,14 +264,14 @@ public class ValidationTest
     [Fact]
     public void Value_InvalidName()
     {
-        var act = () => new Value("", new ValueRange(1, 1));
+        var act = () => Value.Single("", 1);
         act.Should().ThrowExactly<ArgumentException>();
     }
 
     [Fact]
     public void Value_InvalidRange()
     {
-        var value = new Value("test", new ValueRange(3, 1));
+        var value = new Value("test", 3, 1);
 
         var act = () => value.Validate();
         act.Should().ThrowExactly<InvalidOptionException>()
@@ -421,8 +421,8 @@ public class ValidationTest
         {
             Values =
             [
-                new Value("ValueA", new ValueRange(0, 2)),
-                new Value("ValueB", new ValueRange(2, 3)),
+                Value.AtForNext("ValueA", 0, 2),
+                new Value("ValueB", 2, 3),
             ],
         };
 

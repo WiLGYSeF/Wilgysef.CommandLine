@@ -1,4 +1,5 @@
-﻿using Wilgysef.CommandLine.Exceptions;
+﻿using System.Diagnostics.CodeAnalysis;
+using Wilgysef.CommandLine.Exceptions;
 
 namespace Wilgysef.CommandLine.Parsers;
 
@@ -273,7 +274,7 @@ public class Option : IOptionProperties
         return new Option(name)
         {
             LongNames = [opt],
-            ValueCountRange = new ValueRange(0, 1),
+            ValueCountRange = ValueRange.AtMost(1),
         };
     }
 
@@ -450,7 +451,7 @@ public class Option : IOptionProperties
 
         ThrowIf(GroupNames != null && GroupNames.Any(n => string.IsNullOrEmpty(n)), "Group names must have a length greater than 0");
 
-        void ThrowIf(bool value, string message)
+        void ThrowIf([DoesNotReturnIf(true)] bool value, string message)
         {
             if (value)
             {

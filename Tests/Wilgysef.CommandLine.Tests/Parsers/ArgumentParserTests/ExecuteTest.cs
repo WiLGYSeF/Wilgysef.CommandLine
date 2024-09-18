@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Wilgysef.CommandLine.Commands;
+using Wilgysef.CommandLine.Exceptions;
 using Wilgysef.CommandLine.Extensions;
 using Wilgysef.CommandLine.HelpMenus;
 using Wilgysef.CommandLine.Parsers;
@@ -190,7 +191,7 @@ public class ExecuteTest
             ],
         };
 
-        var result = await parser.ExecuteAsync<object>(args, null);
+        var result = await parser.ExecuteAsync(args);
         result.Should().Be(0);
         commandsRun.Should().BeEquivalentTo(["abc"], o => o.WithStrictOrdering());
     }
@@ -213,7 +214,7 @@ public class ExecuteTest
             ],
         };
 
-        var result = parser.Execute<object>(args, null);
+        var result = parser.Execute(args);
         result.Should().Be(0);
         commandsRun.Should().BeEquivalentTo(["abc"], o => o.WithStrictOrdering());
     }
@@ -227,7 +228,7 @@ public class ExecuteTest
         var parser = new ArgumentParser();
         parser.AddCommand("abc", context => commandsRun.Add(context.Command!));
 
-        var result = await parser.ExecuteAsync<object>(args, null);
+        var result = await parser.ExecuteAsync(args);
         result.Should().Be(0);
         commandsRun.Should().BeEquivalentTo(["abc"], o => o.WithStrictOrdering());
     }
@@ -245,7 +246,7 @@ public class ExecuteTest
             return Task.CompletedTask;
         });
 
-        var result = await parser.ExecuteAsync<object>(args, null);
+        var result = await parser.ExecuteAsync(args);
         result.Should().Be(0);
         commandsRun.Should().BeEquivalentTo(["abc"], o => o.WithStrictOrdering());
     }
@@ -263,7 +264,7 @@ public class ExecuteTest
             return Task.CompletedTask;
         });
 
-        var result = parser.Execute<object>(args, null);
+        var result = parser.Execute(args);
         result.Should().Be(0);
         commandsRun.Should().BeEquivalentTo(["abc"], o => o.WithStrictOrdering());
     }
@@ -281,7 +282,7 @@ public class ExecuteTest
             return Task.CompletedTask;
         });
 
-        var result = await parser.ExecuteAsync<object>(args, null);
+        var result = await parser.ExecuteAsync(args);
         result.Should().Be(0);
         commandsRun.Should().BeEquivalentTo(["abc"], o => o.WithStrictOrdering());
     }
@@ -298,7 +299,7 @@ public class ExecuteTest
             commandsRun.Add(context.Command!);
         });
 
-        var result = parser.Execute<object>(args, null);
+        var result = parser.Execute(args);
         result.Should().Be(0);
         commandsRun.Should().BeEquivalentTo(["abc"], o => o.WithStrictOrdering());
     }
@@ -312,7 +313,7 @@ public class ExecuteTest
         parser.AddCommand<ExecuteTestOptions>("abc", (context, options) => { });
         parser.ThrowOnUnknownOptions = true;
 
-        var result = await parser.ExecuteAsync<object>(args, null);
+        var result = await parser.ExecuteAsync(args);
         result.Should().Be(1);
     }
 
@@ -325,8 +326,30 @@ public class ExecuteTest
         parser.AddCommand<ExecuteTestOptions>("abc", (context, options) => { });
         parser.ThrowOnUnknownOptions = true;
 
-        var result = parser.Execute<object>(args, null);
+        var result = parser.Execute(args);
         result.Should().Be(1);
+    }
+
+    [Fact]
+    public void Execute_UnknownCommand()
+    {
+        string[] args = ["abc"];
+        var errorHandled = false;
+
+        var parser = new ArgumentParser();
+        parser.ArgumentParseErrorHandler = e =>
+        {
+            var unknownCommand = (UnknownCommandException)e;
+            unknownCommand.Argument.Should().Be("abc");
+            unknownCommand.ArgumentPosition.Should().Be(1);
+            errorHandled = true;
+        };
+        parser.AddCommand<ExecuteTestOptions>("abcd", (context, options) => { });
+
+        var result = parser.Execute(args);
+        result.Should().Be(1);
+
+        errorHandled.Should().BeTrue();
     }
 
     private class SingleTestCommand : Command
@@ -371,6 +394,14 @@ public class ExecuteTest
 
     private class MultipleTestDefCommand : Command
     {
+        public MultipleTestDefCommand()
+        {
+            Values =
+            [
+                Value.All("Value"),
+            ];
+        }
+
         public override string Name => "def";
 
         public override void Execute(CommandExecutionContext context)

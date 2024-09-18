@@ -5,46 +5,35 @@ namespace Wilgysef.CommandLine.Commands;
 /// <summary>
 /// Command execution context.
 /// </summary>
-public class CommandExecutionContext
+/// <param name="tokenizedArguments">Tokenized arguments.</param>
+/// <param name="args">Arguments.</param>
+/// <param name="argGroup">Current argument group.</param>
+/// <param name="cancellationTokenSource">Cancellation token source.</param>
+public class CommandExecutionContext(
+    TokenizedArguments tokenizedArguments,
+    IEnumerable<string>? args,
+    ArgumentTokenGroup argGroup,
+    CancellationTokenSource cancellationTokenSource)
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="CommandExecutionContext"/> class.
-    /// </summary>
-    /// <param name="tokenizedArguments">Tokenized arguments.</param>
-    /// <param name="args">Arguments.</param>
-    /// <param name="argGroup">Current argument group.</param>
-    /// <param name="cancellationTokenSource">Cancellation token source.</param>
-    public CommandExecutionContext(
-        TokenizedArguments tokenizedArguments,
-        IEnumerable<string>? args,
-        ArgumentTokenGroup argGroup,
-        CancellationTokenSource cancellationTokenSource)
-    {
-        TokenizedArguments = tokenizedArguments;
-        Arguments = args;
-        ArgumentGroup = argGroup;
-        CancellationTokenSource = cancellationTokenSource;
-    }
-
     /// <summary>
     /// Tokenized arguments.
     /// </summary>
-    public TokenizedArguments TokenizedArguments { get; }
+    public TokenizedArguments TokenizedArguments { get; } = tokenizedArguments;
 
     /// <summary>
     /// Arguments.
     /// </summary>
-    public IEnumerable<string>? Arguments { get; }
+    public IEnumerable<string>? Arguments { get; } = args;
 
     /// <summary>
     /// Cancellation token source.
     /// </summary>
-    public CancellationTokenSource CancellationTokenSource { get; }
+    public CancellationTokenSource CancellationTokenSource { get; } = cancellationTokenSource;
 
     /// <summary>
     /// Current argument group.
     /// </summary>
-    public ArgumentTokenGroup ArgumentGroup { get; set; }
+    public ArgumentTokenGroup ArgumentGroup { get; internal set; } = argGroup;
 
     /// <summary>
     /// Exit code to use after execution.

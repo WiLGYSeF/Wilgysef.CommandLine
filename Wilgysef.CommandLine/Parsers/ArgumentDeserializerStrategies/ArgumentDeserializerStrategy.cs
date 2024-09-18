@@ -4,7 +4,7 @@
 /// Argument deserializer strategy.
 /// </summary>
 /// <typeparam name="T">Deserialize target type.</typeparam>
-public abstract class ArgumentDeserializerStrategy<T> : IArgumentDeserializerStrategy<T>, IArgumentDeserializerStrategy
+public abstract class ArgumentDeserializerStrategy<T> : IArgumentDeserializerStrategy<T>
 {
     /// <inheritdoc/>
     public abstract bool MatchesType(Type type);

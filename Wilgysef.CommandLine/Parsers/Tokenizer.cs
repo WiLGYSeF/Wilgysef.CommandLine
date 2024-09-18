@@ -54,8 +54,6 @@ internal class Tokenizer(ArgumentParser argumentParser)
         var position = 1;
         var parseLiteral = false;
         CommandMatch? lastCommand = null;
-        var brokeEarly = false;
-
         List<Option>? helpOptionLongOption = null;
         Trie<Option>? helpOptionPrefixTrie = null;
 
@@ -75,6 +73,7 @@ internal class Tokenizer(ArgumentParser argumentParser)
             }
         }
 
+        bool brokeEarly;
         do
         {
             var longOptions = new List<Option>();
@@ -121,17 +120,26 @@ internal class Tokenizer(ArgumentParser argumentParser)
                     continue;
                 }
 
+                var handled = false;
+
                 if (ArgumentStartsWithDefaultOptionPrefixes(arg))
                 {
                     if (ThrowOnUnknownOptions)
                     {
-                        throw new UnknownOptionException(arg, position);
+                        throw new UnknownOptionException(arg, position, Options);
                     }
 
                     if (IgnoreUnknownOptions)
                     {
                         continue;
                     }
+
+                    handled = true;
+                }
+
+                if (!handled && Commands.Count > 0 && Values.Count == 0)
+                {
+                    throw new UnknownCommandException(arg, position, Commands);
                 }
 
                 argTokens.Add(ArgumentToken.Unparsed(arg, position));
@@ -172,7 +180,7 @@ internal class Tokenizer(ArgumentParser argumentParser)
     /// Applies options from command.
     /// </summary>
     /// <param name="command">Command.</param>
-    public void ApplyOptions(ICommand command)
+    private void ApplyOptions(ICommand command)
     {
         SetIfNotNull(x => x.ShortNamePrefixDefault, command.ShortNamePrefix);
         SetIfNotNull(x => x.LongNamePrefixDefault, command.LongNamePrefix);
@@ -287,7 +295,7 @@ internal class Tokenizer(ArgumentParser argumentParser)
             {
                 if (ThrowOnUnknownShortOptions)
                 {
-                    throw new UnknownShortOptionException(arg, argPos, shortOpt);
+                    throw new UnknownShortOptionException(arg, argPos, shortOpt, Options);
                 }
 
                 continue;
@@ -649,13 +657,12 @@ internal class Tokenizer(ArgumentParser argumentParser)
         }
 
         var valuesRangeSorted = Values.ToList();
-        valuesRangeSorted.Sort((a, b) => a.PositionRange.Min.CompareTo(b.PositionRange.Min));
+        valuesRangeSorted.Sort((a, b) => a.StartIndex.CompareTo(b.StartIndex));
 
         for (var i = 0; i < valuesRangeSorted.Count - 1; i++)
         {
-            var range = valuesRangeSorted[i].PositionRange;
-            var nextRange = valuesRangeSorted[i + 1].PositionRange;
-            if (!range.Max.HasValue || range.Max!.Value >= nextRange.Min)
+            var curEndIndex = valuesRangeSorted[i].EndIndex;
+            if (!curEndIndex.HasValue || curEndIndex.Value >= valuesRangeSorted[i + 1].StartIndex)
             {
                 throw new InvalidOptionException(valuesRangeSorted[i + 1].Name, $"The value range \"{valuesRangeSorted[i + 1].Name}\" overlaps with \"{valuesRangeSorted[i].Name}\"");
             }
