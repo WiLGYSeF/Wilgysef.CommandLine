@@ -330,6 +330,12 @@ public class ParseDeserializeTest : ParserBaseTest
 
         var result = ParseToAnonymous(new { Value = (bool?)null }, parser, ["-v", "true"]);
         result.Value.Should().BeTrue();
+
+        result = ParseToAnonymous(new { Value = (bool?)null }, parser, ["-v", "1"]);
+        result.Value.Should().BeTrue();
+
+        result = ParseToAnonymous(new { Value = (bool?)true }, parser, ["-v", "0"]);
+        result.Value.Should().BeFalse();
     }
 
     [Fact]

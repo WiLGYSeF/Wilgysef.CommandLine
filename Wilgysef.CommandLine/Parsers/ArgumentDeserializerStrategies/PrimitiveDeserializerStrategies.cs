@@ -46,7 +46,20 @@ public class BoolDeserializerStrategy : ArgumentDeserializerStrategy<bool>
 
     /// <inheritdoc/>
     public override bool Deserialize(Type type, string value)
-        => bool.Parse(value);
+    {
+        if (value == "1")
+        {
+            return true;
+        }
+        else if (value == "0")
+        {
+            return false;
+        }
+        else
+        {
+            return bool.Parse(value);
+        }
+    }
 }
 
 /// <summary>
