@@ -2,8 +2,6 @@
 
 namespace Wilgysef.CommandLine.Parsers;
 
-#pragma warning disable SA1402 // File may only contain a single type
-
 /// <summary>
 /// Tokenized arguments.
 /// </summary>
@@ -97,9 +95,7 @@ public record ArgumentToken
     /// <param name="position">Argument position.</param>
     /// <returns>Unparsed argument.</returns>
     public static ArgumentToken Unparsed(string value, int position)
-    {
-        return new ArgumentToken(null, value, position, value, new[] { value });
-    }
+        => new(null, value, position, value, new[] { value });
 
     /// <summary>
     /// Creates an option argument with no value.
@@ -110,9 +106,7 @@ public record ArgumentToken
     /// <param name="argMatch">Argument value key name without option prefixes.</param>
     /// <returns>Argument option with no value.</returns>
     public static ArgumentToken NoValue(Option option, string arg, int position, string argMatch)
-    {
-        return new ArgumentToken(option, arg, position, argMatch, null);
-    }
+        => new(option, arg, position, argMatch, null);
 
     /// <summary>
     /// Creates an option argument with one value.
@@ -124,9 +118,7 @@ public record ArgumentToken
     /// <param name="value">Value specified.</param>
     /// <returns>Argument option with one value.</returns>
     public static ArgumentToken OneValue(Option option, string arg, int position, string argMatch, string value)
-    {
-        return new ArgumentToken(option, arg, position, argMatch, new[] { value });
-    }
+        => new(option, arg, position, argMatch, new[] { value });
 
     /// <summary>
     /// Creates an option argument.
@@ -143,8 +135,5 @@ public record ArgumentToken
         int position,
         string argMatch,
         IReadOnlyList<string> values)
-    {
-        return new ArgumentToken(option, arg, position, argMatch, values.Count > 0 ? values : null);
-    }
+        => new(option, arg, position, argMatch, values.Count > 0 ? values : null);
 }
-#pragma warning restore SA1402 // File may only contain a single type

@@ -49,11 +49,6 @@ internal class Tokenizer(ArgumentParser argumentParser)
     /// <returns>Tokenized arguments.</returns>
     public TokenizedArguments Tokenize(IEnumerable<string> args)
     {
-        var argGroups = new List<ArgumentTokenGroup>();
-        var argsEnumerator = new BufferedEnumerator<string>(args.GetEnumerator(), 1);
-        var position = 1;
-        var parseLiteral = false;
-        CommandMatch? lastCommand = null;
         List<Option>? helpOptionLongOption = null;
         Trie<Option>? helpOptionPrefixTrie = null;
 
@@ -73,19 +68,25 @@ internal class Tokenizer(ArgumentParser argumentParser)
             }
         }
 
-        bool brokeEarly;
+        var argGroups = new List<ArgumentTokenGroup>();
+        var argsEnumerator = new BufferedEnumerator<string>(args.GetEnumerator(), 1);
+        var position = 1;
+        var parseLiteral = false;
+        CommandMatch? lastCommand = null;
+        CommandMatch? foundCommand;
+
         do
         {
             var longOptions = new List<Option>();
             var shortOptions = new List<Option>();
             var shortOptionPrefixTrie = new Trie<Option>();
+            foundCommand = null;
 
             ValidateOptionsValuesCommands(longOptions, shortOptions, shortOptionPrefixTrie);
 
             var argTokens = new List<ArgumentToken>();
-            CommandMatch? foundCommand = null;
 
-            for (brokeEarly = false; argsEnumerator.MoveNext(); position++)
+            for (; argsEnumerator.MoveNext(); position++)
             {
                 var arg = argsEnumerator.Current;
 
@@ -109,7 +110,6 @@ internal class Tokenizer(ArgumentParser argumentParser)
                 if (MatchesCommand(Commands, arg, out var command))
                 {
                     foundCommand = new CommandMatch(command, arg, position);
-                    brokeEarly = true;
                     position++;
                     break;
                 }
@@ -119,8 +119,6 @@ internal class Tokenizer(ArgumentParser argumentParser)
                 {
                     continue;
                 }
-
-                var handled = false;
 
                 if (ArgumentStartsWithDefaultOptionPrefixes(arg))
                 {
@@ -133,11 +131,8 @@ internal class Tokenizer(ArgumentParser argumentParser)
                     {
                         continue;
                     }
-
-                    handled = true;
                 }
-
-                if (!handled && Commands.Count > 0 && Values.Count == 0)
+                else if (Commands.Count > 0 && Values.Count == 0)
                 {
                     throw new UnknownCommandException(arg, position, Commands);
                 }
@@ -155,7 +150,7 @@ internal class Tokenizer(ArgumentParser argumentParser)
             argGroups.Add(new ArgumentTokenGroup(argTokens, lastCommand));
             lastCommand = foundCommand;
         }
-        while (brokeEarly);
+        while (foundCommand != null);
 
         return new TokenizedArguments(argGroups);
 
@@ -163,7 +158,6 @@ internal class Tokenizer(ArgumentParser argumentParser)
         {
             foreach (var cmd in commands)
             {
-                // TODO: should we check all commands for matches?
                 if (cmd.Matches(arg))
                 {
                     command = cmd;

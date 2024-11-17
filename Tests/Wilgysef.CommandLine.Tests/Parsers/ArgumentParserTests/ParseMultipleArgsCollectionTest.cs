@@ -229,7 +229,7 @@ public class ParseMultipleArgsCollectionTest : ParserBaseTest
                     return false;
                 }
 
-                context.SetValue(context.ValueName, ((ArrayList)context.Value!)[0]);
+                context.SetValue(context.ValueName, ((IEnumerable<object>)context.Value!).First());
                 return true;
             })]);
         result.Value!.Count.Should().Be(2);
@@ -479,8 +479,6 @@ public class ParseMultipleArgsCollectionTest : ParserBaseTest
             => true;
 
         public override bool SetValue(ArgumentValueAggregatorContext context)
-        {
-            throw new NotImplementedException();
-        }
+            => throw new NotImplementedException();
     }
 }

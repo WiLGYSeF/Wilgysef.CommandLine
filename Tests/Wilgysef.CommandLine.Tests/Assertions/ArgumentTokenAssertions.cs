@@ -4,13 +4,9 @@ using Wilgysef.CommandLine.Parsers;
 
 namespace Wilgysef.CommandLine.Tests.Assertions;
 
-public class ArgumentTokenAssertions : ReferenceTypeAssertions<ArgumentToken, ArgumentTokenAssertions>
+public class ArgumentTokenAssertions(ArgumentToken subject)
+    : ReferenceTypeAssertions<ArgumentToken, ArgumentTokenAssertions>(subject)
 {
-    public ArgumentTokenAssertions(ArgumentToken subject)
-        : base(subject)
-    {
-    }
-
     protected override string Identifier => "argument";
 
     [CustomAssertion]
@@ -52,9 +48,7 @@ public class ArgumentTokenAssertions : ReferenceTypeAssertions<ArgumentToken, Ar
     }
 }
 
-#pragma warning disable SA1402 // File may only contain a single type
 public static class ArgumentTokenExtensions
-#pragma warning restore SA1402 // File may only contain a single type
 {
     public static ArgumentTokenAssertions Should(this ArgumentToken subject)
     {

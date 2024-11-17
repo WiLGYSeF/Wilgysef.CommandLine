@@ -48,23 +48,6 @@ csharp_style_var_for_built_in_types = false:silent
 csharp_style_var_when_type_is_apparent = false:silent
 csharp_style_var_elsewhere = false:silent
 
-# This diagnostic is already covered by SA1600
-dotnet_diagnostic.CS1591.severity = none
-
-dotnet_diagnostic.SA1101.severity = none
-dotnet_diagnostic.SA1122.severity = none
-dotnet_diagnostic.SA1123.severity = suggestion
-dotnet_diagnostic.SA1124.severity = none
-dotnet_diagnostic.SA1200.severity = none
-dotnet_diagnostic.SA1204.severity = none
-dotnet_diagnostic.SA1309.severity = none
-dotnet_diagnostic.SA1407.severity = silent
-dotnet_diagnostic.SA1512.severity = none
-dotnet_diagnostic.SA1612.severity = error
-dotnet_diagnostic.SA1617.severity = error
-dotnet_diagnostic.SA1623.severity = none
-dotnet_diagnostic.SA1633.severity = none
-
 [*.{cs,vb}]
 dotnet_style_operator_placement_when_wrapping = beginning_of_line
 tab_width = 4

@@ -558,7 +558,9 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
             {
                 var execute = commandType.GetMethods()
                     .Where(m => m.Name == nameof(ICommand<object>.Execute)
-                        && m.GetParameters().Length == 2)
+                        && m.GetParameters() is ParameterInfo[] parameters
+                        && parameters.Length == 2
+                        && parameters[0].ParameterType == typeof(CommandExecutionContext))
                     .Single();
                 execute.Invoke(command, [context, instances[i]]);
             }

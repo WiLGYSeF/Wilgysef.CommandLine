@@ -2,8 +2,6 @@
 
 namespace Wilgysef.CommandLine.Parsers;
 
-#pragma warning disable SA1402 // File may only contain a single type
-
 /// <summary>
 /// Deserialized argument instance value aggregator.
 /// </summary>
@@ -64,5 +62,3 @@ internal class DelegateArgumentValueAggregator<T>(Func<ArgumentValueAggregatorCo
     public override bool SetValue(ArgumentValueAggregatorContext<T> context)
         => setValue(context);
 }
-
-#pragma warning restore SA1402 // File may only contain a single type

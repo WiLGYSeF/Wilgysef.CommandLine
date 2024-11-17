@@ -140,6 +140,11 @@ public class HelpMenuProvider
     public string ValueContinued { get; set; } = "...";
 
     /// <summary>
+    /// The similarity distance to use when displaying similar options.
+    /// </summary>
+    public int SimilarValueDistance { get; set; } = 3;
+
+    /// <summary>
     /// Argument parser.
     /// </summary>
     protected ArgumentParser Parser { get; }
@@ -722,14 +727,12 @@ public class HelpMenuProvider
     /// <returns>Similar commands.</returns>
     protected virtual IEnumerable<Option> GetSimilarOptions(string value, IEnumerable<Option> expectedOptions)
     {
-        var threshold = 3;
-
         var similar = new List<(Option Option, int Distance)>();
 
         foreach (var option in expectedOptions)
         {
             var distance = GetOptionDistance(option, value);
-            if (distance <= threshold)
+            if (distance <= SimilarValueDistance)
             {
                 similar.Add((option, distance));
             }
@@ -743,22 +746,23 @@ public class HelpMenuProvider
             var minDistance = int.MaxValue;
 
             var keyValueSeparators = option.KeyValueSeparators ?? Parser.KeyValueSeparatorsDefault;
+            var ignoreCase = option.LongNameCaseInsensitive ?? Parser.LongNameCaseInsensitiveDefault;
 
             if (keyValueSeparators.Count == 0)
             {
-                GetOptionDistanceInternal(option, value);
+                GetOptionDistanceInternal(value);
                 return minDistance;
             }
 
             foreach (var sep in keyValueSeparators)
             {
                 var sepIdx = value.IndexOf(sep);
-                GetOptionDistanceInternal(option, sepIdx != -1 ? value[..sepIdx] : value);
+                GetOptionDistanceInternal(sepIdx != -1 ? value[..sepIdx] : value);
             }
 
             return minDistance;
 
-            void GetOptionDistanceInternal(Option option, string value)
+            void GetOptionDistanceInternal(string value)
             {
                 if (option.LongNames != null)
                 {
@@ -776,14 +780,14 @@ public class HelpMenuProvider
                         }
                     }
                 }
-            }
 
-            void UpdateDistance(string s, string t)
-            {
-                var distance = DamerauLevenshteinDistance(s, t, threshold, option.LongNameCaseInsensitive ?? Parser.LongNameCaseInsensitiveDefault);
-                if (distance < minDistance)
+                void UpdateDistance(string s, string t)
                 {
-                    minDistance = distance;
+                    var distance = DamerauLevenshteinDistance(s, t, SimilarValueDistance, ignoreCase);
+                    if (distance < minDistance)
+                    {
+                        minDistance = distance;
+                    }
                 }
             }
         }
@@ -830,13 +834,11 @@ public class HelpMenuProvider
 
         for (int j = 1; j <= maxj; j++)
         {
-            // Rotate
             dSwap = dMinus2;
             dMinus2 = dMinus1;
             dMinus1 = dCurrent;
             dCurrent = dSwap;
 
-            // Initialize
             int minDistance = int.MaxValue;
             dCurrent[0] = j;
             im1 = 0;

@@ -1,16 +1,12 @@
 ﻿namespace Wilgysef.CommandLine.Commands;
 
-#pragma warning disable SA1402 // File may only contain a single type
-
 /// <summary>
 /// Command from delegate.
 /// </summary>
 /// <param name="name">Command name.</param>
 /// <param name="action">Action invoked on command execution.</param>
 /// <typeparam name="T">Command options type.</typeparam>
-#pragma warning disable SA1649 // File name should match first type name
 public class AsyncDelegateCommand<T>(string name, Func<CommandExecutionContext, T, Task> action) : AsyncCommand<T>
-#pragma warning restore SA1649 // File name should match first type name
     where T : class
 {
     /// <inheritdoc/>
@@ -67,4 +63,3 @@ public class DelegateCommand(string name, Action<CommandExecutionContext> action
     public override void Execute(CommandExecutionContext context)
         => action(context);
 }
-#pragma warning restore SA1402 // File may only contain a single type

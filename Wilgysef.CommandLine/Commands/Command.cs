@@ -8,9 +8,7 @@ namespace Wilgysef.CommandLine.Commands;
 /// Command-line command.
 /// </summary>
 /// <typeparam name="T">Command options type.</typeparam>
-#pragma warning disable SA1402 // File may only contain a single type
 public abstract class Command<T> : Command, ICommand<T>
-#pragma warning restore SA1402 // File may only contain a single type
     where T : class
 {
     /// <inheritdoc/>

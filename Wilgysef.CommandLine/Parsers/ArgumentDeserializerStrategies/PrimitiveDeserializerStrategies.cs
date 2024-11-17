@@ -1,7 +1,5 @@
 ﻿namespace Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies;
 
-#pragma warning disable SA1402 // File may only contain a single type
-
 /// <summary>
 /// Deserializer strategies for primitives.
 /// </summary>
@@ -313,4 +311,3 @@ public class UInt128DeserializerStrategy : ArgumentDeserializerStrategy<UInt128>
     public override UInt128 Deserialize(Type type, string value)
         => UInt128.Parse(value);
 }
-#pragma warning restore SA1402 // File may only contain a single type

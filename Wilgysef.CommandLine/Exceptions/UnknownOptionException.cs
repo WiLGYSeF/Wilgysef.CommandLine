@@ -13,6 +13,8 @@ public class UnknownOptionException : ArgumentParseException
     /// <param name="argument">Argument.</param>
     /// <param name="argumentPosition">Argument position.</param>
     /// <param name="expectedOptions">Expected options.</param>
+    /// <param name="message">Message.</param>
+    /// <param name="innerException">Inner exception.</param>
     public UnknownOptionException(
         string argument,
         int argumentPosition,

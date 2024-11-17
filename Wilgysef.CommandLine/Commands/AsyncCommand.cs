@@ -4,9 +4,7 @@
 /// Asynchronous command.
 /// </summary>
 /// <typeparam name="T">Command options type.</typeparam>
-#pragma warning disable SA1402 // File may only contain a single type
 public abstract class AsyncCommand<T> : AsyncCommand, IAsyncCommand<T>, ICommand<T>
-#pragma warning restore SA1402 // File may only contain a single type
     where T : class
 {
     /// <inheritdoc/>

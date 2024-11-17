@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Wilgysef.CommandLine.Extensions;
 
@@ -95,6 +96,42 @@ internal static class TypeExtensions
         }
 
         genericArgType = null;
+        return false;
+    }
+
+    /// <summary>
+    /// Checks if <paramref name="type"/> is an enumerable collection.
+    /// </summary>
+    /// <remarks>This method does not consider <see cref="string"/> as enumerable.</remarks>
+    /// <param name="type">Type.</param>
+    /// <param name="elementType">Element type of enumerable.</param>
+    /// <returns><see langword="true"/> if the type is enumerable, otherwise <see langword="false"/>.</returns>
+    public static bool IsEnumerable(this Type type, [NotNullWhen(true)] out Type? elementType)
+    {
+        if (type.IsArray)
+        {
+            elementType = type.GetElementType()!;
+            return true;
+        }
+
+        if (type == typeof(string))
+        {
+            // do not treat string as enumerable
+            elementType = null;
+            return false;
+        }
+
+        if (type.InheritsGeneric(typeof(IEnumerable<>), out elementType))
+        {
+            return true;
+        }
+
+        if (type.IsCastableTo(typeof(IEnumerable)))
+        {
+            elementType = typeof(object);
+            return true;
+        }
+
         return false;
     }
 }

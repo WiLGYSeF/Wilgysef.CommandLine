@@ -1,5 +1,7 @@
 ﻿using System.Collections;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using Wilgysef.CommandLine.Exceptions;
 using Wilgysef.CommandLine.Extensions;
 using Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies;
@@ -171,6 +173,11 @@ internal class ParserInstanceFactory<TInstance>(ArgumentParser parser)
             ValueName = valueName;
             KeepFirstValue = keepFirstValue;
 
+            if (KeepFirstValue && !_valueNamesSet.Add(valueName))
+            {
+                return;
+            }
+
             var instanceValueType = instanceValueHandler.GetValueType(instance, ValueName);
             var option = ArgumentToken.Option;
 
@@ -232,90 +239,58 @@ internal class ParserInstanceFactory<TInstance>(ArgumentParser parser)
         private void SetValue(string valueName, object? value)
         {
             var propValue = instanceValueHandler.GetValue(instance, valueName);
-            var propValueType = propValue?.GetType() ?? instanceValueHandler.GetValueType(instance, valueName);
-            var setProp = true;
+            var propValueType = propValue?.GetType()
+                    ?? instanceValueHandler.GetValueType(instance, valueName);
 
-            if (propValue != null)
+            CreateEmptyCollectionIfNull();
+
+            if (AddRange(ref propValue, value))
             {
-                var valueType = value?.GetType();
-
                 if (propValueType.IsArray)
                 {
-                    value = CombineArray((Array)propValue, value);
-                }
-                else if (propValueType.InheritsGeneric(typeof(ICollection<>), out var collectionType))
-                {
-                    setProp = !AddTo(propValue, value, propValueType, collectionType, AddToCollection);
-                }
-                else if (propValue is IList list)
-                {
-                    if (value is not string && value is IEnumerable enumerable)
-                    {
-                        foreach (var val in enumerable)
-                        {
-                            list.Add(val);
-                        }
-                    }
-                    else
-                    {
-                        list.Add(value);
-                    }
-
-                    setProp = false;
-                }
-                else if (propValueType.InheritsGeneric(typeof(Queue<>), out var queueType))
-                {
-                    setProp = !AddTo(propValue, value, propValueType, queueType, AddToQueue);
-                }
-                else if (propValueType.InheritsGeneric(typeof(Stack<>), out var stackType))
-                {
-                    setProp = !AddTo(propValue, value, propValueType, stackType, AddToStack);
+                    // arrays are replaced
+                    instanceValueHandler.SetValue(instance, valueName, propValue);
                 }
             }
-
-            if (setProp
-                && (!_valueNamesSet.Contains(valueName) || !KeepFirstValue))
+            else if (value?.GetType().IsEnumerable(out var elementType) ?? false)
             {
-                ThrowIfCannotCast(instanceValueHandler.GetValueType(instance, valueName), value);
+                instanceValueHandler.SetValue(
+                    instance,
+                    valueName,
+                    Enumerate(
+                        value,
+                        propValueType == typeof(object)
+                            ? null
+                            : propValueType).Last());
+            }
+            else
+            {
+                ThrowIfCannotCast(propValueType, value);
                 instanceValueHandler.SetValue(instance, valueName, value);
-                _valueNamesSet.Add(valueName);
             }
 
-            bool AddTo(object collection, object? value, Type collectionType, Type itemType, Action<object, object?, Type> action)
+            bool CreateEmptyCollectionIfNull()
             {
-                var valueType = value?.GetType();
-                if (valueType == null)
+                if (propValue == null)
                 {
-                    ThrowIfCannotCast(itemType, null);
-                    action(propValue, value, itemType);
-                    return true;
-                }
-
-                if (valueType == typeof(string) && itemType.IsCastableTo(valueType))
-                {
-                    action(propValue, value, itemType);
-                    return true;
-                }
-                else if (valueType.InheritsGeneric(typeof(IEnumerable<>), out var valueEnumerableType))
-                {
-                    ThrowIfCannotCast(itemType, valueEnumerableType);
-
-                    foreach (var val in Enumerate(value!))
+                    if (CreateGenericCollection(propValueType, [], out var collection))
                     {
-                        action(propValue, val, valueEnumerableType);
+                        propValue = collection;
+                        instanceValueHandler.SetValue(instance, valueName, propValue);
+                        return true;
                     }
-
-                    return true;
-                }
-                else if (value is IEnumerable enumerable)
-                {
-                    foreach (var val in enumerable)
+                    else if (propValueType.IsArray)
                     {
-                        ThrowIfCannotCast(itemType, val?.GetType());
-                        action(propValue, val, collectionType.GenericTypeArguments.FirstOrDefault() ?? typeof(object));
+                        propValue = Array.CreateInstance(propValueType.GetElementType()!, 0);
+                        instanceValueHandler.SetValue(instance, valueName, propValue);
+                        return true;
                     }
-
-                    return true;
+                    else if (CreateNongenericCollection(propValueType, [], out var nongenericCollection))
+                    {
+                        propValue = nongenericCollection;
+                        instanceValueHandler.SetValue(instance, valueName, propValue);
+                        return true;
+                    }
                 }
 
                 return false;
@@ -324,6 +299,11 @@ internal class ParserInstanceFactory<TInstance>(ArgumentParser parser)
 
         private bool Deserialize(Type type, IReadOnlyList<string> values, out object? result)
         {
+            if (DeserializeTypeConverter(values, out result))
+            {
+                return true;
+            }
+
             foreach (var deserializer in listDeserializers)
             {
                 if (deserializer.Deserialize(
@@ -340,20 +320,72 @@ internal class ParserInstanceFactory<TInstance>(ArgumentParser parser)
                 }
             }
 
-            if (DeserializeCollection(type, values, out result))
-            {
-                return true;
-            }
-
-            var deserializedValues = DeserializeValues(type, values);
+            var deserializedValues = DeserializeValues(
+                type.IsEnumerable(out var elementType)
+                    ? elementType
+                    : type,
+                values);
             if (deserializedValues != null)
             {
-                result = KeepFirstValue
-                    ? deserializedValues.First()
-                    : deserializedValues.Last();
+                result = deserializedValues;
                 return true;
             }
 
+            if (DeserializeStringConstructor(type, values, out result))
+            {
+                return true;
+            }
+
+            result = null;
+            return false;
+        }
+
+        private bool DeserializeTypeConverter(IReadOnlyList<string> values, out object? result)
+        {
+            if (instance.GetType().GetProperty(ValueName)?.GetCustomAttributes<TypeConverterAttribute>() is not IEnumerable<TypeConverterAttribute> typeConverterAttributes)
+            {
+                result = null;
+                return false;
+            }
+
+            foreach (var attr in typeConverterAttributes)
+            {
+                if (Type.GetType(attr.ConverterTypeName) is not Type converterType)
+                {
+                    continue;
+                }
+
+                var converter = TypeDescriptor.GetConverter(converterType);
+
+                if (converter.GetType() == typeof(TypeConverter))
+                {
+                    // converter type is not registered with TypeDescriptor, create it manually
+                    converter = (TypeConverter)CreateInstance(converterType, []);
+                }
+
+                if (converter.CanConvertFrom(typeof(IReadOnlyList<string>)))
+                {
+                    result = converter.ConvertFrom(values);
+                    return true;
+                }
+                else if (converter.CanConvertFrom(typeof(string)))
+                {
+                    result = converter.ConvertFromString(KeepFirstValue
+                        ? values[0]
+                        : values[^1]);
+                    return true;
+                }
+            }
+
+            result = null;
+            return false;
+        }
+
+        private bool DeserializeStringConstructor(
+            Type type,
+            IReadOnlyList<string> values,
+            [NotNullWhen(true)] out object? result)
+        {
             var constructors = type.GetConstructors();
             var constructorStringParameters = constructors
                 .Select(c => c.GetParameters())
@@ -389,134 +421,6 @@ internal class ParserInstanceFactory<TInstance>(ArgumentParser parser)
                 if (deserializedStringValues != null)
                 {
                     result = CreateInstance(type, [deserializedStringValues]);
-                    return true;
-                }
-            }
-
-            result = null;
-            return false;
-        }
-
-        private bool DeserializeCollection(
-            Type type,
-            IEnumerable<string> values,
-            [NotNullWhen(true)] out object? result)
-        {
-            if (type.IsGenericType)
-            {
-                return DeserializeGenericCollection(type, values, out result);
-            }
-
-            if (type.IsArray && type.GetElementType() is Type elementType)
-            {
-                return DeserializeArray(elementType, values, out result);
-            }
-
-            return DeserializeNongenericCollection(type, values, out result);
-        }
-
-        private bool DeserializeGenericCollection(
-            Type type,
-            IEnumerable<string> values,
-            [NotNullWhen(true)] out object? result)
-        {
-            var genericType = type.GenericTypeArguments[0];
-            var deserializedValues = DeserializeValues(genericType, values);
-            if (deserializedValues == null)
-            {
-                result = null;
-                return false;
-            }
-
-            var genericTypeDefinition = type.GetGenericTypeDefinition();
-            if (genericTypeDefinition == typeof(IEnumerable<>)
-                || genericTypeDefinition == typeof(IReadOnlyCollection<>)
-                || genericTypeDefinition == typeof(IReadOnlyList<>)
-                || genericTypeDefinition == typeof(ICollection<>)
-                || genericTypeDefinition == typeof(IList<>)
-                || genericTypeDefinition == typeof(List<>))
-            {
-                return CreateCollection(typeof(List<>), genericType, nameof(List<object>.Add), out result);
-            }
-            else if (genericTypeDefinition == typeof(Queue<>))
-            {
-                return CreateCollection(typeof(Queue<>), genericType, nameof(Queue<object>.Enqueue), out result);
-            }
-            else if (genericTypeDefinition == typeof(Stack<>))
-            {
-                return CreateCollection(typeof(Stack<>), genericType, nameof(Stack<object>.Push), out result);
-            }
-            else if (genericTypeDefinition == typeof(LinkedList<>))
-            {
-                return CreateCollection(typeof(LinkedList<>), genericType, nameof(LinkedList<object>.AddLast), out result);
-            }
-            else if (genericTypeDefinition == typeof(IReadOnlySet<>)
-                || genericTypeDefinition == typeof(ISet<>)
-                || genericTypeDefinition == typeof(HashSet<>))
-            {
-                return CreateCollection(typeof(HashSet<>), genericType, nameof(HashSet<object>.Add), out result);
-            }
-            else if (genericTypeDefinition == typeof(SortedSet<>))
-            {
-                return CreateCollection(typeof(SortedSet<>), genericType, nameof(SortedSet<object>.Add), out result);
-            }
-
-            result = null;
-            return false;
-
-            bool CreateCollection(Type collectionType, Type genericType, string methodName, out object result)
-            {
-                var collType = collectionType.MakeGenericType(genericType);
-                var addMethod = collType.GetMethod(methodName, [genericType])!;
-
-                var collection = CreateInstance(collType);
-                foreach (var value in deserializedValues)
-                {
-                    ThrowIfCannotCast(genericType, value);
-                    addMethod.Invoke(collection, [value]);
-                }
-
-                result = collection;
-                return true;
-            }
-        }
-
-        private bool DeserializeArray(
-            Type type,
-            IEnumerable<string> values,
-            [NotNullWhen(true)] out object? result)
-        {
-            var deserializedValues = DeserializeValues(type, values);
-            if (deserializedValues == null)
-            {
-                result = null;
-                return false;
-            }
-
-            var array = Array.CreateInstance(type, deserializedValues.Count);
-            for (var i = 0; i < deserializedValues.Count; i++)
-            {
-                ThrowIfCannotCast(type, deserializedValues[i]);
-                array.SetValue(deserializedValues[i], i);
-            }
-
-            result = array;
-            return true;
-        }
-
-        private bool DeserializeNongenericCollection(
-            Type type,
-            IEnumerable<string> values,
-            [NotNullWhen(true)] out object? result)
-        {
-            if (type == typeof(ICollection)
-                || type == typeof(IEnumerable)
-                || type == typeof(IList))
-            {
-                var deserializedValues = DeserializeValues(values);
-                if (deserializedValues != null)
-                {
-                    result = new ArrayList(deserializedValues);
                     return true;
                 }
             }
@@ -573,86 +477,220 @@ internal class ParserInstanceFactory<TInstance>(ArgumentParser parser)
             return null;
         }
 
-        private static IEnumerable Enumerate(object obj)
+        private IEnumerable<object?> Enumerate(object? obj, Type? expectedType)
         {
+            if (expectedType == null)
+            {
+                if (obj is IEnumerable enumerable && obj is not string)
+                {
+                    foreach (var value in enumerable)
+                    {
+                        yield return value;
+                    }
+                }
+                else
+                {
+                    yield return obj;
+                }
+
+                yield break;
+            }
+
+            if (obj == null)
+            {
+                ThrowIfCannotCast(expectedType, null);
+                yield return obj;
+                yield break;
+            }
+
+            if (obj.GetType().IsCastableTo(expectedType))
+            {
+                yield return obj;
+                yield break;
+            }
+
+            ThrowIfCannotCast(typeof(IEnumerable), obj);
+
             var enumerator = ((IEnumerable)obj).GetEnumerator();
             while (enumerator.MoveNext())
             {
+                ThrowIfCannotCast(expectedType, enumerator.Current);
                 yield return enumerator.Current;
             }
         }
 
-        private static void AddToCollection(object collection, object? item, Type itemType)
+        private bool CreateGenericCollection(
+            Type type,
+            IEnumerable<object?> values,
+            [NotNullWhen(true)] out object? result)
         {
-            typeof(ICollection<>).MakeGenericType(itemType)
-                .GetMethod(nameof(ICollection<object>.Add))!
-                .Invoke(collection, [item]);
-        }
-
-        private static void AddToQueue(object collection, object? item, Type itemType)
-        {
-            typeof(Queue<>).MakeGenericType(itemType)
-                .GetMethod(nameof(Queue<object>.Enqueue))!
-                .Invoke(collection, [item]);
-        }
-
-        private static void AddToStack(object collection, object? item, Type itemType)
-        {
-            typeof(Stack<>).MakeGenericType(itemType)
-                .GetMethod(nameof(Stack<object>.Push))!
-                .Invoke(collection, [item]);
-        }
-
-        private Array CombineArray(Array array, object? obj)
-        {
-            var arrayType = array.GetType().GetElementType()!;
-            var otherArray = CreateArray(arrayType, obj);
-
-            var result = Array.CreateInstance(arrayType, array.Length + otherArray.Length);
-            var idx = 0;
-
-            for (var i = 0; i < array.Length; i++)
+            if (type.GenericTypeArguments.Length != 1)
             {
-                result.SetValue(array.GetValue(i), idx++);
+                result = null;
+                return false;
             }
 
-            for (var i = 0; i < otherArray.Length; i++)
+            var genericType = type.GenericTypeArguments[0];
+            var genericTypeDefinition = type.GetGenericTypeDefinition();
+
+            if (genericTypeDefinition == typeof(IEnumerable<>)
+                || genericTypeDefinition == typeof(IReadOnlyCollection<>)
+                || genericTypeDefinition == typeof(IReadOnlyList<>)
+                || genericTypeDefinition == typeof(ICollection<>)
+                || genericTypeDefinition == typeof(IList<>)
+                || genericTypeDefinition == typeof(List<>))
             {
-                result.SetValue(otherArray.GetValue(i), idx++);
+                return CreateCollection(typeof(List<>), genericType, nameof(List<object>.Add), out result);
+            }
+            else if (genericTypeDefinition == typeof(Queue<>))
+            {
+                return CreateCollection(typeof(Queue<>), genericType, nameof(Queue<object>.Enqueue), out result);
+            }
+            else if (genericTypeDefinition == typeof(Stack<>))
+            {
+                return CreateCollection(typeof(Stack<>), genericType, nameof(Stack<object>.Push), out result);
+            }
+            else if (genericTypeDefinition == typeof(LinkedList<>))
+            {
+                return CreateCollection(typeof(LinkedList<>), genericType, nameof(LinkedList<object>.AddLast), out result);
+            }
+            else if (genericTypeDefinition == typeof(IReadOnlySet<>)
+                || genericTypeDefinition == typeof(ISet<>)
+                || genericTypeDefinition == typeof(HashSet<>))
+            {
+                return CreateCollection(typeof(HashSet<>), genericType, nameof(HashSet<object>.Add), out result);
+            }
+            else if (genericTypeDefinition == typeof(SortedSet<>))
+            {
+                return CreateCollection(typeof(SortedSet<>), genericType, nameof(SortedSet<object>.Add), out result);
             }
 
-            return result;
-        }
+            result = null;
+            return false;
 
-        private object?[] CreateArray(Type arrayType, object? obj)
-        {
-            var objType = obj?.GetType();
-
-            if (obj is not string && obj is IEnumerable enumerable)
+            bool CreateCollection(Type collectionType, Type genericType, string methodName, out object result)
             {
-                var list = new ArrayList();
-                foreach (var val in enumerable)
+                var collType = collectionType.MakeGenericType(genericType);
+                var addMethod = collType.GetMethod(methodName, [genericType])!;
+
+                var collection = CreateInstance(collType);
+                foreach (var value in values)
                 {
-                    ThrowIfCannotCast(arrayType, val);
-                    list.Add(val);
+                    ThrowIfCannotCast(genericType, value);
+                    addMethod.Invoke(collection, [value]);
                 }
 
-                return list.ToArray();
+                result = collection;
+                return true;
             }
-
-            ThrowIfCannotCast(arrayType, objType);
-            return [obj];
         }
 
-        private void ThrowIfCannotCast(Type expectedType, object? obj)
-            => ThrowIfCannotCast(expectedType, obj?.GetType());
-
-        private void ThrowIfCannotCast(Type expectedType, Type? other)
+        private static bool CreateNongenericCollection(
+            Type type,
+            IEnumerable<string> values,
+            [NotNullWhen(true)] out object? result)
         {
-            if (!other.IsCastableTo(expectedType))
+            if (type == typeof(ICollection)
+                || type == typeof(IEnumerable)
+                || type == typeof(IList))
             {
-                throw TypeMismatchError(expectedType, other);
+                var list = new ArrayList();
+                foreach (var value in values)
+                {
+                    list.Add(value);
+                }
+
+                result = list;
+                return true;
             }
+
+            result = null;
+            return false;
+        }
+
+        private bool AddRange(ref object? collection, object? values)
+        {
+            if (collection == null)
+            {
+                return false;
+            }
+
+            var type = collection.GetType();
+            if (type.IsArray)
+            {
+                var elementType = type.GetElementType()!;
+                var valuesCount = 0;
+
+                foreach (var value in Enumerate(values, elementType))
+                {
+                    ThrowIfCannotCast(elementType, value);
+                    valuesCount++;
+                }
+
+                var collectionAsArray = (Array)collection;
+                var array = Array.CreateInstance(elementType, collectionAsArray.Length + valuesCount);
+                var idx = 0;
+
+                for (var i = 0; i < collectionAsArray.Length; i++)
+                {
+                    array.SetValue(collectionAsArray.GetValue(i), idx++);
+                }
+
+                foreach (var value in Enumerate(values, elementType))
+                {
+                    array.SetValue(value, idx++);
+                }
+
+                collection = array;
+                return true;
+            }
+            else if (type.InheritsGeneric(typeof(ICollection<>), out var collectionType))
+            {
+                var add = typeof(ICollection<>).MakeGenericType(collectionType)
+                    .GetMethod(nameof(ICollection<object>.Add))!;
+
+                foreach (var value in Enumerate(values, collectionType))
+                {
+                    add.Invoke(collection, [value]);
+                }
+
+                return true;
+            }
+            else if (collection is IList list)
+            {
+                foreach (var value in Enumerate(values, null))
+                {
+                    list.Add(value);
+                }
+
+                return true;
+            }
+            else if (type.InheritsGeneric(typeof(Queue<>), out var queueType))
+            {
+                var enqueue = typeof(Queue<>).MakeGenericType(queueType)
+                    .GetMethod(nameof(Queue<object>.Enqueue))!;
+
+                foreach (var value in Enumerate(values, queueType))
+                {
+                    enqueue.Invoke(collection, [value]);
+                }
+
+                return true;
+            }
+            else if (type.InheritsGeneric(typeof(Stack<>), out var stackType))
+            {
+                var push = typeof(Stack<>).MakeGenericType(stackType)
+                    .GetMethod(nameof(Stack<object>.Push))!;
+
+                foreach (var value in Enumerate(values, stackType))
+                {
+                    push.Invoke(collection, [value]);
+                }
+
+                return true;
+            }
+
+            return false;
         }
 
         private object CreateInstance(Type type, params object?[]? args)
@@ -668,14 +706,21 @@ internal class ParserInstanceFactory<TInstance>(ArgumentParser parser)
             }
         }
 
-        private InvalidArgumentValueDeserializationException TypeMismatchError(Type expected, Type? actual)
+        private void ThrowIfCannotCast(Type expectedType, object? obj)
+            => ThrowIfCannotCast(expectedType, obj?.GetType());
+
+        private void ThrowIfCannotCast(Type expectedType, Type? other)
         {
-            return Error($"The type '{expected.Name}' was expected for {ValueName}, but received '{actual?.Name ?? "null"}'");
+            if (!other.IsCastableTo(expectedType))
+            {
+                throw TypeMismatchError(expectedType, other);
+            }
         }
 
+        private InvalidArgumentValueDeserializationException TypeMismatchError(Type expected, Type? actual)
+            => Error($"The type '{expected.Name}' was expected for {ValueName}, but received '{actual?.Name ?? "null"}'");
+
         private InvalidArgumentValueDeserializationException Error(string message, Exception? innerException = null)
-        {
-            return new InvalidArgumentValueDeserializationException(ArgumentToken, message, innerException);
-        }
+            => new(ArgumentToken, message, innerException);
     }
 }

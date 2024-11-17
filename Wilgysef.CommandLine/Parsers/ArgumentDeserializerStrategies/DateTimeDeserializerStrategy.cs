@@ -1,13 +1,9 @@
 ﻿namespace Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies;
 
-#pragma warning disable SA1402 // File may only contain a single type
-
 /// <summary>
 /// Deserializer strategies for DateTime objects.
 /// </summary>
-#pragma warning disable SA1649 // File name should match first type name
 public static class DateTimeDeserializerStrategies
-#pragma warning restore SA1649 // File name should match first type name
 {
     /// <summary>
     /// Gets DateTime deserializers.
@@ -77,4 +73,3 @@ public class TimeOnlyDeserializerStrategy : ArgumentDeserializerStrategy<TimeOnl
     public override TimeOnly Deserialize(Type type, string value)
         => TimeOnly.Parse(value);
 }
-#pragma warning restore SA1402 // File may only contain a single type
