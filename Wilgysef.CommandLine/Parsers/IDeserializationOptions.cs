@@ -15,5 +15,5 @@ public interface IDeserializationOptions
     /// <summary>
     /// Argument list deserializers.
     /// </summary>
-    ICollection<ArgumentValueListDeserializerStrategy> ListDeserializers { get; set; }
+    ICollection<IArgumentValueListDeserializerStrategy> ListDeserializers { get; set; }
 }

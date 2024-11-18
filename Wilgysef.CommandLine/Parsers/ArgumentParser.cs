@@ -132,7 +132,7 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
     /// <summary>
     /// Argument list deserializers.
     /// </summary>
-    public ICollection<ArgumentValueListDeserializerStrategy> ListDeserializers { get; set; } = [];
+    public ICollection<IArgumentValueListDeserializerStrategy> ListDeserializers { get; set; } = [];
 
     /// <summary>
     /// Propagate deserialization exceptions.
@@ -542,7 +542,7 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
                             && m.GetParameters().Length == 2)
                         .SingleOrDefault() is MethodInfo executeAsyncMethod)
                 {
-                    await (Task)(executeAsyncMethod.Invoke(command, [context, instances[i]])!);
+                    await (Task)executeAsyncMethod.Invoke(command, [context, instances[i]])!;
                     continue;
                 }
                 else if (command is IAsyncCommand asyncCommand)
@@ -560,7 +560,7 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
                     .Where(m => m.Name == nameof(ICommand<object>.Execute)
                         && m.GetParameters() is ParameterInfo[] parameters
                         && parameters.Length == 2
-                        && parameters[0].ParameterType == typeof(CommandExecutionContext))
+                        && parameters[0].ParameterType == typeof(ICommandExecutionContext))
                     .Single();
                 execute.Invoke(command, [context, instances[i]]);
             }
@@ -611,7 +611,7 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
 
     private ParserInstanceFactory<T> CreateParserInstanceFactory<T>(
         IEnumerable<IArgumentDeserializerStrategy> deserializers,
-        IEnumerable<ArgumentValueListDeserializerStrategy> listDeserializers,
+        IEnumerable<IArgumentValueListDeserializerStrategy> listDeserializers,
         bool throwOnMissingProperty,
         bool throwOnTooManyValues,
         IEnumerable<IArgumentValueAggregator>? valueAggregators,

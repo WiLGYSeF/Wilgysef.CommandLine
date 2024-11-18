@@ -18,10 +18,10 @@ public abstract class Command<T> : Command, ICommand<T>
     }
 
     /// <inheritdoc/>
-    public abstract void Execute(CommandExecutionContext context, T options);
+    public abstract void Execute(ICommandExecutionContext context, T options);
 
     /// <inheritdoc/>
-    public override void Execute(CommandExecutionContext context)
+    public override void Execute(ICommandExecutionContext context)
         => Execute(context, null!);
 }
 
@@ -94,7 +94,7 @@ public abstract class Command : ICommand
     public ICollection<IArgumentDeserializerStrategy> Deserializers { get; set; } = [];
 
     /// <inheritdoc/>
-    public ICollection<ArgumentValueListDeserializerStrategy> ListDeserializers { get; set; } = [];
+    public ICollection<IArgumentValueListDeserializerStrategy> ListDeserializers { get; set; } = [];
 
     /// <inheritdoc/>
     public ICollection<IArgumentValueAggregator> ValueAggregators { get; set; } = [];
@@ -109,7 +109,7 @@ public abstract class Command : ICommand
     public bool? ThrowOnTooManyValues { get; set; }
 
     /// <inheritdoc/>
-    public abstract void Execute(CommandExecutionContext context);
+    public abstract void Execute(ICommandExecutionContext context);
 
     /// <inheritdoc/>
     public virtual bool Matches(string arg)

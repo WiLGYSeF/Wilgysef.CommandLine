@@ -132,18 +132,18 @@ public class ArgumentRegistrationPropertiesExtensionTests
         command.Description.Should().Be("test command");
     }
 
-    private void Nop(CommandExecutionContext context)
+    private void Nop(ICommandExecutionContext context)
     {
     }
 
-    private Task NopAsync(CommandExecutionContext context)
+    private Task NopAsync(ICommandExecutionContext context)
         => Task.CompletedTask;
 
-    private void Nop(CommandExecutionContext context, CommandOptions options)
+    private void Nop(ICommandExecutionContext context, CommandOptions options)
     {
     }
 
-    private Task NopAsync(CommandExecutionContext context, CommandOptions options)
+    private Task NopAsync(ICommandExecutionContext context, CommandOptions options)
         => Task.CompletedTask;
 
     private class Instance

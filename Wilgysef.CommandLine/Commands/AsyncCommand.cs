@@ -14,14 +14,14 @@ public abstract class AsyncCommand<T> : AsyncCommand, IAsyncCommand<T>, ICommand
     }
 
     /// <inheritdoc/>
-    public abstract Task ExecuteAsync(CommandExecutionContext context, T options);
+    public abstract Task ExecuteAsync(ICommandExecutionContext context, T options);
 
     /// <inheritdoc/>
-    public override Task ExecuteAsync(CommandExecutionContext context)
+    public override Task ExecuteAsync(ICommandExecutionContext context)
         => ExecuteAsync(context, null!);
 
     /// <inheritdoc/>
-    public virtual void Execute(CommandExecutionContext context, T options)
+    public virtual void Execute(ICommandExecutionContext context, T options)
         => ExecuteAsync(context, options).GetAwaiter().GetResult();
 }
 
@@ -31,9 +31,9 @@ public abstract class AsyncCommand<T> : AsyncCommand, IAsyncCommand<T>, ICommand
 public abstract class AsyncCommand : Command, IAsyncCommand
 {
     /// <inheritdoc/>
-    public abstract Task ExecuteAsync(CommandExecutionContext context);
+    public abstract Task ExecuteAsync(ICommandExecutionContext context);
 
     /// <inheritdoc/>
-    public override void Execute(CommandExecutionContext context)
+    public override void Execute(ICommandExecutionContext context)
         => ExecuteAsync(context).GetAwaiter().GetResult();
 }

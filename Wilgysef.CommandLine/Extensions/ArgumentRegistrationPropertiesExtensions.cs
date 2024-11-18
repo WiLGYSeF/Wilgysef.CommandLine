@@ -98,7 +98,7 @@ public static class ArgumentRegistrationPropertiesExtensions
     public static IArgumentRegistrationProperties AddCommand<T>(
         this IArgumentRegistrationProperties registration,
         string name,
-        Func<CommandExecutionContext, T, Task> action,
+        Func<ICommandExecutionContext, T, Task> action,
         Action<IAsyncCommand<T>>? configure = null)
         where T : class
     {
@@ -121,7 +121,7 @@ public static class ArgumentRegistrationPropertiesExtensions
     public static IArgumentRegistrationProperties AddCommand<T>(
         this IArgumentRegistrationProperties registration,
         string name,
-        Action<CommandExecutionContext, T> action,
+        Action<ICommandExecutionContext, T> action,
         Action<ICommand<T>>? configure = null)
         where T : class
     {
@@ -143,7 +143,7 @@ public static class ArgumentRegistrationPropertiesExtensions
     public static IArgumentRegistrationProperties AddCommand(
         this IArgumentRegistrationProperties registration,
         string name,
-        Func<CommandExecutionContext, Task> action,
+        Func<ICommandExecutionContext, Task> action,
         Action<IAsyncCommand>? configure = null)
     {
         var command = new AsyncDelegateCommand(name, action);
@@ -164,7 +164,7 @@ public static class ArgumentRegistrationPropertiesExtensions
     public static IArgumentRegistrationProperties AddCommand(
         this IArgumentRegistrationProperties registration,
         string name,
-        Action<CommandExecutionContext> action,
+        Action<ICommandExecutionContext> action,
         Action<ICommand>? configure = null)
     {
         var command = new DelegateCommand(name, action);

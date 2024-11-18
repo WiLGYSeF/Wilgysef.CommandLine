@@ -12,7 +12,7 @@ public interface IAsyncCommand<T> : ICommand
     /// <param name="context">Execution context.</param>
     /// <param name="options">Command options.</param>
     /// <returns>Task.</returns>
-    Task ExecuteAsync(CommandExecutionContext context, T options);
+    Task ExecuteAsync(ICommandExecutionContext context, T options);
 }
 
 /// <summary>
@@ -25,5 +25,5 @@ public interface IAsyncCommand : ICommand
     /// </summary>
     /// <param name="context">Execution context.</param>
     /// <returns>Task.</returns>
-    Task ExecuteAsync(CommandExecutionContext context);
+    Task ExecuteAsync(ICommandExecutionContext context);
 }

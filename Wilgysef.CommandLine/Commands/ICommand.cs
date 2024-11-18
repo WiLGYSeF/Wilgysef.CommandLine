@@ -20,7 +20,7 @@ public interface ICommand<T> : ICommand
     /// </summary>
     /// <param name="context">Execution context.</param>
     /// <param name="options">Command options.</param>
-    void Execute(CommandExecutionContext context, T options);
+    void Execute(ICommandExecutionContext context, T options);
 }
 
 /// <summary>
@@ -69,5 +69,5 @@ public interface ICommand
     /// Executes the command.
     /// </summary>
     /// <param name="context">Execution context.</param>
-    void Execute(CommandExecutionContext context);
+    void Execute(ICommandExecutionContext context);
 }

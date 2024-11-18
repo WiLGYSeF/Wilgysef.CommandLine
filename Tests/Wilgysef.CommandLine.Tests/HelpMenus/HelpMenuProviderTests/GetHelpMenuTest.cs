@@ -571,7 +571,7 @@ Options:
 
         public override string Name => "abc";
 
-        public override void Execute(CommandExecutionContext context)
+        public override void Execute(ICommandExecutionContext context)
         {
         }
     }

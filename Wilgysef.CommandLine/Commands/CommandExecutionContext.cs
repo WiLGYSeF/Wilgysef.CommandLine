@@ -14,39 +14,26 @@ public class CommandExecutionContext(
     IEnumerable<string>? args,
     ArgumentTokenGroup argGroup,
     CancellationTokenSource cancellationTokenSource)
+    : ICommandExecutionContext
 {
-    /// <summary>
-    /// Tokenized arguments.
-    /// </summary>
+    /// <inheritdoc/>
     public TokenizedArguments TokenizedArguments { get; } = tokenizedArguments;
 
-    /// <summary>
-    /// Arguments.
-    /// </summary>
+    /// <inheritdoc/>
     public IEnumerable<string>? Arguments { get; } = args;
 
-    /// <summary>
-    /// Cancellation token source.
-    /// </summary>
+    /// <inheritdoc/>
     public CancellationTokenSource CancellationTokenSource { get; } = cancellationTokenSource;
 
-    /// <summary>
-    /// Current argument group.
-    /// </summary>
+    /// <inheritdoc/>
     public ArgumentTokenGroup ArgumentGroup { get; internal set; } = argGroup;
 
-    /// <summary>
-    /// Exit code to use after execution.
-    /// </summary>
+    /// <inheritdoc/>
     public int ExitCode { get; set; }
 
-    /// <summary>
-    /// Current command name.
-    /// </summary>
+    /// <inheritdoc/>
     public string? Command => ArgumentGroup.Command?.Name;
 
-    /// <summary>
-    /// Command argument position.
-    /// </summary>
+    /// <inheritdoc/>
     public int ArgumentPosition => ArgumentGroup.CommandMatch?.ArgumentPosition ?? 0;
 }

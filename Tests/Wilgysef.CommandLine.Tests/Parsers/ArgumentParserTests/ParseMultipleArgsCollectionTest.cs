@@ -446,7 +446,7 @@ public class ParseMultipleArgsCollectionTest : ParserBaseTest
 
     private class ListDeserializerTestObj : ArgumentValueListDeserializerStrategy
     {
-        public override bool Deserialize(Context context, out object? result)
+        public override bool Deserialize(ArgumentValueListDeserializerStrategyContext context, out object? result)
         {
             context.Type.Should().Be(typeof(List<string?>));
             context.ArgumentToken.Option!.Name.Should().Be("Value");
@@ -460,7 +460,7 @@ public class ParseMultipleArgsCollectionTest : ParserBaseTest
 
     private class ListDeserializerAggregatorTestObj : ArgumentValueListDeserializerStrategy
     {
-        public override bool Deserialize(Context context, out object? result)
+        public override bool Deserialize(ArgumentValueListDeserializerStrategyContext context, out object? result)
         {
             if (context.Values.Count == 1)
             {

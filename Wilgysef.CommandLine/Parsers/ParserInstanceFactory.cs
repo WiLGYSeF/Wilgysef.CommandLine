@@ -34,7 +34,7 @@ internal class ParserInstanceFactory<TInstance>(ArgumentParser parser)
     /// <summary>
     /// Value list deserializers.
     /// </summary>
-    public IEnumerable<ArgumentValueListDeserializerStrategy> ListDeserializers { get; set; } = new List<ArgumentValueListDeserializerStrategy>();
+    public IEnumerable<IArgumentValueListDeserializerStrategy> ListDeserializers { get; set; } = new List<IArgumentValueListDeserializerStrategy>();
 
     /// <summary>
     /// Value aggregators.
@@ -153,7 +153,7 @@ internal class ParserInstanceFactory<TInstance>(ArgumentParser parser)
     private class DeserializationContext(
         ArgumentParser parser,
         IEnumerable<IArgumentDeserializerStrategy> deserializers,
-        IEnumerable<ArgumentValueListDeserializerStrategy> listDeserializers,
+        IEnumerable<IArgumentValueListDeserializerStrategy> listDeserializers,
         IEnumerable<IArgumentValueAggregator> valueAggregators,
         IInstanceValueHandler instanceValueHandler,
         TInstance instance,
@@ -240,7 +240,7 @@ internal class ParserInstanceFactory<TInstance>(ArgumentParser parser)
         {
             var propValue = instanceValueHandler.GetValue(instance, valueName);
             var propValueType = propValue?.GetType()
-                    ?? instanceValueHandler.GetValueType(instance, valueName);
+                ?? instanceValueHandler.GetValueType(instance, valueName);
 
             CreateEmptyCollectionIfNull();
 
@@ -252,16 +252,15 @@ internal class ParserInstanceFactory<TInstance>(ArgumentParser parser)
                     instanceValueHandler.SetValue(instance, valueName, propValue);
                 }
             }
-            else if (value?.GetType().IsEnumerable(out var elementType) ?? false)
+            else if (value?.GetType().IsEnumerable(out _) ?? false)
             {
-                instanceValueHandler.SetValue(
-                    instance,
-                    valueName,
-                    Enumerate(
-                        value,
-                        propValueType == typeof(object)
-                            ? null
-                            : propValueType).Last());
+                var valueItem = Enumerate(
+                    value,
+                    propValueType == typeof(object)
+                        ? null
+                        : propValueType)
+                    .Last();
+                instanceValueHandler.SetValue(instance, valueName, valueItem);
             }
             else
             {
@@ -307,7 +306,7 @@ internal class ParserInstanceFactory<TInstance>(ArgumentParser parser)
             foreach (var deserializer in listDeserializers)
             {
                 if (deserializer.Deserialize(
-                    new ArgumentValueListDeserializerStrategy.Context(
+                    new ArgumentValueListDeserializerStrategyContext(
                         ArgumentToken,
                         type,
                         values,
@@ -619,13 +618,7 @@ internal class ParserInstanceFactory<TInstance>(ArgumentParser parser)
             if (type.IsArray)
             {
                 var elementType = type.GetElementType()!;
-                var valuesCount = 0;
-
-                foreach (var value in Enumerate(values, elementType))
-                {
-                    ThrowIfCannotCast(elementType, value);
-                    valuesCount++;
-                }
+                var valuesCount = Enumerate(values, elementType).Count();
 
                 var collectionAsArray = (Array)collection;
                 var array = Array.CreateInstance(elementType, collectionAsArray.Length + valuesCount);

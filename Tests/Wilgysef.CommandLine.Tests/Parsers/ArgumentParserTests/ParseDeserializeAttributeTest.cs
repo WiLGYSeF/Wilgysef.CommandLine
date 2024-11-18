@@ -49,7 +49,7 @@ public class ParseDeserializeAttributeTest : ParserBaseTest
         public int ValueB { get; set; }
 
         [TypeConverter(typeof(IntListTestConverter))]
-        public List<int> ValueC { get; set; }
+        public List<int>? ValueC { get; set; }
     }
 
     private class IntTestConverter : TypeConverter

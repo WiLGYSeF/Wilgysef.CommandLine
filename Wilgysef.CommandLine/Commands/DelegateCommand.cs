@@ -6,14 +6,14 @@
 /// <param name="name">Command name.</param>
 /// <param name="action">Action invoked on command execution.</param>
 /// <typeparam name="T">Command options type.</typeparam>
-public class AsyncDelegateCommand<T>(string name, Func<CommandExecutionContext, T, Task> action) : AsyncCommand<T>
+public class AsyncDelegateCommand<T>(string name, Func<ICommandExecutionContext, T, Task> action) : AsyncCommand<T>
     where T : class
 {
     /// <inheritdoc/>
     public override string Name => name;
 
     /// <inheritdoc/>
-    public override Task ExecuteAsync(CommandExecutionContext context, T options)
+    public override Task ExecuteAsync(ICommandExecutionContext context, T options)
         => action(context, options);
 }
 
@@ -22,13 +22,13 @@ public class AsyncDelegateCommand<T>(string name, Func<CommandExecutionContext, 
 /// </summary>
 /// <param name="name">Command name.</param>
 /// <param name="action">Action invoked on command execution.</param>
-public class AsyncDelegateCommand(string name, Func<CommandExecutionContext, Task> action) : AsyncCommand
+public class AsyncDelegateCommand(string name, Func<ICommandExecutionContext, Task> action) : AsyncCommand
 {
     /// <inheritdoc/>
     public override string Name => name;
 
     /// <inheritdoc/>
-    public override Task ExecuteAsync(CommandExecutionContext context)
+    public override Task ExecuteAsync(ICommandExecutionContext context)
         => action(context);
 }
 
@@ -38,14 +38,14 @@ public class AsyncDelegateCommand(string name, Func<CommandExecutionContext, Tas
 /// <param name="name">Command name.</param>
 /// <param name="action">Action invoked on command execution.</param>
 /// <typeparam name="T">Command options type.</typeparam>
-public class DelegateCommand<T>(string name, Action<CommandExecutionContext, T> action) : Command<T>
+public class DelegateCommand<T>(string name, Action<ICommandExecutionContext, T> action) : Command<T>
     where T : class
 {
     /// <inheritdoc/>
     public override string Name => name;
 
     /// <inheritdoc/>
-    public override void Execute(CommandExecutionContext context, T options)
+    public override void Execute(ICommandExecutionContext context, T options)
         => action(context, options);
 }
 
@@ -54,12 +54,12 @@ public class DelegateCommand<T>(string name, Action<CommandExecutionContext, T> 
 /// </summary>
 /// <param name="name">Command name.</param>
 /// <param name="action">Action invoked on command execution.</param>
-public class DelegateCommand(string name, Action<CommandExecutionContext> action) : Command
+public class DelegateCommand(string name, Action<ICommandExecutionContext> action) : Command
 {
     /// <inheritdoc/>
     public override string Name => name;
 
     /// <inheritdoc/>
-    public override void Execute(CommandExecutionContext context)
+    public override void Execute(ICommandExecutionContext context)
         => action(context);
 }

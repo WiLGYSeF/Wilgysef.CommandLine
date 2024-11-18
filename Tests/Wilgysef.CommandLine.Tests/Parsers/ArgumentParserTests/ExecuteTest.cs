@@ -364,7 +364,7 @@ public class ExecuteTest
 
         public override string Name => "abc";
 
-        public override void Execute(CommandExecutionContext context)
+        public override void Execute(ICommandExecutionContext context)
         {
         }
     }
@@ -385,7 +385,7 @@ public class ExecuteTest
 
         public override string Name => "abc";
 
-        public override void Execute(CommandExecutionContext context)
+        public override void Execute(ICommandExecutionContext context)
         {
             context.Command.Should().Be(Name);
             context.ArgumentPosition.Should().Be(1);
@@ -404,7 +404,7 @@ public class ExecuteTest
 
         public override string Name => "def";
 
-        public override void Execute(CommandExecutionContext context)
+        public override void Execute(ICommandExecutionContext context)
         {
             context.Command.Should().Be(Name);
             context.ArgumentPosition.Should().Be(4);
@@ -413,9 +413,9 @@ public class ExecuteTest
 
     private class ExecuteTestCommand : Command<ExecuteTestOptions>
     {
-        private readonly Action<CommandExecutionContext, ExecuteTestOptions> _executeCallback;
+        private readonly Action<ICommandExecutionContext, ExecuteTestOptions> _executeCallback;
 
-        public ExecuteTestCommand(Action<CommandExecutionContext, ExecuteTestOptions> executeCallback)
+        public ExecuteTestCommand(Action<ICommandExecutionContext, ExecuteTestOptions> executeCallback)
         {
             _executeCallback = executeCallback;
 
@@ -427,7 +427,7 @@ public class ExecuteTest
 
         public override string Name => "abc";
 
-        public override void Execute(CommandExecutionContext context, ExecuteTestOptions options)
+        public override void Execute(ICommandExecutionContext context, ExecuteTestOptions options)
         {
             _executeCallback(context, options);
         }
@@ -435,9 +435,9 @@ public class ExecuteTest
 
     private class ExecuteAsyncTestCommand : AsyncCommand<ExecuteTestOptions>
     {
-        private readonly Action<CommandExecutionContext, ExecuteTestOptions> _executeCallback;
+        private readonly Action<ICommandExecutionContext, ExecuteTestOptions> _executeCallback;
 
-        public ExecuteAsyncTestCommand(Action<CommandExecutionContext, ExecuteTestOptions> executeCallback)
+        public ExecuteAsyncTestCommand(Action<ICommandExecutionContext, ExecuteTestOptions> executeCallback)
         {
             _executeCallback = executeCallback;
 
@@ -449,7 +449,7 @@ public class ExecuteTest
 
         public override string Name => "abc";
 
-        public override Task ExecuteAsync(CommandExecutionContext context, ExecuteTestOptions options)
+        public override Task ExecuteAsync(ICommandExecutionContext context, ExecuteTestOptions options)
         {
             _executeCallback(context, options);
             return Task.CompletedTask;
@@ -463,9 +463,9 @@ public class ExecuteTest
 
     private class ExecuteHelpCommandTestCommand : Command
     {
-        private readonly Action<CommandExecutionContext> _executeCallback;
+        private readonly Action<ICommandExecutionContext> _executeCallback;
 
-        public ExecuteHelpCommandTestCommand(Action<CommandExecutionContext> executeCallback)
+        public ExecuteHelpCommandTestCommand(Action<ICommandExecutionContext> executeCallback)
         {
             _executeCallback = executeCallback;
 
@@ -477,7 +477,7 @@ public class ExecuteTest
 
         public override string Name => "abc";
 
-        public override void Execute(CommandExecutionContext context)
+        public override void Execute(ICommandExecutionContext context)
         {
             _executeCallback(context);
         }
