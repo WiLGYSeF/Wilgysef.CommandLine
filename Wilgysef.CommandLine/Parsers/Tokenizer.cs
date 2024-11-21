@@ -533,7 +533,7 @@ internal class Tokenizer(ArgumentParser argumentParser)
         return false;
     }
 
-    private static int IndexOfKeyValueSeparator(ReadOnlySpan<char> span, IEnumerable<string> separators, [NotNullWhen(true)] out string? separator)
+    private static int IndexOfKeyValueSeparator(ReadOnlySpan<char> span, IEnumerable<string> separators, out string? separator)
     {
         foreach (var sep in separators)
         {
