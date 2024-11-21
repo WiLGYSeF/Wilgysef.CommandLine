@@ -305,6 +305,105 @@ public class ExecuteTest
     }
 
     [Fact]
+    public void Execute_TokenizeArgsStage()
+    {
+        string[] args = ["abc"];
+        var commandRun = false;
+
+        var parser = new ArgumentParser();
+        parser.ExecutePostTokenizeStage = tokenizedArgs =>
+        {
+            return (
+                new TokenizedArguments([
+                    tokenizedArgs.ArgumentGroups[0],
+                    new ArgumentTokenGroup(
+                        tokenizedArgs.ArgumentGroups[1].Arguments
+                            .Append(ArgumentToken.Unparsed("def", 2))
+                            .ToList(),
+                        tokenizedArgs.ArgumentGroups[1].CommandMatch)]),
+                null);
+        };
+
+        parser.AddCommand<ExecuteTestOptions>("abc", (context, options) =>
+        {
+            context.ArgumentGroup.Arguments[0].Should().BeValue("def");
+            commandRun = true;
+        });
+
+        var result = parser.Execute(args);
+        result.Should().Be(0);
+        commandRun.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Execute_TokenizeArgsStage_Exit()
+    {
+        string[] args = ["abc"];
+        var commandRun = false;
+
+        var parser = new ArgumentParser();
+        parser.ExecutePostTokenizeStage = tokenizedArgs =>
+        {
+            return (tokenizedArgs, 123);
+        };
+
+        parser.AddCommand<ExecuteTestOptions>("abc", (context, options) =>
+        {
+            commandRun = true;
+        });
+
+        var result = parser.Execute(args);
+        result.Should().Be(123);
+        commandRun.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Execute_OptionInitializeStage()
+    {
+        string[] args = ["abc"];
+        var commandRun = false;
+
+        var parser = new ArgumentParser();
+        parser.ExecutePostOptionInitializationStage = instances =>
+        {
+            ((ExecuteTestOptions)instances[1]).ShortOptA = true;
+            return (instances, null);
+        };
+
+        parser.AddCommand<ExecuteTestOptions>("abc", (context, options) =>
+        {
+            options.ShortOptA.Should().BeTrue();
+            commandRun = true;
+        });
+
+        var result = parser.Execute(args);
+        result.Should().Be(0);
+        commandRun.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Execute_OptionInitializeStage_Exit()
+    {
+        string[] args = ["abc"];
+        var commandRun = false;
+
+        var parser = new ArgumentParser();
+        parser.ExecutePostOptionInitializationStage = instances =>
+        {
+            return (instances, 123);
+        };
+
+        parser.AddCommand<ExecuteTestOptions>("abc", (context, options) =>
+        {
+            commandRun = true;
+        });
+
+        var result = parser.Execute(args);
+        result.Should().Be(123);
+        commandRun.Should().BeFalse();
+    }
+
+    [Fact]
     public async Task ExecuteAsync_Error()
     {
         string[] args = ["abc", "-a"];
