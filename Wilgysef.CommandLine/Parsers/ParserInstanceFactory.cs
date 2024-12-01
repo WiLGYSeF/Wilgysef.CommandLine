@@ -81,6 +81,14 @@ internal class ParserInstanceFactory<TInstance>(ArgumentParser parser)
             instance,
             PropagateDeserializationExceptions);
 
+        foreach (var prop in instance.GetType().GetProperties())
+        {
+            if (prop.CanWrite && prop.GetCustomAttribute<DefaultValueAttribute>() is DefaultValueAttribute attr)
+            {
+                context.SetValue(prop.Name, attr.Value);
+            }
+        }
+
         var valueMax = parser.Values.Count > 0
             ? parser.Values.Select(v => v.EndIndex ?? int.MaxValue).Max()
             : -1;
@@ -189,34 +197,43 @@ internal class ParserInstanceFactory<TInstance>(ArgumentParser parser)
                     deserializedResult = ArgumentToken.Values;
                 }
 
-                SetValue(deserializedResult);
+                SetValueInternal(deserializedResult);
             }
             else if (option?.Switch ?? false)
             {
                 if (option.HasLongNames
                     && option.MatchesLongName(ArgumentToken.ArgumentMatch, out bool switchNegated, parser.LongNameCaseInsensitiveDefault))
                 {
-                    SetValue(!switchNegated);
+                    SetValueInternal(!switchNegated);
                 }
                 else
                 {
                     option.MatchesShortName(ArgumentToken.ArgumentMatch[0], out bool shortSwitchNegated);
-                    SetValue(!shortSwitchNegated);
+                    SetValueInternal(!shortSwitchNegated);
                 }
             }
             else if (option?.Counter ?? false)
             {
                 var propValue = (int?)instanceValueHandler.GetValue(instance, ValueName) ?? 0;
-                SetValue(propValue + 1);
+                SetValueInternal(propValue + 1);
             }
             else if (instanceValueType == typeof(bool) || instanceValueType == typeof(bool?))
             {
                 // if option is none of the above but is a bool, assume it is a switch
-                SetValue(true);
+                SetValueInternal(true);
             }
         }
 
-        private void SetValue(object? value)
+        public void SetValue(string valueName, object? value)
+        {
+            ArgumentToken = null;
+            ValueName = valueName;
+            KeepFirstValue = false;
+
+            SetValueInternal(ValueName, value);
+        }
+
+        private void SetValueInternal(object? value)
         {
             foreach (var valueAggregate in valueAggregators)
             {
@@ -227,16 +244,16 @@ internal class ParserInstanceFactory<TInstance>(ArgumentParser parser)
                         instanceValueHandler,
                         ValueName,
                         value,
-                        SetValue)))
+                        SetValueInternal)))
                 {
                     return;
                 }
             }
 
-            SetValue(ValueName, value);
+            SetValueInternal(ValueName, value);
         }
 
-        private void SetValue(string valueName, object? value)
+        private void SetValueInternal(string valueName, object? value)
         {
             var propValue = instanceValueHandler.GetValue(instance, valueName);
             var propValueType = propValue?.GetType()
@@ -341,7 +358,7 @@ internal class ParserInstanceFactory<TInstance>(ArgumentParser parser)
 
         private bool DeserializeTypeConverter(IReadOnlyList<string> values, out object? result)
         {
-            if (instance.GetType().GetProperty(ValueName)?.GetCustomAttributes<TypeConverterAttribute>() is not IEnumerable<TypeConverterAttribute> typeConverterAttributes)
+            if (!TryGetCustomAttributes<TypeConverterAttribute>(instance, ValueName, out var typeConverterAttributes))
             {
                 result = null;
                 return false;
@@ -684,6 +701,26 @@ internal class ParserInstanceFactory<TInstance>(ArgumentParser parser)
             }
 
             return false;
+        }
+
+        private static bool TryGetCustomAttribute<T>(
+            object instance,
+            string propertyName,
+            [MaybeNullWhen(false)] out T result)
+            where T : Attribute
+        {
+            result = instance.GetType().GetProperty(propertyName)?.GetCustomAttribute<T>();
+            return result != null;
+        }
+
+        private static bool TryGetCustomAttributes<T>(
+            object instance,
+            string propertyName,
+            [MaybeNullWhen(false)] out IEnumerable<T> result)
+            where T : Attribute
+        {
+            result = instance.GetType().GetProperty(propertyName)?.GetCustomAttributes<T>();
+            return result != null;
         }
 
         private object CreateInstance(Type type, params object?[]? args)

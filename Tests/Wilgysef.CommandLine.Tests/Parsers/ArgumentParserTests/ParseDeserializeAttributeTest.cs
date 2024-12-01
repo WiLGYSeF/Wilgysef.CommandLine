@@ -41,6 +41,25 @@ public class ParseDeserializeAttributeTest : ParserBaseTest
         result.ValueC.Should().BeEquivalentTo([421, 223], o => o.WithStrictOrdering());
     }
 
+    [Fact]
+    public void DefaultValue()
+    {
+        string[] args = ["--abc", "123"];
+        var parser = new ArgumentParser
+        {
+            Options =
+            [
+                Option.LongOptionWithValue("ValueA", "abc"),
+                Option.LongOptionWithValue("ValueB", "def"),
+            ],
+        };
+
+        var result = parser.ParseTo<IntDefaultTestObject>(args);
+        result.ValueA.Should().Be(123);
+        result.ValueB.Should().Be(6);
+    }
+
+
     private class IntTestObject
     {
         public int ValueA { get; set; }
@@ -50,6 +69,15 @@ public class ParseDeserializeAttributeTest : ParserBaseTest
 
         [TypeConverter(typeof(IntListTestConverter))]
         public List<int>? ValueC { get; set; }
+    }
+
+    private class IntDefaultTestObject
+    {
+        [DefaultValue(4)]
+        public int ValueA { get; set; }
+
+        [DefaultValue(6)]
+        public int ValueB { get; set; }
     }
 
     private class IntTestConverter : TypeConverter
