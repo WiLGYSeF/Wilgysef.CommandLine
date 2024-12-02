@@ -3,6 +3,8 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Wilgysef.CommandLine.Commands;
 using Wilgysef.CommandLine.Exceptions;
+using Wilgysef.CommandLine.Options;
+using Wilgysef.CommandLine.Values;
 
 namespace Wilgysef.CommandLine.Parsers;
 

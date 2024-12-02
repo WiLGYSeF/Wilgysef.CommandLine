@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using FluentAssertions;
+using Wilgysef.CommandLine.Options;
 using Wilgysef.CommandLine.Parsers;
 using Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies;
 

@@ -1,4 +1,5 @@
 ﻿using Wilgysef.CommandLine.Commands;
+using Wilgysef.CommandLine.Options;
 
 namespace Wilgysef.CommandLine.Parsers;
 

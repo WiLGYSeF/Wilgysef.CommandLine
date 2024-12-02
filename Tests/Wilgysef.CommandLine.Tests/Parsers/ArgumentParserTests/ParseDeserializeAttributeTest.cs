@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using System.ComponentModel;
 using System.Globalization;
+using Wilgysef.CommandLine.Options;
 using Wilgysef.CommandLine.Parsers;
 
 namespace Wilgysef.CommandLine.Tests.Parsers.ArgumentParserTests;

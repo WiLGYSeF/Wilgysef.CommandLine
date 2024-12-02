@@ -1,4 +1,4 @@
-﻿namespace Wilgysef.CommandLine.Parsers;
+﻿namespace Wilgysef.CommandLine.Options;
 
 /// <summary>
 /// Option properties.

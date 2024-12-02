@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Wilgysef.CommandLine.Options;
 using Wilgysef.CommandLine.Parsers;
 
 namespace Wilgysef.CommandLine.Tests.HelpMenus.HelpMenuProviderTests;

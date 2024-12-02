@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Wilgysef.CommandLine.Exceptions;
 
-namespace Wilgysef.CommandLine.Parsers;
+namespace Wilgysef.CommandLine.Options;
 
 /// <summary>
 /// Used to parse argument options.
@@ -399,7 +399,7 @@ public class Option : IOptionProperties
             return false;
         }
 
-        var comparison = (LongNameCaseInsensitive ?? ignoreCaseDefault)
+        var comparison = LongNameCaseInsensitive ?? ignoreCaseDefault
             ? StringComparison.CurrentCultureIgnoreCase
             : StringComparison.CurrentCulture;
 

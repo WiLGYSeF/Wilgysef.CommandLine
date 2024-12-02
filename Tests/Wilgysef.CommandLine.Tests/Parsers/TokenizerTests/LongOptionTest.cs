@@ -1,6 +1,7 @@
 using FluentAssertions;
 using Wilgysef.CommandLine.Exceptions;
 using Wilgysef.CommandLine.Extensions;
+using Wilgysef.CommandLine.Options;
 using Wilgysef.CommandLine.Parsers;
 using Wilgysef.CommandLine.Tests.Assertions;
 

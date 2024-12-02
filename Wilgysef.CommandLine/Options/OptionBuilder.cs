@@ -1,7 +1,8 @@
 ﻿using System.Reflection;
 using Wilgysef.CommandLine.Attributes;
+using Wilgysef.CommandLine.Parsers;
 
-namespace Wilgysef.CommandLine.Parsers;
+namespace Wilgysef.CommandLine.Options;
 
 /// <summary>
 /// Builds <see cref="Option"/>s from objects with <see cref="OptionAttribute"/>s.

@@ -1,6 +1,6 @@
 ﻿using Wilgysef.CommandLine.Exceptions;
 
-namespace Wilgysef.CommandLine.Parsers;
+namespace Wilgysef.CommandLine.Values;
 
 /// <summary>
 /// Used to parse argument values at positions.

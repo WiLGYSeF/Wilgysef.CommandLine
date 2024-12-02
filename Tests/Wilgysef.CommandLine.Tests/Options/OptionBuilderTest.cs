@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using Wilgysef.CommandLine.Attributes;
-using Wilgysef.CommandLine.Parsers;
+using Wilgysef.CommandLine.Options;
 
-namespace Wilgysef.CommandLine.Tests.Parsers;
+namespace Wilgysef.CommandLine.Tests.Options;
 
 public class OptionBuilderTest
 {

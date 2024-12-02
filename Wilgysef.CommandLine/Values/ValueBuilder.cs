@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using Wilgysef.CommandLine.Attributes;
 
-namespace Wilgysef.CommandLine.Parsers;
+namespace Wilgysef.CommandLine.Values;
 
 /// <summary>
 /// Builds <see cref="Value"/>s from objects with <see cref="ValueAttribute"/>s.
