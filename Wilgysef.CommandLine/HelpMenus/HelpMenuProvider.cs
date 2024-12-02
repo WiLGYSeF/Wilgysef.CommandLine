@@ -14,7 +14,7 @@ public class HelpMenuProvider
     /// </summary>
     /// <param name="argParser">Argument parser.</param>
     /// <param name="commandList">The command list for which the help should be provided for.</param>
-    public HelpMenuProvider(ArgumentParser argParser, IReadOnlyList<ICommand>? commandList = null)
+    public HelpMenuProvider(ArgumentParser argParser, IReadOnlyList<ICommandConfiguration>? commandList = null)
     {
         Parser = argParser;
         CommandList = commandList;
@@ -152,7 +152,7 @@ public class HelpMenuProvider
     /// <summary>
     /// The command list for which the help should be provided for.
     /// </summary>
-    protected IReadOnlyList<ICommand>? CommandList { get; }
+    protected IReadOnlyList<ICommandConfiguration>? CommandList { get; }
 
     /// <summary>
     /// Options to describe in help provider.
@@ -167,7 +167,7 @@ public class HelpMenuProvider
     /// <summary>
     /// Commands to describe in help provider.
     /// </summary>
-    protected ICollection<ICommand> Commands { get; }
+    protected ICollection<ICommandConfiguration> Commands { get; }
 
     /// <summary>
     /// Gets the help menu.
@@ -197,7 +197,7 @@ public class HelpMenuProvider
     /// <param name="value">Unknown command.</param>
     /// <param name="expectedCommands">Expected commands.</param>
     /// <returns>Unknown command message lines.</returns>
-    public virtual IEnumerable<string> GetUnknownCommandMessage(string value, IEnumerable<ICommand> expectedCommands)
+    public virtual IEnumerable<string> GetUnknownCommandMessage(string value, IEnumerable<ICommandConfiguration> expectedCommands)
     {
         yield return $"Error: \"{value}\" is not a known command.";
 
@@ -421,7 +421,7 @@ public class HelpMenuProvider
     /// </summary>
     /// <param name="command">Command.</param>
     /// <returns>Command name.</returns>
-    protected virtual string GetCommandName(ICommand command)
+    protected virtual string GetCommandName(ICommandConfiguration command)
     {
         return command.Name;
     }
@@ -431,7 +431,7 @@ public class HelpMenuProvider
     /// </summary>
     /// <param name="command">Command.</param>
     /// <returns>Command description.</returns>
-    protected virtual string GetCommandDescription(ICommand command)
+    protected virtual string GetCommandDescription(ICommandConfiguration command)
     {
         return command.Description ?? "";
     }
@@ -700,11 +700,11 @@ public class HelpMenuProvider
     /// <param name="value">Value.</param>
     /// <param name="expectedCommands">Expected commands.</param>
     /// <returns>Similar commands.</returns>
-    protected virtual IEnumerable<ICommand> GetSimilarCommands(string value, IEnumerable<ICommand> expectedCommands)
+    protected virtual IEnumerable<ICommandConfiguration> GetSimilarCommands(string value, IEnumerable<ICommandConfiguration> expectedCommands)
     {
         var threshold = 3;
 
-        var similar = new List<(ICommand Command, int Distance)>();
+        var similar = new List<(ICommandConfiguration Command, int Distance)>();
 
         foreach (var command in expectedCommands)
         {
@@ -829,8 +829,8 @@ public class HelpMenuProvider
         }
 
         int jm1 = 0;
-        int im1 = 0;
-        int im2 = -1;
+        int im1;
+        int im2;
 
         for (int j = 1; j <= maxj; j++)
         {

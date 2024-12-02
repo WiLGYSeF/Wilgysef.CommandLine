@@ -9,7 +9,7 @@ namespace Wilgysef.CommandLine.Parsers;
 public record TokenizedArguments(IReadOnlyList<ArgumentTokenGroup> ArgumentGroups);
 
 /// <summary>
-/// Group of <see cref="ArgumentToken"/>s separated by <see cref="ICommand"/>s.
+/// Group of <see cref="ArgumentToken"/>s separated by <see cref="ICommandConfiguration"/>s.
 /// </summary>
 /// <param name="Arguments">Arguments.</param>
 /// <param name="CommandMatch">Command match.</param>
@@ -18,7 +18,7 @@ public record ArgumentTokenGroup(IReadOnlyList<ArgumentToken> Arguments, Command
     /// <summary>
     /// Command of the group.
     /// </summary>
-    public ICommand? Command => CommandMatch?.Command;
+    public ICommandConfiguration? Command => CommandMatch?.Command;
 }
 
 /// <summary>
@@ -27,7 +27,7 @@ public record ArgumentTokenGroup(IReadOnlyList<ArgumentToken> Arguments, Command
 /// <param name="Command">Command that matched.</param>
 /// <param name="Argument">Argument matched.</param>
 /// <param name="ArgumentPosition">Argument position matched at.</param>
-public record CommandMatch(ICommand Command, string Argument, int ArgumentPosition);
+public record CommandMatch(ICommandConfiguration Command, string Argument, int ArgumentPosition);
 
 /// <summary>
 /// Argument token.

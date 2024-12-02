@@ -99,7 +99,7 @@ public static class ArgumentRegistrationPropertiesExtensions
         this IArgumentRegistrationProperties registration,
         string name,
         Func<ICommandExecutionContext, T, Task> action,
-        Action<IAsyncCommand<T>>? configure = null)
+        Action<ICommandConfiguration>? configure = null)
         where T : class
     {
         var command = new AsyncDelegateCommand<T>(name, action);
@@ -122,7 +122,7 @@ public static class ArgumentRegistrationPropertiesExtensions
         this IArgumentRegistrationProperties registration,
         string name,
         Action<ICommandExecutionContext, T> action,
-        Action<ICommand<T>>? configure = null)
+        Action<ICommandConfiguration>? configure = null)
         where T : class
     {
         var command = new DelegateCommand<T>(name, action);
@@ -144,7 +144,7 @@ public static class ArgumentRegistrationPropertiesExtensions
         this IArgumentRegistrationProperties registration,
         string name,
         Func<ICommandExecutionContext, Task> action,
-        Action<IAsyncCommand>? configure = null)
+        Action<ICommandConfiguration>? configure = null)
     {
         var command = new AsyncDelegateCommand(name, action);
         configure?.Invoke(command);
@@ -165,9 +165,32 @@ public static class ArgumentRegistrationPropertiesExtensions
         this IArgumentRegistrationProperties registration,
         string name,
         Action<ICommandExecutionContext> action,
-        Action<ICommand>? configure = null)
+        Action<ICommandConfiguration>? configure = null)
     {
         var command = new DelegateCommand(name, action);
+        configure?.Invoke(command);
+        registration.Commands.Add(command);
+
+        return registration;
+    }
+
+    /// <summary>
+    /// Configures <paramref name="registration"/> with a new command factory.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="registration"></param>
+    /// <param name="name"></param>
+    /// <param name="factory"></param>
+    /// <param name="configure"></param>
+    /// <returns></returns>
+    public static IArgumentRegistrationProperties AddCommandFactory<T>(
+        this IArgumentRegistrationProperties registration,
+        string name,
+        Func<T> factory,
+        Action<ICommandConfiguration>? configure = null)
+        where T : ICommand
+    {
+        var command = new DelegateCommandFactory<T>(name, factory);
         configure?.Invoke(command);
         registration.Commands.Add(command);
 

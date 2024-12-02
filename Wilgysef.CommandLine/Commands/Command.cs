@@ -55,7 +55,7 @@ public abstract class Command : ICommand
     public ICollection<Value> Values { get; set; } = [];
 
     /// <inheritdoc/>
-    public ICollection<ICommand> Commands { get; set; } = [];
+    public ICollection<ICommandConfiguration> Commands { get; set; } = [];
 
     /// <inheritdoc/>
     public string? ShortNamePrefix { get; set; }

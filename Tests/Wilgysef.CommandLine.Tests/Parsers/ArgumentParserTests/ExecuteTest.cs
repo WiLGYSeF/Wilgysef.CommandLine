@@ -366,7 +366,7 @@ public class ExecuteTest
         var parser = new ArgumentParser();
         parser.ExecutePostOptionInitializationStage = instances =>
         {
-            ((ExecuteTestOptions)instances[1]).ShortOptA = true;
+            ((ExecuteTestOptions)instances[1]!).ShortOptA = true;
             return (instances, null);
         };
 
@@ -449,6 +449,23 @@ public class ExecuteTest
         result.Should().Be(1);
 
         errorHandled.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Execute_Factory()
+    {
+        string[] args = ["abc"];
+        var commandsRun = new List<string>();
+
+        var parser = new ArgumentParser();
+        parser.AddCommandFactory("abc", () => new FactoryTestCommand(context =>
+        {
+            commandsRun.Add(context.Command!);
+        }));
+
+        var result = parser.Execute(args);
+        result.Should().Be(0);
+        commandsRun.Should().BeEquivalentTo(["abc"], o => o.WithStrictOrdering());
     }
 
     private class SingleTestCommand : Command
@@ -579,6 +596,16 @@ public class ExecuteTest
         public override void Execute(ICommandExecutionContext context)
         {
             _executeCallback(context);
+        }
+    }
+
+    private class FactoryTestCommand(Action<ICommandExecutionContext> executeCallback) : Command
+    {
+        public override string Name => "abc";
+
+        public override void Execute(ICommandExecutionContext context)
+        {
+            executeCallback(context);
         }
     }
 }

@@ -568,4 +568,24 @@ public class ValidationTest
         var result = parser.Tokenize(["-abc"]);
         result.ArgumentGroups[0].Arguments.Should().HaveCount(3);
     }
+
+    [Fact]
+    public void OptionGroup_NotExist()
+    {
+        var parser = new ArgumentParser
+        {
+            Options =
+            [
+                new Option("ValueA")
+                {
+                    ShortNames = ['a'],
+                    GroupNames = ["test"],
+                }
+            ],
+        };
+
+        var act = () => parser.Tokenize(["-a"]);
+        act.Should().ThrowExactly<InvalidOptionException>()
+            .Where(e => e.OptionName == "ValueA");
+    }
 }

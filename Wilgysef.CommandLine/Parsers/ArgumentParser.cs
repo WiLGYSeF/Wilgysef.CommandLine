@@ -25,7 +25,7 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
         {
             if (ex is UnknownCommandException unknownCommand)
             {
-                var helpMenu = HelpMenuProviderFactory(this, Array.Empty<ICommand>());
+                var helpMenu = HelpMenuProviderFactory(this, Array.Empty<ICommandConfiguration>());
                 foreach (var line in helpMenu.GetUnknownCommandMessage(unknownCommand.Argument, unknownCommand.ExpectedCommands))
                 {
                     OutputWriter.WriteLine(line);
@@ -33,7 +33,7 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
             }
             else if (ex is UnknownOptionException unknownOption)
             {
-                var helpMenu = HelpMenuProviderFactory(this, Array.Empty<ICommand>());
+                var helpMenu = HelpMenuProviderFactory(this, Array.Empty<ICommandConfiguration>());
                 foreach (var line in helpMenu.GetUnknownOptionMessage(unknownOption.Argument, unknownOption.ExpectedOptions))
                 {
                     OutputWriter.WriteLine(line);
@@ -56,7 +56,7 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
     public ICollection<Value> Values { get; set; } = [];
 
     /// <inheritdoc/>
-    public ICollection<ICommand> Commands { get; set; } = [];
+    public ICollection<ICommandConfiguration> Commands { get; set; } = [];
 
     /// <summary>
     /// Short name prefix.
@@ -163,7 +163,7 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
     /// <summary>
     /// <see cref="HelpMenuProvider"/> factory.
     /// </summary>
-    public Func<ArgumentParser, IReadOnlyList<ICommand>, HelpMenuProvider> HelpMenuProviderFactory { get; set; }
+    public Func<ArgumentParser, IReadOnlyList<ICommandConfiguration>, HelpMenuProvider> HelpMenuProviderFactory { get; set; }
         = (parser, commandList) => new HelpMenuProvider(parser, commandList);
 
     /// <summary>
@@ -314,7 +314,7 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
 
         return instances;
 
-        object Parse(Type commandType, ICommand command, Type optionsType, ArgumentTokenGroup argGroup)
+        object Parse(Type commandType, ICommandConfiguration command, Type optionsType, ArgumentTokenGroup argGroup)
         {
             // we need to create instance factories with dynamic types
             var createParserResultFactoryMethod = typeof(ArgumentParser).GetMethod(nameof(CreateParserInstanceFactory), BindingFlags.Instance | BindingFlags.NonPublic)!
@@ -526,7 +526,7 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
     {
         tokenizedArgs = Tokenize(args);
 
-        if (HasHelpOption(tokenizedArgs) is List<ICommand> commands)
+        if (HasHelpOption(tokenizedArgs) is List<ICommandConfiguration> commands)
         {
             var helpProvider = HelpMenuProviderFactory(this, commands);
             foreach (var line in helpProvider.GetHelpMenu())
@@ -575,19 +575,25 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
             var command = tokenizedArgs.ArgumentGroups[i].Command!;
             var commandType = command.GetType();
 
+            if (command is ICommandFactory commandFactory)
+            {
+                command = commandFactory.Create();
+                commandType = command.GetType();
+            }
+
             context.ArgumentGroup = tokenizedArgs.ArgumentGroups[i];
 
             if (async)
             {
-                if (instances[i] != null
-                    && commandType.GetMethods()
+                if (commandType.InheritsGeneric(typeof(IAsyncCommand<>), out _))
+                {
+                    var execute = commandType.GetMethods()
                         .Where(m => m.Name == nameof(IAsyncCommand<object>.ExecuteAsync)
                             && m.GetParameters() is ParameterInfo[] parameters
                             && parameters.Length == 2
                             && parameters[0].ParameterType == typeof(ICommandExecutionContext))
-                        .SingleOrDefault() is MethodInfo executeAsyncMethod)
-                {
-                    await (Task)executeAsyncMethod.Invoke(command, [context, instances[i]])!;
+                        .Single();
+                    await (Task)execute.Invoke(command, [context, instances[i]])!;
                     continue;
                 }
                 else if (command is IAsyncCommand asyncCommand)
@@ -609,16 +615,20 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
                     .Single();
                 execute.Invoke(command, [context, instances[i]]);
             }
+            else if (command is ICommand command1)
+            {
+                command1.Execute(context);
+            }
             else
             {
-                command.Execute(context);
+                throw new Exception($"{commandType} is not a {nameof(ICommand)} or {nameof(ICommandFactory)}");
             }
         }
 
         return context.ExitCode;
     }
 
-    private List<ICommand>? HasHelpOption(TokenizedArguments tokenizedArgs)
+    private List<ICommandConfiguration>? HasHelpOption(TokenizedArguments tokenizedArgs)
     {
         for (var i = 0; i < tokenizedArgs.ArgumentGroups.Count; i++)
         {

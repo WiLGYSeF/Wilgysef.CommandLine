@@ -6,7 +6,7 @@
 /// <param name="name">Command name.</param>
 /// <param name="action">Action invoked on command execution.</param>
 /// <typeparam name="T">Command options type.</typeparam>
-public class AsyncDelegateCommand<T>(string name, Func<ICommandExecutionContext, T, Task> action) : AsyncCommand<T>
+internal class AsyncDelegateCommand<T>(string name, Func<ICommandExecutionContext, T, Task> action) : AsyncCommand<T>
     where T : class
 {
     /// <inheritdoc/>
@@ -22,7 +22,7 @@ public class AsyncDelegateCommand<T>(string name, Func<ICommandExecutionContext,
 /// </summary>
 /// <param name="name">Command name.</param>
 /// <param name="action">Action invoked on command execution.</param>
-public class AsyncDelegateCommand(string name, Func<ICommandExecutionContext, Task> action) : AsyncCommand
+internal class AsyncDelegateCommand(string name, Func<ICommandExecutionContext, Task> action) : AsyncCommand
 {
     /// <inheritdoc/>
     public override string Name => name;
@@ -38,7 +38,7 @@ public class AsyncDelegateCommand(string name, Func<ICommandExecutionContext, Ta
 /// <param name="name">Command name.</param>
 /// <param name="action">Action invoked on command execution.</param>
 /// <typeparam name="T">Command options type.</typeparam>
-public class DelegateCommand<T>(string name, Action<ICommandExecutionContext, T> action) : Command<T>
+internal class DelegateCommand<T>(string name, Action<ICommandExecutionContext, T> action) : Command<T>
     where T : class
 {
     /// <inheritdoc/>
@@ -54,7 +54,7 @@ public class DelegateCommand<T>(string name, Action<ICommandExecutionContext, T>
 /// </summary>
 /// <param name="name">Command name.</param>
 /// <param name="action">Action invoked on command execution.</param>
-public class DelegateCommand(string name, Action<ICommandExecutionContext> action) : Command
+internal class DelegateCommand(string name, Action<ICommandExecutionContext> action) : Command
 {
     /// <inheritdoc/>
     public override string Name => name;

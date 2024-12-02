@@ -16,7 +16,7 @@ public class UnknownCommandException : ArgumentParseException
     public UnknownCommandException(
         string argument,
         int argumentPosition,
-        IEnumerable<ICommand> expectedCommands)
+        IEnumerable<ICommandConfiguration> expectedCommands)
         : base(argument, argumentPosition, $"The argument \"{argument}\" at position {argumentPosition} is an unknown command")
     {
         ExpectedCommands = expectedCommands;
@@ -25,5 +25,5 @@ public class UnknownCommandException : ArgumentParseException
     /// <summary>
     /// Expected commands.
     /// </summary>
-    public IEnumerable<ICommand> ExpectedCommands { get; }
+    public IEnumerable<ICommandConfiguration> ExpectedCommands { get; }
 }

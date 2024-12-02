@@ -703,20 +703,10 @@ internal class ParserInstanceFactory<TInstance>(ArgumentParser parser)
             return false;
         }
 
-        private static bool TryGetCustomAttribute<T>(
-            object instance,
-            string propertyName,
-            [MaybeNullWhen(false)] out T result)
-            where T : Attribute
-        {
-            result = instance.GetType().GetProperty(propertyName)?.GetCustomAttribute<T>();
-            return result != null;
-        }
-
         private static bool TryGetCustomAttributes<T>(
             object instance,
             string propertyName,
-            [MaybeNullWhen(false)] out IEnumerable<T> result)
+            [NotNullWhen(true)] out IEnumerable<T>? result)
             where T : Attribute
         {
             result = instance.GetType().GetProperty(propertyName)?.GetCustomAttributes<T>();

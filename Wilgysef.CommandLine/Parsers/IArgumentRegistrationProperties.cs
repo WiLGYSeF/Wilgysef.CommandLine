@@ -25,5 +25,5 @@ public interface IArgumentRegistrationProperties
     /// <summary>
     /// Commands.
     /// </summary>
-    ICollection<ICommand> Commands { get; set; }
+    ICollection<ICommandConfiguration> Commands { get; set; }
 }

@@ -18,7 +18,7 @@ internal class Tokenizer(ArgumentParser argumentParser)
 
     private ICollection<Value> Values { get; set; } = argumentParser.Values;
 
-    private ICollection<ICommand> Commands { get; set; } = argumentParser.Commands;
+    private ICollection<ICommandConfiguration> Commands { get; set; } = argumentParser.Commands;
 
     private string ShortNamePrefixDefault { get; set; } = argumentParser.ShortNamePrefixDefault;
 
@@ -154,7 +154,9 @@ internal class Tokenizer(ArgumentParser argumentParser)
 
         return new TokenizedArguments(argGroups);
 
-        static bool MatchesCommand(IEnumerable<ICommand> commands, string arg, [NotNullWhen(true)] out ICommand? command)
+        static bool MatchesCommand(
+            IEnumerable<ICommandConfiguration> commands, string arg,
+            [NotNullWhen(true)] out ICommandConfiguration? command)
         {
             foreach (var cmd in commands)
             {
@@ -174,7 +176,7 @@ internal class Tokenizer(ArgumentParser argumentParser)
     /// Applies options from command.
     /// </summary>
     /// <param name="command">Command.</param>
-    private void ApplyOptions(ICommand command)
+    private void ApplyOptions(ICommandConfiguration command)
     {
         SetIfNotNull(x => x.ShortNamePrefixDefault, command.ShortNamePrefix);
         SetIfNotNull(x => x.LongNamePrefixDefault, command.LongNamePrefix);
@@ -795,7 +797,7 @@ internal class Tokenizer(ArgumentParser argumentParser)
         }
     }
 
-    private void UseCommandContext(ICommand command)
+    private void UseCommandContext(ICommandConfiguration command)
     {
         Options = command.Options;
         OptionGroups = command.OptionGroups;
