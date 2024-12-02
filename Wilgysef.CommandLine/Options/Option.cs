@@ -6,7 +6,7 @@ namespace Wilgysef.CommandLine.Options;
 /// <summary>
 /// Used to parse argument options.
 /// </summary>
-public class Option : IOptionProperties
+public class Option : IOption
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Option"/> class.
@@ -23,37 +23,22 @@ public class Option : IOptionProperties
         Name = name;
     }
 
-    /// <summary>
-    /// Option name.
-    /// </summary>
-    /// <remarks>
-    /// Used to determine the instance property to set when parsing.
-    /// </remarks>
+    /// <inheritdoc/>
     public string Name { get; set; }
 
-    /// <summary>
-    /// Option description.
-    /// </summary>
+    /// <inheritdoc/>
     public string? Description { get; set; }
 
-    /// <summary>
-    /// Indicates if the option should be hidden from help providers.
-    /// </summary>
+    /// <inheritdoc/>
     public bool Hidden { get; set; }
 
-    /// <summary>
-    /// Value names to display in help providers.
-    /// </summary>
+    /// <inheritdoc/>
     public ICollection<string>? ValueNames { get; set; }
 
-    /// <summary>
-    /// Option short names.
-    /// </summary>
+    /// <inheritdoc/>
     public ICollection<char>? ShortNames { get; set; }
 
-    /// <summary>
-    /// Option long names.
-    /// </summary>
+    /// <inheritdoc/>
     public ICollection<string>? LongNames { get; set; }
 
     /// <inheritdoc/>
@@ -65,50 +50,28 @@ public class Option : IOptionProperties
     /// <inheritdoc/>
     public ICollection<string>? KeyValueSeparators { get; set; }
 
-    /// <summary>
-    /// Number of values the option may have.
-    /// </summary>
+    /// <inheritdoc/>
     public ValueRange? ValueCountRange { get; set; }
 
-    /// <summary>
-    /// Indicates if the option is a boolean switch value.
-    /// </summary>
+    /// <inheritdoc/>
     public bool Switch { get; set; }
 
-    /// <summary>
-    /// Switch negation long prefix used to configure a negatable option.
-    /// </summary>
-    /// <remarks>
-    /// If the option is <c>--no-cache</c>, <c>"no-"</c> is the negated switch long prefix.
-    /// </remarks>
+    /// <inheritdoc/>
     public string? SwitchNegateLongPrefix { get; set; }
 
-    /// <summary>
-    /// Switch negation short names.
-    /// </summary>
-    /// <remarks>
-    /// If the option is <c>-P</c>, <c>P</c> is the negated short name.
-    /// </remarks>
+    /// <inheritdoc/>
     public ICollection<char>? SwitchNegateShortNames { get; set; }
 
-    /// <summary>
-    /// Indicates if the option is a counter value.
-    /// </summary>
+    /// <inheritdoc/>
     public bool Counter { get; set; }
 
-    /// <summary>
-    /// Indicates if the option is required.
-    /// </summary>
+    /// <inheritdoc/>
     public bool Required { get; set; }
 
-    /// <summary>
-    /// Name of groups the option belongs to.
-    /// </summary>
+    /// <inheritdoc/>
     public ICollection<string>? GroupNames { get; set; }
 
-    /// <summary>
-    /// Indicates if the option should only be provided once.
-    /// </summary>
+    /// <inheritdoc/>
     public bool Unique { get; set; }
 
     /// <inheritdoc/>
@@ -120,19 +83,13 @@ public class Option : IOptionProperties
     /// <inheritdoc/>
     public bool? KeepFirstValue { get; set; }
 
-    /// <summary>
-    /// Indicates if the option has short names.
-    /// </summary>
+    /// <inheritdoc/>
     public bool HasShortNames => ShortNames != null && ShortNames.Count > 0;
 
-    /// <summary>
-    /// Indicates if the option has long names.
-    /// </summary>
+    /// <inheritdoc/>
     public bool HasLongNames => LongNames != null && LongNames.Count > 0;
 
-    /// <summary>
-    /// Indicates if the option can have values.
-    /// </summary>
+    /// <inheritdoc/>
     public bool CanHaveValues => ValueCountRange != null
         && (!ValueCountRange.Max.HasValue || ValueCountRange.Max > 0);
 
@@ -360,12 +317,7 @@ public class Option : IOptionProperties
 
     #endregion
 
-    /// <summary>
-    /// Checks if <paramref name="ch"/> matches the option.
-    /// </summary>
-    /// <param name="ch">Argument name, without prefixes or key-values.</param>
-    /// <param name="switchNegated">Indicates if the argument is a switch-negation.</param>
-    /// <returns><see langword="true"/> if <paramref name="ch"/> matches the option, otherwise <see langword="false"/>.</returns>
+    /// <inheritdoc/>
     public bool MatchesShortName(char ch, out bool switchNegated)
     {
         if (ShortNames == null)
@@ -384,13 +336,7 @@ public class Option : IOptionProperties
         return ShortNames.Contains(ch);
     }
 
-    /// <summary>
-    /// Checks if <paramref name="argName"/> matches the option.
-    /// </summary>
-    /// <param name="argName">Argument name, without prefixes or key-values.</param>
-    /// <param name="switchNegated">Indicates if the argument is a switch-negation.</param>
-    /// <param name="ignoreCaseDefault">Whether to ignore case-sensitivity if <see cref="LongNameCaseInsensitive"/> is <see langword="null"/>.</param>
-    /// <returns><see langword="true"/> if <paramref name="argName"/> matches the option, otherwise <see langword="false"/>.</returns>
+    /// <inheritdoc/>
     public bool MatchesLongName(string argName, out bool switchNegated, bool ignoreCaseDefault = false)
     {
         if (LongNames == null)
@@ -416,12 +362,7 @@ public class Option : IOptionProperties
         return LongNames.Any(n => n.Equals(argName, comparison));
     }
 
-    /// <summary>
-    /// Gets the option argument.
-    /// </summary>
-    /// <param name="shortNamePrefixDefault">Short name prefix default if <see cref="ShortNamePrefix"/> is <see langword="null"/>.</param>
-    /// <param name="longNamePrefixDefault">Long name prefix default if <see cref="LongNamePrefix"/> is <see langword="null"/>.</param>
-    /// <returns>Option argument.</returns>
+    /// <inheritdoc/>
     public string GetOptionArgument(string shortNamePrefixDefault = "-", string longNamePrefixDefault = "--")
     {
         return LongNames != null
@@ -429,10 +370,7 @@ public class Option : IOptionProperties
             : $"{ShortNamePrefix ?? shortNamePrefixDefault}{ShortNames!.First()}";
     }
 
-    /// <summary>
-    /// Validates the option.
-    /// </summary>
-    /// <exception cref="InvalidOptionException">Thrown if the option is invalid.</exception>
+    /// <inheritdoc/>
     public void Validate()
     {
         ThrowIf(!HasShortNames && !HasLongNames, "Option does not have long or short names set");

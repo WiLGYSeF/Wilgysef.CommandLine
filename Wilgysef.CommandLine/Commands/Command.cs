@@ -48,13 +48,13 @@ public abstract class Command : ICommand
     public bool CaseInsensitiveNameMatch { get; set; }
 
     /// <inheritdoc/>
-    public ICollection<Option> Options { get; set; } = [];
+    public ICollection<IOption> Options { get; set; } = [];
 
     /// <inheritdoc/>
-    public ICollection<OptionGroup> OptionGroups { get; set; } = [];
+    public ICollection<IOptionGroup> OptionGroups { get; set; } = [];
 
     /// <inheritdoc/>
-    public ICollection<Value> Values { get; set; } = [];
+    public ICollection<IValue> Values { get; set; } = [];
 
     /// <inheritdoc/>
     public ICollection<ICommandConfiguration> Commands { get; set; } = [];

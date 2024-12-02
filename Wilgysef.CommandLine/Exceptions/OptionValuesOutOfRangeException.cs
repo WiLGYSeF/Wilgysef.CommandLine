@@ -3,43 +3,36 @@
 /// <summary>
 /// Thrown if an option value count was out of range.
 /// </summary>
-public class OptionValuesOutOfRangeException : ArgumentParseException
+/// <param name="argument">Argument.</param>
+/// <param name="argumentPosition">Argument postion.</param>
+/// <param name="expectedMin">Expected minimum values.</param>
+/// <param name="expectedMax">Expected maximum values.</param>
+/// <param name="actual">Actual value count.</param>
+public class OptionValuesOutOfRangeException(
+    string argument,
+    int argumentPosition,
+    int expectedMin,
+    int? expectedMax,
+    int actual)
+    : ArgumentParseException(
+        argument,
+        argumentPosition,
+        GetMessage(argument, expectedMin, expectedMax, actual))
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="OptionValuesOutOfRangeException"/> class.
-    /// </summary>
-    /// <param name="argument">Argument.</param>
-    /// <param name="argumentPosition">Argument postion.</param>
-    /// <param name="expectedMin">Expected minimum values.</param>
-    /// <param name="expectedMax">Expected maximum values.</param>
-    /// <param name="actual">Actual value count.</param>
-    public OptionValuesOutOfRangeException(
-        string argument,
-        int argumentPosition,
-        int expectedMin,
-        int? expectedMax,
-        int actual)
-        : base(argument, argumentPosition, GetMessage(argument, expectedMin, expectedMax, actual))
-    {
-        ExpectedMinValues = expectedMin;
-        ExpectedMaxValues = expectedMax;
-        ActualValues = actual;
-    }
-
     /// <summary>
     /// Expected minimum values.
     /// </summary>
-    public int ExpectedMinValues { get; }
+    public int ExpectedMinValues { get; } = expectedMin;
 
     /// <summary>
     /// Expected maximum values.
     /// </summary>
-    public int? ExpectedMaxValues { get; }
+    public int? ExpectedMaxValues { get; } = expectedMax;
 
     /// <summary>
     /// Actual value count.
     /// </summary>
-    public int ActualValues { get; }
+    public int ActualValues { get; } = actual;
 
     private static string GetMessage(
         string argument,

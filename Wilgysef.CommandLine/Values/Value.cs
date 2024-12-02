@@ -1,11 +1,12 @@
-﻿using Wilgysef.CommandLine.Exceptions;
+﻿using System.Diagnostics.CodeAnalysis;
+using Wilgysef.CommandLine.Exceptions;
 
 namespace Wilgysef.CommandLine.Values;
 
 /// <summary>
 /// Used to parse argument values at positions.
 /// </summary>
-public class Value
+public class Value : IValue
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Value"/> class.
@@ -25,32 +26,19 @@ public class Value
         EndIndex = endIndex;
     }
 
-    /// <summary>
-    /// Value name.
-    /// </summary>
-    /// <remarks>
-    /// Used to determine the instance property to set when parsing.
-    /// </remarks>
+    /// <inheritdoc/>
     public string Name { get; set; }
 
-    /// <summary>
-    /// Value description.
-    /// </summary>
+    /// <inheritdoc/>
     public string? Description { get; set; }
 
-    /// <summary>
-    /// Value display name.
-    /// </summary>
+    /// <inheritdoc/>
     public string? ValueName { get; set; }
 
-    /// <summary>
-    /// Argument position start index.
-    /// </summary>
+    /// <inheritdoc/>
     public int StartIndex { get; set; }
 
-    /// <summary>
-    /// Argument position end index.
-    /// </summary>
+    /// <inheritdoc/>
     public int? EndIndex { get; set; }
 
     /// <summary>
@@ -89,15 +77,12 @@ public class Value
     public static Value All(string name)
         => new(name, 0, null);
 
-    /// <summary>
-    /// Validates the value.
-    /// </summary>
-    /// <exception cref="InvalidOptionException">Thrown if the value is invalid.</exception>
+    /// <inheritdoc/>
     public void Validate()
     {
         ThrowIf(EndIndex.HasValue && StartIndex > EndIndex.Value, "Start index cannot be greater than end index");
 
-        void ThrowIf(bool value, string message)
+        void ThrowIf([DoesNotReturnIf(true)] bool value, string message)
         {
             if (value)
             {

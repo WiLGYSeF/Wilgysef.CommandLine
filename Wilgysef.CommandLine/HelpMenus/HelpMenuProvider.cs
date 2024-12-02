@@ -159,12 +159,12 @@ public class HelpMenuProvider
     /// <summary>
     /// Options to describe in help provider.
     /// </summary>
-    protected ICollection<Option> Options { get; }
+    protected ICollection<IOption> Options { get; }
 
     /// <summary>
     /// Values to describe in help provider.
     /// </summary>
-    protected ICollection<Value> Values { get; }
+    protected ICollection<IValue> Values { get; }
 
     /// <summary>
     /// Commands to describe in help provider.
@@ -223,7 +223,7 @@ public class HelpMenuProvider
     /// <param name="value">Unknown option.</param>
     /// <param name="expectedOptions">Expected options.</param>
     /// <returns>Unknown option message lines.</returns>
-    public virtual IEnumerable<string> GetUnknownOptionMessage(string value, IEnumerable<Option> expectedOptions)
+    public virtual IEnumerable<string> GetUnknownOptionMessage(string value, IEnumerable<IOption> expectedOptions)
     {
         yield return $"Error: \"{value}\" is not a known option.";
 
@@ -386,7 +386,7 @@ public class HelpMenuProvider
     /// </summary>
     /// <param name="value">Value.</param>
     /// <returns>Value name.</returns>
-    protected virtual string GetValueName(Value value)
+    protected virtual string GetValueName(IValue value)
     {
         return value.ValueName ?? value.Name;
     }
@@ -396,7 +396,7 @@ public class HelpMenuProvider
     /// </summary>
     /// <param name="value">Value.</param>
     /// <returns>Value description.</returns>
-    protected virtual string GetValueDescription(Value value)
+    protected virtual string GetValueDescription(IValue value)
     {
         return value.Description ?? "";
     }
@@ -460,7 +460,7 @@ public class HelpMenuProvider
     /// </summary>
     /// <param name="option">Option.</param>
     /// <returns>Option argument and values.</returns>
-    protected virtual string GetOptionArgumentAndValues(Option option)
+    protected virtual string GetOptionArgumentAndValues(IOption option)
     {
         var builder = new StringBuilder();
         builder.Append(string.Join(OptionNamesSeparator, GetOptionNames(option)));
@@ -480,7 +480,7 @@ public class HelpMenuProvider
     /// </summary>
     /// <param name="option">Option.</param>
     /// <returns>Option argument names.</returns>
-    protected virtual IEnumerable<string> GetOptionNames(Option option)
+    protected virtual IEnumerable<string> GetOptionNames(IOption option)
     {
         return GetOptionShortArguments(option)
             .Concat(GetOptionLongArguments(option));
@@ -491,7 +491,7 @@ public class HelpMenuProvider
     /// </summary>
     /// <param name="option">Option.</param>
     /// <returns>Short arguments.</returns>
-    protected virtual IEnumerable<string> GetOptionShortArguments(Option option)
+    protected virtual IEnumerable<string> GetOptionShortArguments(IOption option)
     {
         if (option.HasShortNames)
         {
@@ -508,7 +508,7 @@ public class HelpMenuProvider
     /// </summary>
     /// <param name="option">Option.</param>
     /// <returns>Long arguments.</returns>
-    protected virtual IEnumerable<string> GetOptionLongArguments(Option option)
+    protected virtual IEnumerable<string> GetOptionLongArguments(IOption option)
     {
         if (option.HasLongNames)
         {
@@ -532,7 +532,7 @@ public class HelpMenuProvider
     /// </summary>
     /// <param name="option">Option.</param>
     /// <returns>Value names.</returns>
-    protected virtual IEnumerable<string> GetOptionValues(Option option)
+    protected virtual IEnumerable<string> GetOptionValues(IOption option)
     {
         if (option.ValueCountRange == null || option.ValueNames == null)
         {
@@ -571,7 +571,7 @@ public class HelpMenuProvider
     /// </summary>
     /// <param name="option">Option.</param>
     /// <returns>Option description.</returns>
-    protected virtual string GetOptionDescription(Option option)
+    protected virtual string GetOptionDescription(IOption option)
     {
         return option.Description ?? "";
     }
@@ -727,9 +727,9 @@ public class HelpMenuProvider
     /// <param name="value">Value.</param>
     /// <param name="expectedOptions">Expected options.</param>
     /// <returns>Similar commands.</returns>
-    protected virtual IEnumerable<Option> GetSimilarOptions(string value, IEnumerable<Option> expectedOptions)
+    protected virtual IEnumerable<IOption> GetSimilarOptions(string value, IEnumerable<IOption> expectedOptions)
     {
-        var similar = new List<(Option Option, int Distance)>();
+        var similar = new List<(IOption Option, int Distance)>();
 
         foreach (var option in expectedOptions)
         {
@@ -743,7 +743,7 @@ public class HelpMenuProvider
         return similar.OrderBy(e => e.Distance)
             .Select(e => e.Option);
 
-        int GetOptionDistance(Option option, string value)
+        int GetOptionDistance(IOption option, string value)
         {
             var minDistance = int.MaxValue;
 

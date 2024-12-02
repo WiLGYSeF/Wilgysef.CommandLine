@@ -5,7 +5,7 @@ namespace Wilgysef.CommandLine.Options;
 /// <summary>
 /// Option group.
 /// </summary>
-public class OptionGroup
+public class OptionGroup : IOptionGroup
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="OptionGroup"/> class.
@@ -25,29 +25,19 @@ public class OptionGroup
         Max = max;
     }
 
-    /// <summary>
-    /// Option group name.
-    /// </summary>
-    public string Name { get; }
+    /// <inheritdoc/>
+    public string Name { get; set; }
 
-    /// <summary>
-    /// Minimum number of expected options specified for the group, or <see langword="null"/> if all options are expected.
-    /// </summary>
+    /// <inheritdoc/>
     public int? Min { get; set; }
 
-    /// <summary>
-    /// Maximum number of expected options specified for the group, or <see langword="null"/> if at least <see name="Min"/> options are expected.
-    /// </summary>
+    /// <inheritdoc/>
     public int? Max { get; set; }
 
-    /// <summary>
-    /// Indicates if the option group is mutually exclusive.
-    /// </summary>
+    /// <inheritdoc/>
     public bool IsMutuallyExclusive => Max == 1;
 
-    /// <summary>
-    /// Indicates if the option group is required.
-    /// </summary>
+    /// <inheritdoc/>
     public bool IsRequired => Min == 1;
 
     /// <summary>
@@ -82,12 +72,7 @@ public class OptionGroup
     public static OptionGroup All(string name)
         => new(name, null, null);
 
-    /// <summary>
-    /// Checks if the <paramref name="count"/> of options specified is valid when there are <paramref name="optionsInGroup"/> number of options in the group.
-    /// </summary>
-    /// <param name="count">Options specified count.</param>
-    /// <param name="optionsInGroup">Number of options in group.</param>
-    /// <returns><see langword="true"/> if the count matches the number of options in the group, otherwise <see langword="false"/>.</returns>
+    /// <inheritdoc/>
     public bool MatchesCount(int count, int optionsInGroup)
     {
         if (!Min.HasValue)
@@ -98,10 +83,7 @@ public class OptionGroup
         return Min.Value <= count && (!Max.HasValue || Max.Value >= count);
     }
 
-    /// <summary>
-    /// Validates the option group.
-    /// </summary>
-    /// <exception cref="InvalidOptionException">Thrown if the option group is not valid.</exception>
+    /// <inheritdoc/>
     public void Validate()
     {
         if (!Min.HasValue && Max.HasValue)

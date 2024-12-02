@@ -6,47 +6,37 @@ namespace Wilgysef.CommandLine.Exceptions;
 /// <summary>
 /// Thrown if the option group's expected option count and the specified option count mismatch.
 /// </summary>
-public class OptionGroupOptionMismatchException : ArgumentParseException
+/// <param name="optionGroup">Option group.</param>
+/// <param name="options">Options in option group.</param>
+/// <param name="argumentTokens">Argument tokens of options.</param>
+/// <param name="message">Message.</param>
+/// <param name="innerException">Inner exception.</param>
+public class OptionGroupOptionMismatchException(
+    IOptionGroup? optionGroup,
+    ICollection<IOption> options,
+    ICollection<ArgumentToken> argumentTokens,
+    string message,
+    Exception? innerException = null)
+    : ArgumentParseException(
+        argumentTokens.FirstOrDefault()?.Argument ?? options.First().GetOptionArgument(),
+        argumentTokens.FirstOrDefault()?.ArgumentPosition ?? -1,
+        message,
+        innerException)
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="OptionGroupOptionMismatchException"/> class.
-    /// </summary>
-    /// <param name="optionGroup">Option group.</param>
-    /// <param name="options">Options in option group.</param>
-    /// <param name="argumentTokens">Argument tokens of options.</param>
-    /// <param name="message">Message.</param>
-    /// <param name="innerException">Inner exception.</param>
-    public OptionGroupOptionMismatchException(
-        OptionGroup? optionGroup,
-        ICollection<Option> options,
-        ICollection<ArgumentToken> argumentTokens,
-        string message,
-        Exception? innerException = null)
-        : base(
-            argumentTokens.FirstOrDefault()?.Argument ?? options.First().GetOptionArgument(),
-            argumentTokens.FirstOrDefault()?.ArgumentPosition ?? -1,
-            message,
-            innerException)
-    {
-        OptionGroup = optionGroup;
-        Options = options;
-        ArgumentTokens = argumentTokens;
-    }
-
     /// <summary>
     /// Option group.
     /// </summary>
-    public OptionGroup? OptionGroup { get; }
+    public IOptionGroup? OptionGroup { get; } = optionGroup;
 
     /// <summary>
     /// Options in option group.
     /// </summary>
-    public ICollection<Option> Options { get; }
+    public ICollection<IOption> Options { get; } = options;
 
     /// <summary>
     /// Argument tokens of options.
     /// </summary>
-    public ICollection<ArgumentToken> ArgumentTokens { get; }
+    public ICollection<ArgumentToken> ArgumentTokens { get; } = argumentTokens;
 
     /// <summary>
     /// Indicates if there are required options missing.
@@ -63,7 +53,7 @@ public class OptionGroupOptionMismatchException : ArgumentParseException
     /// </summary>
     /// <param name="option">Option.</param>
     /// <returns><see cref="OptionGroupOptionMismatchException"/>.</returns>
-    public static OptionGroupOptionMismatchException RequiredOptionMissing(Option option)
+    public static OptionGroupOptionMismatchException RequiredOptionMissing(IOption option)
     {
         var message = $"The option \"{option.GetOptionArgument()}\" is required";
         return new OptionGroupOptionMismatchException(null, [option], Array.Empty<ArgumentToken>(), message)
@@ -79,8 +69,8 @@ public class OptionGroupOptionMismatchException : ArgumentParseException
     /// <param name="options">Options in option group.</param>
     /// <returns><see cref="OptionGroupOptionMismatchException"/>.</returns>
     public static OptionGroupOptionMismatchException RequiredOptionMissing(
-        OptionGroup group,
-        ICollection<Option> options)
+        IOptionGroup group,
+        ICollection<IOption> options)
     {
         var message = $"At least one of these options are required: {string.Join(", ", options.Select(o => o.GetOptionArgument()))}";
         return new OptionGroupOptionMismatchException(group, options, Array.Empty<ArgumentToken>(), message)
@@ -97,8 +87,8 @@ public class OptionGroupOptionMismatchException : ArgumentParseException
     /// <param name="argTokens">Argument tokens of options.</param>
     /// <returns><see cref="OptionGroupOptionMismatchException"/>.</returns>
     public static OptionGroupOptionMismatchException MutuallyExclusiveOption(
-        OptionGroup group,
-        ICollection<Option> options,
+        IOptionGroup group,
+        ICollection<IOption> options,
         ICollection<ArgumentToken> argTokens)
     {
         var first = argTokens.ElementAt(0);
@@ -119,8 +109,8 @@ public class OptionGroupOptionMismatchException : ArgumentParseException
     /// <param name="argTokens">Argument tokens of options.</param>
     /// <returns><see cref="OptionGroupOptionMismatchException"/>.</returns>
     public static OptionGroupOptionMismatchException OptionMismatch(
-        OptionGroup group,
-        ICollection<Option> options,
+        IOptionGroup group,
+        ICollection<IOption> options,
         ICollection<ArgumentToken> argTokens)
     {
         var optionStrs = string.Join(", ", options.Select(o => o.GetOptionArgument()));

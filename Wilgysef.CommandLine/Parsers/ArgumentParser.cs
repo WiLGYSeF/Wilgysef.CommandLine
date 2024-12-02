@@ -49,13 +49,13 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
     }
 
     /// <inheritdoc/>
-    public ICollection<Option> Options { get; set; } = [];
+    public ICollection<IOption> Options { get; set; } = [];
 
     /// <inheritdoc/>
-    public ICollection<OptionGroup> OptionGroups { get; set; } = [];
+    public ICollection<IOptionGroup> OptionGroups { get; set; } = [];
 
     /// <inheritdoc/>
-    public ICollection<Value> Values { get; set; } = [];
+    public ICollection<IValue> Values { get; set; } = [];
 
     /// <inheritdoc/>
     public ICollection<ICommandConfiguration> Commands { get; set; } = [];
@@ -155,7 +155,7 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
     /// <summary>
     /// Help option to determine if the help menu provider should be invoked.
     /// </summary>
-    public Option? HelpOption { get; set; } = new Option("Help")
+    public IOption? HelpOption { get; set; } = new Option("Help")
     {
         Description = "Displays the help menu",
         ShortNames = ['h'],

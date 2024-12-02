@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using Wilgysef.CommandLine.Attributes;
-using Wilgysef.CommandLine.Parsers;
 
 namespace Wilgysef.CommandLine.Options;
 

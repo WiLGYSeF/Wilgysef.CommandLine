@@ -1,6 +1,4 @@
-﻿using Wilgysef.CommandLine.Parsers;
-
-namespace Wilgysef.CommandLine.Commands;
+﻿namespace Wilgysef.CommandLine.Commands;
 
 /// <summary>
 /// Command interface.

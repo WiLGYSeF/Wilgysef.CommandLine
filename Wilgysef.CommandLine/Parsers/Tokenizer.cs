@@ -14,11 +14,11 @@ namespace Wilgysef.CommandLine.Parsers;
 /// <param name="argumentParser">Argument parser.</param>
 internal class Tokenizer(ArgumentParser argumentParser)
 {
-    private ICollection<Option> Options { get; set; } = argumentParser.Options;
+    private ICollection<IOption> Options { get; set; } = argumentParser.Options;
 
-    private ICollection<OptionGroup> OptionGroups { get; set; } = argumentParser.OptionGroups;
+    private ICollection<IOptionGroup> OptionGroups { get; set; } = argumentParser.OptionGroups;
 
-    private ICollection<Value> Values { get; set; } = argumentParser.Values;
+    private ICollection<IValue> Values { get; set; } = argumentParser.Values;
 
     private ICollection<ICommandConfiguration> Commands { get; set; } = argumentParser.Commands;
 
@@ -51,8 +51,8 @@ internal class Tokenizer(ArgumentParser argumentParser)
     /// <returns>Tokenized arguments.</returns>
     public TokenizedArguments Tokenize(IEnumerable<string> args)
     {
-        List<Option>? helpOptionLongOption = null;
-        Trie<Option>? helpOptionPrefixTrie = null;
+        List<IOption>? helpOptionLongOption = null;
+        Trie<IOption>? helpOptionPrefixTrie = null;
 
         if (argumentParser.HelpOption != null)
         {
@@ -79,9 +79,9 @@ internal class Tokenizer(ArgumentParser argumentParser)
 
         do
         {
-            var longOptions = new List<Option>();
-            var shortOptions = new List<Option>();
-            var shortOptionPrefixTrie = new Trie<Option>();
+            var longOptions = new List<IOption>();
+            var shortOptions = new List<IOption>();
+            var shortOptionPrefixTrie = new Trie<IOption>();
             foundCommand = null;
 
             ValidateOptionsValuesCommands(longOptions, shortOptions, shortOptionPrefixTrie);
@@ -203,8 +203,8 @@ internal class Tokenizer(ArgumentParser argumentParser)
 
     private bool TokenizeArg(
         BufferedEnumerator<string> argsEnumerator,
-        List<Option> longOptions,
-        Trie<Option> shortOptionPrefixTrie,
+        List<IOption> longOptions,
+        Trie<IOption> shortOptionPrefixTrie,
         string arg,
         ref int argPos,
         List<ArgumentToken> argTokens)
@@ -239,7 +239,7 @@ internal class Tokenizer(ArgumentParser argumentParser)
     }
 
     private ArgumentToken? TokenizeLongOption(
-        Option option,
+        IOption option,
         string arg,
         ref int argPos,
         BufferedEnumerator<string> argsEnumerator)
@@ -277,7 +277,7 @@ internal class Tokenizer(ArgumentParser argumentParser)
     }
 
     private List<ArgumentToken>? TokenizeShortOption(
-        IEnumerable<Option> options,
+        IEnumerable<IOption> options,
         string arg,
         ref int argPos,
         string prefix,
@@ -349,7 +349,7 @@ internal class Tokenizer(ArgumentParser argumentParser)
 
         return argTokens;
 
-        Option? MatchOption(char ch)
+        IOption? MatchOption(char ch)
         {
             foreach (var option in options)
             {
@@ -364,7 +364,7 @@ internal class Tokenizer(ArgumentParser argumentParser)
     }
 
     private int CollectArgumentValues(
-        Option option,
+        IOption option,
         int argsCollected,
         BufferedEnumerator<string> argsEnumerator,
         List<string> values)
@@ -413,13 +413,13 @@ internal class Tokenizer(ArgumentParser argumentParser)
         return argsMoved;
     }
 
-    private bool MatchesOption(Option option, string arg)
+    private bool MatchesOption(IOption option, string arg)
     {
         return MatchesLongOption(option, arg, out _, out _)
             || MatchesShortOption(option, arg, out _);
     }
 
-    private bool MatchesLongOption(Option option, string arg, [NotNullWhen(true)] out string? argMatch, out string? value)
+    private bool MatchesLongOption(IOption option, string arg, [NotNullWhen(true)] out string? argMatch, out string? value)
     {
         var longPrefix = option.LongNamePrefix ?? LongNamePrefixDefault;
 
@@ -452,7 +452,7 @@ internal class Tokenizer(ArgumentParser argumentParser)
         return option.MatchesLongName(argSubstring, out _, LongNameCaseInsensitiveDefault);
     }
 
-    private bool MatchesShortOption(Option option, string arg, out string? value)
+    private bool MatchesShortOption(IOption option, string arg, out string? value)
     {
         var shortPrefix = option.ShortNamePrefix ?? ShortNamePrefixDefault;
         if (!option.HasShortNames || !arg.StartsWith(shortPrefix))
@@ -554,9 +554,9 @@ internal class Tokenizer(ArgumentParser argumentParser)
     }
 
     private void ValidateOptionsValuesCommands(
-        List<Option> longOptionsList,
-        List<Option> shortOptionsList,
-        Trie<Option> shortOptionPrefixTrie)
+        List<IOption> longOptionsList,
+        List<IOption> shortOptionsList,
+        Trie<IOption> shortOptionPrefixTrie)
     {
         if (ShortNamePrefixDefault.Length == 0)
         {
@@ -574,8 +574,8 @@ internal class Tokenizer(ArgumentParser argumentParser)
         }
 
         var names = new HashSet<string>();
-        var optionsDict = new Dictionary<string, Option>();
-        var optionGroups = new Dictionary<string, OptionGroup>();
+        var optionsDict = new Dictionary<string, IOption>();
+        var optionGroups = new Dictionary<string, IOptionGroup>();
 
         foreach (var group in OptionGroups)
         {
@@ -603,12 +603,13 @@ internal class Tokenizer(ArgumentParser argumentParser)
             {
                 foreach (var shortName in option.ShortNames!)
                 {
-                    if (optionsDict.TryGetValue(shortPrefix + shortName, out var otherOption))
+                    var shortArg = shortPrefix + shortName;
+                    if (optionsDict.TryGetValue(shortArg, out var otherOption))
                     {
                         throw DuplicateOptionException.ShortOption(option.Name, otherOption.Name, shortName);
                     }
 
-                    optionsDict[shortPrefix + shortName] = option;
+                    optionsDict[shortArg] = option;
                 }
 
                 shortOptionsList.Add(option);
@@ -619,12 +620,13 @@ internal class Tokenizer(ArgumentParser argumentParser)
             {
                 foreach (var longName in option.LongNames!)
                 {
-                    if (optionsDict.TryGetValue(longPrefix + longName, out var otherOption))
+                    var longArg = longPrefix + longName;
+                    if (optionsDict.TryGetValue(longArg, out var otherOption))
                     {
                         throw DuplicateOptionException.LongOption(option.Name, otherOption.Name, longName);
                     }
 
-                    optionsDict[longPrefix + longName] = option;
+                    optionsDict[longArg] = option;
                 }
 
                 longOptionsList.Add(option);
@@ -697,8 +699,8 @@ internal class Tokenizer(ArgumentParser argumentParser)
 
     private void ParsePostValidation(List<ArgumentToken> argTokens)
     {
-        var optionsGroups = new Dictionary<string, List<Option>>();
-        var optionGroupTokens = new Dictionary<OptionGroup, HashSet<ArgumentToken>>();
+        var optionsGroups = new Dictionary<string, List<IOption>>();
+        var optionGroupTokens = new Dictionary<IOptionGroup, HashSet<ArgumentToken>>();
 
         foreach (var group in OptionGroups)
         {
@@ -706,8 +708,8 @@ internal class Tokenizer(ArgumentParser argumentParser)
             optionGroupTokens[group] = new HashSet<ArgumentToken>(new OptionGroupArgumentTokenComparer());
         }
 
-        var optionCounts = new Dictionary<Option, int>();
-        var requiredOptions = new List<Option>();
+        var optionCounts = new Dictionary<IOption, int>();
+        var requiredOptions = new List<IOption>();
 
         foreach (var option in Options)
         {

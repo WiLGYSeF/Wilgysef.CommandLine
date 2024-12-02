@@ -144,7 +144,7 @@ internal class ParserInstanceFactory<TInstance>(ArgumentParser parser)
 
         return instance;
 
-        Value? GetValue(int index)
+        IValue? GetValue(int index)
         {
             foreach (var value in parser.Values)
             {

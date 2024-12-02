@@ -36,7 +36,7 @@ public record CommandMatch(ICommandConfiguration Command, string Argument, int A
 public record ArgumentToken
 {
     private ArgumentToken(
-        Option? option,
+        IOption? option,
         string arg,
         int argPosition,
         string argMatch,
@@ -52,7 +52,7 @@ public record ArgumentToken
     /// <summary>
     /// Argument option.
     /// </summary>
-    public Option? Option { get; }
+    public IOption? Option { get; }
 
     /// <summary>
     /// Argument value.
@@ -106,7 +106,7 @@ public record ArgumentToken
     /// <param name="position">Argument position.</param>
     /// <param name="argMatch">Argument value key name without option prefixes.</param>
     /// <returns>Argument option with no value.</returns>
-    public static ArgumentToken NoValue(Option option, string arg, int position, string argMatch)
+    public static ArgumentToken NoValue(IOption option, string arg, int position, string argMatch)
         => new(option, arg, position, argMatch, null);
 
     /// <summary>
@@ -118,7 +118,7 @@ public record ArgumentToken
     /// <param name="argMatch">Argument value key name without option prefixes.</param>
     /// <param name="value">Value specified.</param>
     /// <returns>Argument option with one value.</returns>
-    public static ArgumentToken OneValue(Option option, string arg, int position, string argMatch, string value)
+    public static ArgumentToken OneValue(IOption option, string arg, int position, string argMatch, string value)
         => new(option, arg, position, argMatch, new[] { value });
 
     /// <summary>
@@ -131,7 +131,7 @@ public record ArgumentToken
     /// <param name="values">Values specified.</param>
     /// <returns>Argument option with values.</returns>
     public static ArgumentToken WithValues(
-        Option option,
+        IOption option,
         string arg,
         int position,
         string argMatch,

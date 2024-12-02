@@ -3,31 +3,23 @@
 namespace Wilgysef.CommandLine.Exceptions;
 
 /// <summary>
-/// Thrown if a duplicate <see cref="Option"/> is encountered.
+/// Thrown if a duplicate <see cref="IOption"/> is encountered.
 /// </summary>
-public class DuplicateOptionException : InvalidOptionException
+/// <param name="optionName">Option name.</param>
+/// <param name="otherOptionName">Other option name.</param>
+/// <param name="message">Message.</param>
+/// <param name="innerException">Inner exception.</param>
+public class DuplicateOptionException(
+    string optionName,
+    string otherOptionName,
+    string? message,
+    Exception? innerException = null)
+    : InvalidOptionException(optionName, message, innerException)
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="DuplicateOptionException"/> class.
-    /// </summary>
-    /// <param name="optionName">Option name.</param>
-    /// <param name="otherOptionName">Other option name.</param>
-    /// <param name="message">Message.</param>
-    /// <param name="innerException">Inner exception.</param>
-    public DuplicateOptionException(
-        string optionName,
-        string otherOptionName,
-        string? message,
-        Exception? innerException = null)
-        : base(optionName, message, innerException)
-    {
-        OtherOptionName = otherOptionName;
-    }
-
     /// <summary>
     /// Other option name.
     /// </summary>
-    public string OtherOptionName { get; }
+    public string OtherOptionName { get; } = otherOptionName;
 
     /// <summary>
     /// Creates a <see cref="DuplicateOptionException"/> with an option name.

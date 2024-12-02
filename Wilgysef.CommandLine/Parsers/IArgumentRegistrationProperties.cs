@@ -12,17 +12,17 @@ public interface IArgumentRegistrationProperties
     /// <summary>
     /// Options.
     /// </summary>
-    ICollection<Option> Options { get; set; }
+    ICollection<IOption> Options { get; set; }
 
     /// <summary>
     /// Option groups.
     /// </summary>
-    ICollection<OptionGroup> OptionGroups { get; set; }
+    ICollection<IOptionGroup> OptionGroups { get; set; }
 
     /// <summary>
     /// Values.
     /// </summary>
-    ICollection<Value> Values { get; set; }
+    ICollection<IValue> Values { get; set; }
 
     /// <summary>
     /// Commands.
