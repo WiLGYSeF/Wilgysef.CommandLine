@@ -4,10 +4,85 @@ using Wilgysef.CommandLine.Attributes;
 namespace Wilgysef.CommandLine.Values;
 
 /// <summary>
-/// Builds <see cref="Value"/>s from objects with <see cref="ValueAttribute"/>s.
+/// Builder for <see cref="Value"/>s.
 /// </summary>
 public class ValueBuilder
 {
+    /// <inheritdoc/>
+    public string? Name { get; set; }
+
+    /// <inheritdoc/>
+    public string? Description { get; set; }
+
+    /// <inheritdoc/>
+    public string? ValueName { get; set; }
+
+    /// <inheritdoc/>
+    public int StartIndex { get; set; }
+
+    /// <inheritdoc/>
+    public int? EndIndex { get; set; }
+
+    public ValueBuilder WithName(string name)
+    {
+        Name = name;
+        return this;
+    }
+
+    public ValueBuilder WithDescription(string description)
+    {
+        Description = description;
+        return this;
+    }
+
+    public ValueBuilder WithValueName(string valueName)
+    {
+        ValueName = valueName;
+        return this;
+    }
+
+    public ValueBuilder Single(int index)
+    {
+        StartIndex = index;
+        EndIndex = index;
+        return this;
+    }
+
+    public ValueBuilder StartingAt(int index)
+    {
+        StartIndex = index;
+        EndIndex = index;
+        return this;
+    }
+
+    public ValueBuilder AtForNext(int index, int count)
+    {
+        StartIndex = index;
+        EndIndex = index + count;
+        return this;
+    }
+
+    public ValueBuilder All()
+    {
+        StartIndex = 0;
+        EndIndex = null;
+        return this;
+    }
+
+    public Value Build()
+    {
+        if (Name == null)
+        {
+            throw new Exception("Name must be set");
+        }
+
+        return new Value(Name, StartIndex, EndIndex)
+        {
+            Description = Description,
+            ValueName = ValueName
+        };
+    }
+
     /// <summary>
     /// Creates <see cref="Value"/>s from an object type <typeparamref name="T"/> with <see cref="ValueAttribute"/>s.
     /// </summary>
