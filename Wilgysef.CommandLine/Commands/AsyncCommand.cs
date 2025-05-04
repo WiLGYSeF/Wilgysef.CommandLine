@@ -1,4 +1,5 @@
 ﻿using Wilgysef.CommandLine.Extensions;
+using Wilgysef.CommandLine.Generators;
 
 namespace Wilgysef.CommandLine.Commands;
 
@@ -6,6 +7,7 @@ namespace Wilgysef.CommandLine.Commands;
 /// Asynchronous command.
 /// </summary>
 /// <typeparam name="T">Command options type.</typeparam>
+[GenerateFluentPattern]
 public abstract class AsyncCommand<T> : AsyncCommand, IAsyncCommand<T>, ICommand<T>
     where T : class
 {
@@ -46,6 +48,7 @@ public abstract class AsyncCommand<T> : AsyncCommand, IAsyncCommand<T>, ICommand
 /// <summary>
 /// Asynchronous command.
 /// </summary>
+[GenerateFluentPattern]
 public abstract class AsyncCommand : Command, IAsyncCommand
 {
     /// <inheritdoc/>

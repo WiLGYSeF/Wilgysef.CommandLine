@@ -1,10 +1,12 @@
 ﻿using Wilgysef.CommandLine.Exceptions;
+using Wilgysef.CommandLine.Generators;
 
 namespace Wilgysef.CommandLine.Options;
 
 /// <summary>
 /// Used to parse argument options.
 /// </summary>
+[GenerateFluentPattern]
 public interface IOption : IOptionProperties
 {
     /// <summary>

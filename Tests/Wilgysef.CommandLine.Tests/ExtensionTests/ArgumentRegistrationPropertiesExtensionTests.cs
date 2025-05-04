@@ -9,26 +9,6 @@ namespace Wilgysef.CommandLine.Tests.ExtensionTests;
 public class ArgumentRegistrationPropertiesExtensionTests
 {
     [Fact]
-    public void WithOptionsFrom()
-    {
-        var parser = new ArgumentParser();
-        parser.WithOptionsFrom<Instance>();
-
-        parser.Options.Should().HaveCount(1);
-        parser.Options.First().Name.Should().Be("OptionA");
-    }
-
-    [Fact]
-    public void WithValuesFrom()
-    {
-        var parser = new ArgumentParser();
-        parser.WithValuesFrom<Instance>();
-
-        parser.Values.Should().HaveCount(1);
-        parser.Values.First().Name.Should().Be("ValueA");
-    }
-
-    [Fact]
     public void WithOptionsValuesFrom()
     {
         var parser = new ArgumentParser();

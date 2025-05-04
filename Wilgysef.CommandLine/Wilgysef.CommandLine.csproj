@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>1.0.0-alpha.6</Version>
+    <Version>1.0.0-alpha.7</Version>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <Title>Wilgysef.CommandLine</Title>
     <Authors>wilgysef</Authors>
@@ -21,6 +21,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Wilgysef.CommandLine.Generators\Wilgysef.CommandLine.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
   </ItemGroup>
 
 </Project>

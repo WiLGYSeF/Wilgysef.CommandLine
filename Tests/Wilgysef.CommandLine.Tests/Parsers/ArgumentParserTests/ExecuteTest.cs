@@ -574,6 +574,7 @@ public class ExecuteTest
     {
         [Option]
         [ShortName('a')]
+        [Switch]
         public bool ShortOptA { get; set; }
     }
 

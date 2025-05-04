@@ -66,6 +66,20 @@ public class OptionBuilderTest
         }
     }
 
+    [Fact]
+    public void ValueCount_Implied()
+    {
+        var options = OptionBuilder.BuildOptions<ValueCountImpliedTest>();
+        options.Should().HaveCount(1);
+
+        var option = options[0];
+        option.Name.Should().Be("ValueA");
+        option.ValueCountRange!.Min.Should().Be(1);
+        option.ValueCountRange!.Max.Should().Be(1);
+        option.KeepFirstValue.Should().BeNull();
+        option.ValueNames.Should().BeNull();
+    }
+
     private class OptionTest
     {
         [Option(
@@ -119,5 +133,12 @@ public class OptionBuilderTest
         [LongName("abc")]
         [ValueCount(1, 2, true, "value")]
         public IReadOnlyList<string>? ValueE { get; set; }
+    }
+
+    private class ValueCountImpliedTest
+    {
+        [Option]
+        [LongName("abc")]
+        public string? ValueA { get; set; }
     }
 }

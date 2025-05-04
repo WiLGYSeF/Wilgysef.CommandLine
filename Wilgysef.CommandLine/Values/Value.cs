@@ -1,11 +1,13 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Wilgysef.CommandLine.Exceptions;
+using Wilgysef.CommandLine.Generators;
 
 namespace Wilgysef.CommandLine.Values;
 
 /// <summary>
 /// Used to parse argument values at positions.
 /// </summary>
+[GenerateFluentPattern]
 public class Value : IValue
 {
     /// <summary>

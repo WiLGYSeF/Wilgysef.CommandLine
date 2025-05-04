@@ -1,4 +1,5 @@
 ﻿using Wilgysef.CommandLine.Extensions;
+using Wilgysef.CommandLine.Generators;
 using Wilgysef.CommandLine.Options;
 using Wilgysef.CommandLine.Parsers;
 using Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies;
@@ -11,6 +12,7 @@ namespace Wilgysef.CommandLine.Commands;
 /// Command-line command.
 /// </summary>
 /// <typeparam name="T">Command options type.</typeparam>
+[GenerateFluentPattern]
 public abstract class Command<T> : Command, ICommand<T>
     where T : class
 {
@@ -47,6 +49,7 @@ public abstract class Command<T> : Command, ICommand<T>
 /// <summary>
 /// Command-line command.
 /// </summary>
+[GenerateFluentPattern]
 public abstract class Command : ICommand
 {
     /// <inheritdoc/>

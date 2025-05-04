@@ -54,7 +54,7 @@ public static class OptionBuilder
                     : null,
                 ValueCountRange = valueCountRangeAttr != null
                     ? new ValueRange(valueCountRangeAttr.Min, valueCountRangeAttr.Max)
-                    : null,
+                    : GetImpliedValueRange(switchAttr != null),
                 Switch = switchAttr != null,
                 SwitchNegateLongPrefix = switchAttr?.SwitchNegateLongPrefix,
                 SwitchNegateShortNames = switchAttr != null
@@ -71,5 +71,12 @@ public static class OptionBuilder
         }
 
         return options;
+    }
+
+    private static ValueRange? GetImpliedValueRange(bool isSwitch)
+    {
+        return isSwitch
+            ? null
+            : ValueRange.Exactly(1);
     }
 }

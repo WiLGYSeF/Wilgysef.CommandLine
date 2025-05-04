@@ -1,11 +1,13 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Wilgysef.CommandLine.Exceptions;
+using Wilgysef.CommandLine.Generators;
 
 namespace Wilgysef.CommandLine.Options;
 
 /// <summary>
 /// Used to parse argument options.
 /// </summary>
+[GenerateFluentPattern]
 public class Option : IOption
 {
     /// <summary>
@@ -381,7 +383,7 @@ public class Option : IOption
 
         ThrowIf(KeyValueSeparators != null && KeyValueSeparators.Any(string.IsNullOrEmpty), "Key-value separator cannot be empty");
 
-        ThrowIf((ValueCountRange != null ? 1 : 0) + (Switch ? 1 : 0) + (Counter ? 1 : 0) > 1, "Option can either take values, be a switch, or counter, only at one time");
+        ThrowIf((ValueCountRange != null ? 1 : 0) + (Switch ? 1 : 0) + (Counter ? 1 : 0) > 1, "Option can only either take values, be a switch, or be a counter");
 
         ThrowIf(ValueCountRange != null && ValueCountRange.Max.HasValue && ValueCountRange.Min > ValueCountRange.Max, "Minimum value range cannot be greater than maximum");
 

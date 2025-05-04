@@ -1,9 +1,12 @@
-﻿namespace Wilgysef.CommandLine.Commands;
+﻿using Wilgysef.CommandLine.Generators;
+
+namespace Wilgysef.CommandLine.Commands;
 
 /// <summary>
 /// Command interface.
 /// </summary>
 /// <typeparam name="T">Command options type.</typeparam>
+[GenerateFluentPattern]
 public interface ICommand<T> : ICommand
     where T : class
 {
@@ -24,6 +27,7 @@ public interface ICommand<T> : ICommand
 /// <summary>
 /// Command interface.
 /// </summary>
+[GenerateFluentPattern]
 public interface ICommand : ICommandConfiguration
 {
     /// <summary>

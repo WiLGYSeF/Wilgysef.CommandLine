@@ -8,19 +8,32 @@ namespace Wilgysef.CommandLine.Values;
 /// </summary>
 public class ValueBuilder
 {
-    /// <inheritdoc/>
+    /// <summary>
+    /// Value name.
+    /// </summary>
+    /// <remarks>
+    /// Used to determine the instance property to set when parsing.
+    /// </remarks>
     public string? Name { get; set; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Value description.
+    /// </summary>
     public string? Description { get; set; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Value display name.
+    /// </summary>
     public string? ValueName { get; set; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Argument position start index.
+    /// </summary>
     public int StartIndex { get; set; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Argument position end index.
+    /// </summary>
     public int? EndIndex { get; set; }
 
     public ValueBuilder WithName(string name)
