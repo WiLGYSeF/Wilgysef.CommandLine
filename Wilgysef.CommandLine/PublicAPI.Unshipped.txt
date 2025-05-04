@@ -1,0 +1,836 @@
+﻿#nullable enable
+abstract Wilgysef.CommandLine.Commands.AsyncCommand.ExecuteAsync(Wilgysef.CommandLine.Commands.ICommandExecutionContext! context) -> System.Threading.Tasks.Task!
+abstract Wilgysef.CommandLine.Commands.AsyncCommand<T>.ExecuteAsync(Wilgysef.CommandLine.Commands.ICommandExecutionContext! context, T! options) -> System.Threading.Tasks.Task!
+abstract Wilgysef.CommandLine.Commands.Command.Execute(Wilgysef.CommandLine.Commands.ICommandExecutionContext! context) -> void
+abstract Wilgysef.CommandLine.Commands.Command.Name.get -> string!
+abstract Wilgysef.CommandLine.Commands.Command<T>.Execute(Wilgysef.CommandLine.Commands.ICommandExecutionContext! context, T! options) -> void
+abstract Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ArgumentDeserializerStrategy<T>.Deserialize(System.Type! type, string! value) -> T?
+abstract Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ArgumentDeserializerStrategy<T>.MatchesType(System.Type! type) -> bool
+abstract Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ArgumentValueListDeserializerStrategy.Deserialize(Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ArgumentValueListDeserializerStrategyContext! context, out object? result) -> bool
+abstract Wilgysef.CommandLine.Parsers.ArgumentValueAggregator.MatchesInstanceType(System.Type! type) -> bool
+abstract Wilgysef.CommandLine.Parsers.ArgumentValueAggregator.SetValue(Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext! context) -> bool
+abstract Wilgysef.CommandLine.Parsers.ArgumentValueAggregator<T>.SetValue(Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext<T!>! context) -> bool
+abstract Wilgysef.CommandLine.Parsers.InstanceValueHandlers.InstanceValueHandler<T>.GetValue(T instance, string! name) -> object?
+abstract Wilgysef.CommandLine.Parsers.InstanceValueHandlers.InstanceValueHandler<T>.GetValueType(T instance, string! name) -> System.Type!
+abstract Wilgysef.CommandLine.Parsers.InstanceValueHandlers.InstanceValueHandler<T>.HasValueName(string! name) -> bool
+abstract Wilgysef.CommandLine.Parsers.InstanceValueHandlers.InstanceValueHandler<T>.SetValue(T instance, string! name, object? value) -> void
+override Wilgysef.CommandLine.Commands.AsyncCommand.Execute(Wilgysef.CommandLine.Commands.ICommandExecutionContext! context) -> void
+override Wilgysef.CommandLine.Commands.AsyncCommand<T>.ExecuteAsync(Wilgysef.CommandLine.Commands.ICommandExecutionContext! context) -> System.Threading.Tasks.Task!
+override Wilgysef.CommandLine.Commands.Command<T>.Execute(Wilgysef.CommandLine.Commands.ICommandExecutionContext! context) -> void
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.BoolDeserializerStrategy.Deserialize(System.Type! type, string! value) -> bool
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.BoolDeserializerStrategy.MatchesType(System.Type! type) -> bool
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ByteDeserializerStrategy.Deserialize(System.Type! type, string! value) -> byte
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ByteDeserializerStrategy.MatchesType(System.Type! type) -> bool
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.CharDeserializerStrategy.Deserialize(System.Type! type, string! value) -> char
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.CharDeserializerStrategy.MatchesType(System.Type! type) -> bool
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.DateOnlyDeserializerStrategy.Deserialize(System.Type! type, string! value) -> System.DateOnly
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.DateOnlyDeserializerStrategy.MatchesType(System.Type! type) -> bool
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.DateTimeDeserializerStrategy.Deserialize(System.Type! type, string! value) -> System.DateTime
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.DateTimeDeserializerStrategy.MatchesType(System.Type! type) -> bool
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.DateTimeOffsetDeserializerStrategy.Deserialize(System.Type! type, string! value) -> System.DateTimeOffset
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.DateTimeOffsetDeserializerStrategy.MatchesType(System.Type! type) -> bool
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.DecimalDeserializerStrategy.Deserialize(System.Type! type, string! value) -> decimal
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.DecimalDeserializerStrategy.MatchesType(System.Type! type) -> bool
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.DoubleDeserializerStrategy.Deserialize(System.Type! type, string! value) -> double
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.DoubleDeserializerStrategy.MatchesType(System.Type! type) -> bool
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.EnumDeserializerStrategy.Deserialize(System.Type! type, string! value) -> System.Enum?
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.EnumDeserializerStrategy.MatchesType(System.Type! type) -> bool
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.FloatDeserializerStrategy.Deserialize(System.Type! type, string! value) -> float
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.FloatDeserializerStrategy.MatchesType(System.Type! type) -> bool
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.Int128DeserializerStrategy.Deserialize(System.Type! type, string! value) -> System.Int128
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.Int128DeserializerStrategy.MatchesType(System.Type! type) -> bool
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.IntDeserializerStrategy.Deserialize(System.Type! type, string! value) -> int
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.IntDeserializerStrategy.MatchesType(System.Type! type) -> bool
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.LongDeserializerStrategy.Deserialize(System.Type! type, string! value) -> long
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.LongDeserializerStrategy.MatchesType(System.Type! type) -> bool
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.NIntDeserializerStrategy.Deserialize(System.Type! type, string! value) -> nint
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.NIntDeserializerStrategy.MatchesType(System.Type! type) -> bool
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.NUIntDeserializerStrategy.Deserialize(System.Type! type, string! value) -> nuint
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.NUIntDeserializerStrategy.MatchesType(System.Type! type) -> bool
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ObjectDeserializerStrategy.Deserialize(System.Type! type, string! value) -> object!
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ObjectDeserializerStrategy.MatchesType(System.Type! type) -> bool
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.SByteDeserializerStrategy.Deserialize(System.Type! type, string! value) -> sbyte
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.SByteDeserializerStrategy.MatchesType(System.Type! type) -> bool
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ShortDeserializerStrategy.Deserialize(System.Type! type, string! value) -> short
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ShortDeserializerStrategy.MatchesType(System.Type! type) -> bool
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.StringDeserializerStrategy.Deserialize(System.Type! type, string! value) -> string!
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.StringDeserializerStrategy.MatchesType(System.Type! type) -> bool
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.TimeOnlyDeserializerStrategy.Deserialize(System.Type! type, string! value) -> System.TimeOnly
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.TimeOnlyDeserializerStrategy.MatchesType(System.Type! type) -> bool
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.UInt128DeserializerStrategy.Deserialize(System.Type! type, string! value) -> System.UInt128
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.UInt128DeserializerStrategy.MatchesType(System.Type! type) -> bool
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.UIntDeserializerStrategy.Deserialize(System.Type! type, string! value) -> uint
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.UIntDeserializerStrategy.MatchesType(System.Type! type) -> bool
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ULongDeserializerStrategy.Deserialize(System.Type! type, string! value) -> ulong
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ULongDeserializerStrategy.MatchesType(System.Type! type) -> bool
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.UShortDeserializerStrategy.Deserialize(System.Type! type, string! value) -> ushort
+override Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.UShortDeserializerStrategy.MatchesType(System.Type! type) -> bool
+override Wilgysef.CommandLine.Parsers.ArgumentValueAggregator<T>.MatchesInstanceType(System.Type! type) -> bool
+override Wilgysef.CommandLine.Parsers.ArgumentValueAggregator<T>.SetValue(Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext! context) -> bool
+override Wilgysef.CommandLine.Parsers.InstanceValueHandlers.InstancePropertyHandler<T>.GetValue(T instance, string! name) -> object?
+override Wilgysef.CommandLine.Parsers.InstanceValueHandlers.InstancePropertyHandler<T>.GetValueType(T instance, string! name) -> System.Type!
+override Wilgysef.CommandLine.Parsers.InstanceValueHandlers.InstancePropertyHandler<T>.HasValueName(string! name) -> bool
+override Wilgysef.CommandLine.Parsers.InstanceValueHandlers.InstancePropertyHandler<T>.SetValue(T instance, string! name, object? value) -> void
+static Wilgysef.CommandLine.Extensions.ArgumentRegistrationPropertiesExtensions.AddCommand(this Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties! registration, string! name, System.Action<Wilgysef.CommandLine.Commands.ICommandExecutionContext!>! action) -> Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties!
+static Wilgysef.CommandLine.Extensions.ArgumentRegistrationPropertiesExtensions.AddCommand(this Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties! registration, string! name, System.Action<Wilgysef.CommandLine.Commands.ICommandExecutionContext!>! action, System.Action<Wilgysef.CommandLine.Commands.ICommandConfiguration!>? configure) -> Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties!
+static Wilgysef.CommandLine.Extensions.ArgumentRegistrationPropertiesExtensions.AddCommand(this Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties! registration, string! name, System.Func<Wilgysef.CommandLine.Commands.ICommandExecutionContext!, System.Threading.Tasks.Task!>! action) -> Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties!
+static Wilgysef.CommandLine.Extensions.ArgumentRegistrationPropertiesExtensions.AddCommand(this Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties! registration, string! name, System.Func<Wilgysef.CommandLine.Commands.ICommandExecutionContext!, System.Threading.Tasks.Task!>! action, System.Action<Wilgysef.CommandLine.Commands.ICommandConfiguration!>? configure) -> Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties!
+static Wilgysef.CommandLine.Extensions.ArgumentRegistrationPropertiesExtensions.AddCommand<T>(this Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties! registration, string! name, System.Action<Wilgysef.CommandLine.Commands.ICommandExecutionContext!, T!>! action) -> Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties!
+static Wilgysef.CommandLine.Extensions.ArgumentRegistrationPropertiesExtensions.AddCommand<T>(this Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties! registration, string! name, System.Action<Wilgysef.CommandLine.Commands.ICommandExecutionContext!, T!>! action, System.Action<Wilgysef.CommandLine.Commands.ICommandConfiguration!>? configure) -> Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties!
+static Wilgysef.CommandLine.Extensions.ArgumentRegistrationPropertiesExtensions.AddCommand<T>(this Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties! registration, string! name, System.Func<Wilgysef.CommandLine.Commands.ICommandExecutionContext!, T!, System.Threading.Tasks.Task!>! action) -> Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties!
+static Wilgysef.CommandLine.Extensions.ArgumentRegistrationPropertiesExtensions.AddCommand<T>(this Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties! registration, string! name, System.Func<Wilgysef.CommandLine.Commands.ICommandExecutionContext!, T!, System.Threading.Tasks.Task!>! action, System.Action<Wilgysef.CommandLine.Commands.ICommandConfiguration!>? configure) -> Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties!
+static Wilgysef.CommandLine.Extensions.ArgumentRegistrationPropertiesExtensions.AddCommandFactory<T>(this Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties! registration, string! name, System.Func<T>! factory, System.Action<Wilgysef.CommandLine.Commands.ICommandConfiguration!>? configure = null) -> Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties!
+static Wilgysef.CommandLine.Extensions.ArgumentRegistrationPropertiesExtensions.WithOptionsFrom(this Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties! registration, System.Type! type) -> Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties!
+static Wilgysef.CommandLine.Extensions.ArgumentRegistrationPropertiesExtensions.WithOptionsFrom<T>(this Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties! registration) -> Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties!
+static Wilgysef.CommandLine.Extensions.ArgumentRegistrationPropertiesExtensions.WithOptionsValuesFrom(this Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties! registration, System.Type! type) -> Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties!
+static Wilgysef.CommandLine.Extensions.ArgumentRegistrationPropertiesExtensions.WithOptionsValuesFrom<T>(this Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties! registration) -> Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties!
+static Wilgysef.CommandLine.Extensions.ArgumentRegistrationPropertiesExtensions.WithValuesFrom(this Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties! registration, System.Type! type) -> Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties!
+static Wilgysef.CommandLine.Extensions.ArgumentRegistrationPropertiesExtensions.WithValuesFrom<T>(this Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties! registration) -> Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties!
+static Wilgysef.CommandLine.Options.Option.LongOptionCounter(string! name, string! opt) -> Wilgysef.CommandLine.Options.Option!
+static Wilgysef.CommandLine.Options.Option.LongOptionNegatableSwitch(string! name, string! opt, string? prefix = "no-") -> Wilgysef.CommandLine.Options.Option!
+static Wilgysef.CommandLine.Options.Option.LongOptionSwitch(string! name, string! opt) -> Wilgysef.CommandLine.Options.Option!
+static Wilgysef.CommandLine.Options.Option.LongOptionWithOptionalValue(string! name, string! opt) -> Wilgysef.CommandLine.Options.Option!
+static Wilgysef.CommandLine.Options.Option.LongOptionWithValue(string! name, string! opt) -> Wilgysef.CommandLine.Options.Option!
+static Wilgysef.CommandLine.Options.Option.LongOptionWithValueRange(string! name, string! opt, int min, int? max) -> Wilgysef.CommandLine.Options.Option!
+static Wilgysef.CommandLine.Options.Option.LongOptionWithValues(string! name, string! opt, int values) -> Wilgysef.CommandLine.Options.Option!
+static Wilgysef.CommandLine.Options.Option.ShortOptionCounter(string! name, char opt) -> Wilgysef.CommandLine.Options.Option!
+static Wilgysef.CommandLine.Options.Option.ShortOptionNegatableSwitch(string! name, char opt, char negateOpt) -> Wilgysef.CommandLine.Options.Option!
+static Wilgysef.CommandLine.Options.Option.ShortOptionSwitch(string! name, char opt) -> Wilgysef.CommandLine.Options.Option!
+static Wilgysef.CommandLine.Options.Option.ShortOptionWithOptionalValue(string! name, char opt) -> Wilgysef.CommandLine.Options.Option!
+static Wilgysef.CommandLine.Options.Option.ShortOptionWithValue(string! name, char opt) -> Wilgysef.CommandLine.Options.Option!
+static Wilgysef.CommandLine.Options.Option.ShortOptionWithValueRange(string! name, char opt, int min, int? max) -> Wilgysef.CommandLine.Options.Option!
+static Wilgysef.CommandLine.Options.Option.ShortOptionWithValues(string! name, char opt, int values) -> Wilgysef.CommandLine.Options.Option!
+static Wilgysef.CommandLine.Options.OptionBuilder.BuildOptions(System.Type! type) -> System.Collections.Generic.List<Wilgysef.CommandLine.Options.Option!>!
+static Wilgysef.CommandLine.Options.OptionBuilder.BuildOptions<T>() -> System.Collections.Generic.List<Wilgysef.CommandLine.Options.Option!>!
+static Wilgysef.CommandLine.Options.OptionGroup.All(string! name) -> Wilgysef.CommandLine.Options.OptionGroup!
+static Wilgysef.CommandLine.Options.OptionGroup.AtLeastOne(string! name) -> Wilgysef.CommandLine.Options.OptionGroup!
+static Wilgysef.CommandLine.Options.OptionGroup.AtMostOne(string! name) -> Wilgysef.CommandLine.Options.OptionGroup!
+static Wilgysef.CommandLine.Options.OptionGroup.ExactlyOne(string! name) -> Wilgysef.CommandLine.Options.OptionGroup!
+static Wilgysef.CommandLine.Options.ValueRange.AtLeast(int value) -> Wilgysef.CommandLine.Options.ValueRange!
+static Wilgysef.CommandLine.Options.ValueRange.AtMost(int value) -> Wilgysef.CommandLine.Options.ValueRange!
+static Wilgysef.CommandLine.Options.ValueRange.Exactly(int value) -> Wilgysef.CommandLine.Options.ValueRange!
+static Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.DateTimeDeserializerStrategies.GetDateTimeDeserializerStrategies() -> System.Collections.Generic.IEnumerable<Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.IArgumentDeserializerStrategy!>!
+static Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.PrimitiveDeserializerStrategies.GetPrimitiveDeserializerStrategies() -> System.Collections.Generic.IEnumerable<Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.IArgumentDeserializerStrategy!>!
+static Wilgysef.CommandLine.Parsers.ArgumentToken.NoValue(Wilgysef.CommandLine.Options.IOption! option, string! arg, int position, string! argMatch) -> Wilgysef.CommandLine.Parsers.ArgumentToken!
+static Wilgysef.CommandLine.Parsers.ArgumentToken.OneValue(Wilgysef.CommandLine.Options.IOption! option, string! arg, int position, string! argMatch, string! value) -> Wilgysef.CommandLine.Parsers.ArgumentToken!
+static Wilgysef.CommandLine.Parsers.ArgumentToken.Unparsed(string! value, int position) -> Wilgysef.CommandLine.Parsers.ArgumentToken!
+static Wilgysef.CommandLine.Parsers.ArgumentToken.WithValues(Wilgysef.CommandLine.Options.IOption! option, string! arg, int position, string! argMatch, System.Collections.Generic.IReadOnlyList<string!>! values) -> Wilgysef.CommandLine.Parsers.ArgumentToken!
+static Wilgysef.CommandLine.Parsers.ArgumentValueAggregator<T>.Create(System.Func<Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext<T!>!, bool>! setValue) -> Wilgysef.CommandLine.Parsers.ArgumentValueAggregator<T!>!
+static Wilgysef.CommandLine.Values.Value.All(string! name) -> Wilgysef.CommandLine.Values.Value!
+static Wilgysef.CommandLine.Values.Value.AtForNext(string! name, int index, int count) -> Wilgysef.CommandLine.Values.Value!
+static Wilgysef.CommandLine.Values.Value.Single(string! name, int index) -> Wilgysef.CommandLine.Values.Value!
+static Wilgysef.CommandLine.Values.Value.StartingAt(string! name, int index) -> Wilgysef.CommandLine.Values.Value!
+static Wilgysef.CommandLine.Values.ValueBuilder.BuildValues(System.Type! type) -> System.Collections.Generic.List<Wilgysef.CommandLine.Values.Value!>!
+static Wilgysef.CommandLine.Values.ValueBuilder.BuildValues<T>() -> System.Collections.Generic.List<Wilgysef.CommandLine.Values.Value!>!
+virtual Wilgysef.CommandLine.Commands.AsyncCommand<T>.Execute(Wilgysef.CommandLine.Commands.ICommandExecutionContext! context, T! options) -> void
+virtual Wilgysef.CommandLine.Commands.AsyncCommand<T>.OptionsFactory() -> T!
+virtual Wilgysef.CommandLine.Commands.Command.Matches(string! arg) -> bool
+virtual Wilgysef.CommandLine.Commands.Command<T>.OptionsFactory() -> T!
+virtual Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.GetCommandDescription(Wilgysef.CommandLine.Commands.ICommandConfiguration! command) -> string!
+virtual Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.GetCommandName(Wilgysef.CommandLine.Commands.ICommandConfiguration! command) -> string!
+virtual Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.GetCommands() -> System.Collections.Generic.IEnumerable<string!>!
+virtual Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.GetDescription() -> System.Collections.Generic.IEnumerable<string!>!
+virtual Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.GetHelpMenu() -> System.Collections.Generic.IEnumerable<string!>!
+virtual Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.GetOptionArgumentAndValues(Wilgysef.CommandLine.Options.IOption! option) -> string!
+virtual Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.GetOptionDescription(Wilgysef.CommandLine.Options.IOption! option) -> string!
+virtual Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.GetOptionLongArguments(Wilgysef.CommandLine.Options.IOption! option) -> System.Collections.Generic.IEnumerable<string!>!
+virtual Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.GetOptionNames(Wilgysef.CommandLine.Options.IOption! option) -> System.Collections.Generic.IEnumerable<string!>!
+virtual Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.GetOptions() -> System.Collections.Generic.IEnumerable<string!>!
+virtual Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.GetOptionShortArguments(Wilgysef.CommandLine.Options.IOption! option) -> System.Collections.Generic.IEnumerable<string!>!
+virtual Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.GetOptionValues(Wilgysef.CommandLine.Options.IOption! option) -> System.Collections.Generic.IEnumerable<string!>!
+virtual Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.GetSections() -> System.Collections.Generic.IEnumerable<System.Collections.Generic.IEnumerable<string!>!>!
+virtual Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.GetSimilarCommands(string! value, System.Collections.Generic.IEnumerable<Wilgysef.CommandLine.Commands.ICommandConfiguration!>! expectedCommands) -> System.Collections.Generic.IEnumerable<Wilgysef.CommandLine.Commands.ICommandConfiguration!>!
+virtual Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.GetSimilarOptions(string! value, System.Collections.Generic.IEnumerable<Wilgysef.CommandLine.Options.IOption!>! expectedOptions) -> System.Collections.Generic.IEnumerable<Wilgysef.CommandLine.Options.IOption!>!
+virtual Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.GetTwoColumnTable<T>(System.Collections.Generic.IEnumerable<T>! items, string? header, System.Func<T, string!>! leftColumnFactory, System.Func<T, string!>! rightColumnFactory) -> System.Collections.Generic.IEnumerable<string!>!
+virtual Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.GetUnknownCommandMessage(string! value, System.Collections.Generic.IEnumerable<Wilgysef.CommandLine.Commands.ICommandConfiguration!>! expectedCommands) -> System.Collections.Generic.IEnumerable<string!>!
+virtual Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.GetUnknownOptionMessage(string! value, System.Collections.Generic.IEnumerable<Wilgysef.CommandLine.Options.IOption!>! expectedOptions) -> System.Collections.Generic.IEnumerable<string!>!
+virtual Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.GetUsage() -> System.Collections.Generic.IEnumerable<string!>!
+virtual Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.GetValueDescription(Wilgysef.CommandLine.Values.IValue! value) -> string!
+virtual Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.GetValueName(Wilgysef.CommandLine.Values.IValue! value) -> string!
+virtual Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.GetValues() -> System.Collections.Generic.IEnumerable<string!>!
+virtual Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.GetValuesValueNames() -> System.Collections.Generic.IEnumerable<string!>!
+virtual Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.Wrap(string! line, int indentSize) -> System.Collections.Generic.IEnumerable<string!>!
+Wilgysef.CommandLine.Attributes.CounterAttribute
+Wilgysef.CommandLine.Attributes.CounterAttribute.CounterAttribute() -> void
+Wilgysef.CommandLine.Attributes.GroupAttribute
+Wilgysef.CommandLine.Attributes.GroupAttribute.GroupAttribute(params string![]! groups) -> void
+Wilgysef.CommandLine.Attributes.GroupAttribute.OptionGroups.get -> System.Collections.Generic.IReadOnlyList<string!>!
+Wilgysef.CommandLine.Attributes.LongNameAttribute
+Wilgysef.CommandLine.Attributes.LongNameAttribute.LongNameAttribute(bool longNameCaseInsensitive, params string![]! longNames) -> void
+Wilgysef.CommandLine.Attributes.LongNameAttribute.LongNameAttribute(params string![]! longNames) -> void
+Wilgysef.CommandLine.Attributes.LongNameAttribute.LongNameCaseInsensitive.get -> bool?
+Wilgysef.CommandLine.Attributes.LongNameAttribute.LongNamePrefix.get -> string?
+Wilgysef.CommandLine.Attributes.LongNameAttribute.LongNamePrefix.set -> void
+Wilgysef.CommandLine.Attributes.LongNameAttribute.LongNames.get -> System.Collections.Generic.IReadOnlyList<string!>!
+Wilgysef.CommandLine.Attributes.OptionAttribute
+Wilgysef.CommandLine.Attributes.OptionAttribute.Description.get -> string?
+Wilgysef.CommandLine.Attributes.OptionAttribute.Description.set -> void
+Wilgysef.CommandLine.Attributes.OptionAttribute.Hidden.get -> bool
+Wilgysef.CommandLine.Attributes.OptionAttribute.Hidden.set -> void
+Wilgysef.CommandLine.Attributes.OptionAttribute.OptionAttribute() -> void
+Wilgysef.CommandLine.Attributes.OptionAttribute.Required.get -> bool
+Wilgysef.CommandLine.Attributes.OptionAttribute.Required.set -> void
+Wilgysef.CommandLine.Attributes.OptionAttribute.Unique.get -> bool
+Wilgysef.CommandLine.Attributes.OptionAttribute.Unique.set -> void
+Wilgysef.CommandLine.Attributes.ShortNameAttribute
+Wilgysef.CommandLine.Attributes.ShortNameAttribute.ShortNameAttribute(bool shortNameImmediateValue, params char[]! shortNames) -> void
+Wilgysef.CommandLine.Attributes.ShortNameAttribute.ShortNameAttribute(params char[]! shortNames) -> void
+Wilgysef.CommandLine.Attributes.ShortNameAttribute.ShortNameImmediateValue.get -> bool?
+Wilgysef.CommandLine.Attributes.ShortNameAttribute.ShortNamePrefix.get -> string?
+Wilgysef.CommandLine.Attributes.ShortNameAttribute.ShortNamePrefix.set -> void
+Wilgysef.CommandLine.Attributes.ShortNameAttribute.ShortNames.get -> System.Collections.Generic.IReadOnlyList<char>!
+Wilgysef.CommandLine.Attributes.SwitchAttribute
+Wilgysef.CommandLine.Attributes.SwitchAttribute.SwitchAttribute() -> void
+Wilgysef.CommandLine.Attributes.SwitchAttribute.SwitchNegateLongPrefix.get -> string?
+Wilgysef.CommandLine.Attributes.SwitchAttribute.SwitchNegateLongPrefix.set -> void
+Wilgysef.CommandLine.Attributes.SwitchAttribute.SwitchNegateShortName.get -> char
+Wilgysef.CommandLine.Attributes.SwitchAttribute.SwitchNegateShortName.set -> void
+Wilgysef.CommandLine.Attributes.ValueAttribute
+Wilgysef.CommandLine.Attributes.ValueAttribute.Description.get -> string?
+Wilgysef.CommandLine.Attributes.ValueAttribute.Description.set -> void
+Wilgysef.CommandLine.Attributes.ValueAttribute.EndIndex.get -> int?
+Wilgysef.CommandLine.Attributes.ValueAttribute.StartIndex.get -> int
+Wilgysef.CommandLine.Attributes.ValueAttribute.ValueAttribute(int index) -> void
+Wilgysef.CommandLine.Attributes.ValueAttribute.ValueAttribute(int startIndex, int endIndex) -> void
+Wilgysef.CommandLine.Attributes.ValueAttribute.ValueName.get -> string?
+Wilgysef.CommandLine.Attributes.ValueAttribute.ValueName.set -> void
+Wilgysef.CommandLine.Attributes.ValueCountAttribute
+Wilgysef.CommandLine.Attributes.ValueCountAttribute.KeepFirstValue.get -> bool?
+Wilgysef.CommandLine.Attributes.ValueCountAttribute.KeyValueSeparator.get -> string?
+Wilgysef.CommandLine.Attributes.ValueCountAttribute.KeyValueSeparator.set -> void
+Wilgysef.CommandLine.Attributes.ValueCountAttribute.Max.get -> int?
+Wilgysef.CommandLine.Attributes.ValueCountAttribute.Min.get -> int
+Wilgysef.CommandLine.Attributes.ValueCountAttribute.ValueCountAttribute(int count, bool keepFirstValue, params string![]! valueNames) -> void
+Wilgysef.CommandLine.Attributes.ValueCountAttribute.ValueCountAttribute(int count, params string![]! valueNames) -> void
+Wilgysef.CommandLine.Attributes.ValueCountAttribute.ValueCountAttribute(int min, int max, bool keepFirstValue, params string![]! valueNames) -> void
+Wilgysef.CommandLine.Attributes.ValueCountAttribute.ValueCountAttribute(int min, int max, params string![]! valueNames) -> void
+Wilgysef.CommandLine.Attributes.ValueCountAttribute.ValueCountAttribute(params string![]! valueNames) -> void
+Wilgysef.CommandLine.Attributes.ValueCountAttribute.ValueNames.get -> System.Collections.Generic.IReadOnlyList<string!>!
+Wilgysef.CommandLine.Commands.AsyncCommand
+Wilgysef.CommandLine.Commands.AsyncCommand.AsyncCommand() -> void
+Wilgysef.CommandLine.Commands.AsyncCommand<T>
+Wilgysef.CommandLine.Commands.AsyncCommand<T>.AsyncCommand() -> void
+Wilgysef.CommandLine.Commands.Command
+Wilgysef.CommandLine.Commands.Command.Aliases.get -> System.Collections.Generic.ICollection<string!>?
+Wilgysef.CommandLine.Commands.Command.Aliases.set -> void
+Wilgysef.CommandLine.Commands.Command.ArgumentLiteralSeparator.get -> string?
+Wilgysef.CommandLine.Commands.Command.ArgumentLiteralSeparator.set -> void
+Wilgysef.CommandLine.Commands.Command.CaseInsensitiveNameMatch.get -> bool
+Wilgysef.CommandLine.Commands.Command.CaseInsensitiveNameMatch.set -> void
+Wilgysef.CommandLine.Commands.Command.Command() -> void
+Wilgysef.CommandLine.Commands.Command.Commands.get -> System.Collections.Generic.ICollection<Wilgysef.CommandLine.Commands.ICommandConfiguration!>!
+Wilgysef.CommandLine.Commands.Command.Commands.set -> void
+Wilgysef.CommandLine.Commands.Command.Description.get -> string?
+Wilgysef.CommandLine.Commands.Command.Description.set -> void
+Wilgysef.CommandLine.Commands.Command.Deserializers.get -> System.Collections.Generic.ICollection<Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.IArgumentDeserializerStrategy!>!
+Wilgysef.CommandLine.Commands.Command.Deserializers.set -> void
+Wilgysef.CommandLine.Commands.Command.Hidden.get -> bool
+Wilgysef.CommandLine.Commands.Command.Hidden.set -> void
+Wilgysef.CommandLine.Commands.Command.IgnoreUnknownOptions.get -> bool?
+Wilgysef.CommandLine.Commands.Command.IgnoreUnknownOptions.set -> void
+Wilgysef.CommandLine.Commands.Command.InstanceValueHandler.get -> Wilgysef.CommandLine.Parsers.InstanceValueHandlers.IInstanceValueHandler?
+Wilgysef.CommandLine.Commands.Command.InstanceValueHandler.set -> void
+Wilgysef.CommandLine.Commands.Command.KeepFirstValue.get -> bool?
+Wilgysef.CommandLine.Commands.Command.KeepFirstValue.set -> void
+Wilgysef.CommandLine.Commands.Command.KeyValueSeparators.get -> System.Collections.Generic.ICollection<string!>?
+Wilgysef.CommandLine.Commands.Command.KeyValueSeparators.set -> void
+Wilgysef.CommandLine.Commands.Command.ListDeserializers.get -> System.Collections.Generic.ICollection<Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.IArgumentValueListDeserializerStrategy!>!
+Wilgysef.CommandLine.Commands.Command.ListDeserializers.set -> void
+Wilgysef.CommandLine.Commands.Command.LongNameCaseInsensitive.get -> bool?
+Wilgysef.CommandLine.Commands.Command.LongNameCaseInsensitive.set -> void
+Wilgysef.CommandLine.Commands.Command.LongNamePrefix.get -> string?
+Wilgysef.CommandLine.Commands.Command.LongNamePrefix.set -> void
+Wilgysef.CommandLine.Commands.Command.OptionGroups.get -> System.Collections.Generic.ICollection<Wilgysef.CommandLine.Options.IOptionGroup!>!
+Wilgysef.CommandLine.Commands.Command.OptionGroups.set -> void
+Wilgysef.CommandLine.Commands.Command.Options.get -> System.Collections.Generic.ICollection<Wilgysef.CommandLine.Options.IOption!>!
+Wilgysef.CommandLine.Commands.Command.Options.set -> void
+Wilgysef.CommandLine.Commands.Command.ShortNameImmediateValue.get -> bool?
+Wilgysef.CommandLine.Commands.Command.ShortNameImmediateValue.set -> void
+Wilgysef.CommandLine.Commands.Command.ShortNamePrefix.get -> string?
+Wilgysef.CommandLine.Commands.Command.ShortNamePrefix.set -> void
+Wilgysef.CommandLine.Commands.Command.ThrowOnArgumentUnexpectedKeyValue.get -> bool?
+Wilgysef.CommandLine.Commands.Command.ThrowOnArgumentUnexpectedKeyValue.set -> void
+Wilgysef.CommandLine.Commands.Command.ThrowOnMissingProperty.get -> bool?
+Wilgysef.CommandLine.Commands.Command.ThrowOnMissingProperty.set -> void
+Wilgysef.CommandLine.Commands.Command.ThrowOnTooManyValues.get -> bool?
+Wilgysef.CommandLine.Commands.Command.ThrowOnTooManyValues.set -> void
+Wilgysef.CommandLine.Commands.Command.ThrowOnUnknownOptions.get -> bool?
+Wilgysef.CommandLine.Commands.Command.ThrowOnUnknownOptions.set -> void
+Wilgysef.CommandLine.Commands.Command.ThrowOnUnknownShortOptions.get -> bool?
+Wilgysef.CommandLine.Commands.Command.ThrowOnUnknownShortOptions.set -> void
+Wilgysef.CommandLine.Commands.Command.ValueAggregators.get -> System.Collections.Generic.ICollection<Wilgysef.CommandLine.Parsers.IArgumentValueAggregator!>!
+Wilgysef.CommandLine.Commands.Command.ValueAggregators.set -> void
+Wilgysef.CommandLine.Commands.Command.Values.get -> System.Collections.Generic.ICollection<Wilgysef.CommandLine.Values.IValue!>!
+Wilgysef.CommandLine.Commands.Command.Values.set -> void
+Wilgysef.CommandLine.Commands.Command<T>
+Wilgysef.CommandLine.Commands.Command<T>.Command() -> void
+Wilgysef.CommandLine.Commands.CommandExecutionContext
+Wilgysef.CommandLine.Commands.CommandExecutionContext.ArgumentGroup.get -> Wilgysef.CommandLine.Parsers.ArgumentTokenGroup!
+Wilgysef.CommandLine.Commands.CommandExecutionContext.ArgumentPosition.get -> int
+Wilgysef.CommandLine.Commands.CommandExecutionContext.Arguments.get -> System.Collections.Generic.IEnumerable<string!>?
+Wilgysef.CommandLine.Commands.CommandExecutionContext.CancellationTokenSource.get -> System.Threading.CancellationTokenSource!
+Wilgysef.CommandLine.Commands.CommandExecutionContext.Command.get -> string?
+Wilgysef.CommandLine.Commands.CommandExecutionContext.CommandExecutionContext(Wilgysef.CommandLine.Parsers.TokenizedArguments! tokenizedArguments, System.Collections.Generic.IEnumerable<string!>? args, Wilgysef.CommandLine.Parsers.ArgumentTokenGroup! argGroup, System.Threading.CancellationTokenSource! cancellationTokenSource) -> void
+Wilgysef.CommandLine.Commands.CommandExecutionContext.ExitCode.get -> int
+Wilgysef.CommandLine.Commands.CommandExecutionContext.ExitCode.set -> void
+Wilgysef.CommandLine.Commands.CommandExecutionContext.TokenizedArguments.get -> Wilgysef.CommandLine.Parsers.TokenizedArguments!
+Wilgysef.CommandLine.Commands.IAsyncCommand
+Wilgysef.CommandLine.Commands.IAsyncCommand.ExecuteAsync(Wilgysef.CommandLine.Commands.ICommandExecutionContext! context) -> System.Threading.Tasks.Task!
+Wilgysef.CommandLine.Commands.IAsyncCommand<T>
+Wilgysef.CommandLine.Commands.IAsyncCommand<T>.ExecuteAsync(Wilgysef.CommandLine.Commands.ICommandExecutionContext! context, T options) -> System.Threading.Tasks.Task!
+Wilgysef.CommandLine.Commands.ICommand
+Wilgysef.CommandLine.Commands.ICommand.Execute(Wilgysef.CommandLine.Commands.ICommandExecutionContext! context) -> void
+Wilgysef.CommandLine.Commands.ICommand<T>
+Wilgysef.CommandLine.Commands.ICommand<T>.Execute(Wilgysef.CommandLine.Commands.ICommandExecutionContext! context, T! options) -> void
+Wilgysef.CommandLine.Commands.ICommand<T>.OptionsFactory() -> T!
+Wilgysef.CommandLine.Commands.ICommandConfiguration
+Wilgysef.CommandLine.Commands.ICommandConfiguration.Aliases.get -> System.Collections.Generic.ICollection<string!>?
+Wilgysef.CommandLine.Commands.ICommandConfiguration.Aliases.set -> void
+Wilgysef.CommandLine.Commands.ICommandConfiguration.CaseInsensitiveNameMatch.get -> bool
+Wilgysef.CommandLine.Commands.ICommandConfiguration.CaseInsensitiveNameMatch.set -> void
+Wilgysef.CommandLine.Commands.ICommandConfiguration.Description.get -> string?
+Wilgysef.CommandLine.Commands.ICommandConfiguration.Description.set -> void
+Wilgysef.CommandLine.Commands.ICommandConfiguration.Hidden.get -> bool
+Wilgysef.CommandLine.Commands.ICommandConfiguration.Hidden.set -> void
+Wilgysef.CommandLine.Commands.ICommandConfiguration.Matches(string! arg) -> bool
+Wilgysef.CommandLine.Commands.ICommandConfiguration.Name.get -> string!
+Wilgysef.CommandLine.Commands.ICommandExecutionContext
+Wilgysef.CommandLine.Commands.ICommandExecutionContext.ArgumentGroup.get -> Wilgysef.CommandLine.Parsers.ArgumentTokenGroup!
+Wilgysef.CommandLine.Commands.ICommandExecutionContext.ArgumentPosition.get -> int
+Wilgysef.CommandLine.Commands.ICommandExecutionContext.Arguments.get -> System.Collections.Generic.IEnumerable<string!>?
+Wilgysef.CommandLine.Commands.ICommandExecutionContext.CancellationTokenSource.get -> System.Threading.CancellationTokenSource!
+Wilgysef.CommandLine.Commands.ICommandExecutionContext.Command.get -> string?
+Wilgysef.CommandLine.Commands.ICommandExecutionContext.ExitCode.get -> int
+Wilgysef.CommandLine.Commands.ICommandExecutionContext.ExitCode.set -> void
+Wilgysef.CommandLine.Commands.ICommandExecutionContext.TokenizedArguments.get -> Wilgysef.CommandLine.Parsers.TokenizedArguments!
+Wilgysef.CommandLine.Commands.ICommandFactory
+Wilgysef.CommandLine.Commands.ICommandFactory.Create() -> Wilgysef.CommandLine.Commands.ICommand!
+Wilgysef.CommandLine.Commands.ICommandFactory<T>
+Wilgysef.CommandLine.Commands.ICommandFactory<T>.Create() -> T
+Wilgysef.CommandLine.Exceptions.ArgumentParseException
+Wilgysef.CommandLine.Exceptions.ArgumentParseException.Argument.get -> string!
+Wilgysef.CommandLine.Exceptions.ArgumentParseException.ArgumentParseException(string! argument, int argumentPosition, string! message, System.Exception? innerException = null) -> void
+Wilgysef.CommandLine.Exceptions.ArgumentParseException.ArgumentPosition.get -> int
+Wilgysef.CommandLine.Exceptions.DuplicateOptionException
+Wilgysef.CommandLine.Exceptions.DuplicateOptionException.DuplicateOptionException(string! optionName, string! otherOptionName, string? message, System.Exception? innerException = null) -> void
+Wilgysef.CommandLine.Exceptions.DuplicateOptionException.OtherOptionName.get -> string!
+Wilgysef.CommandLine.Exceptions.InstanceMissingPropertyException
+Wilgysef.CommandLine.Exceptions.InstanceMissingPropertyException.InstanceMissingPropertyException(string! argument, int argumentPosition, string! instanceName, string! property) -> void
+Wilgysef.CommandLine.Exceptions.InstanceMissingPropertyException.InstanceName.get -> string!
+Wilgysef.CommandLine.Exceptions.InstanceMissingPropertyException.Property.get -> string!
+Wilgysef.CommandLine.Exceptions.InvalidArgumentValueDeserializationException
+Wilgysef.CommandLine.Exceptions.InvalidArgumentValueDeserializationException.DeserializationMessage.get -> string!
+Wilgysef.CommandLine.Exceptions.InvalidArgumentValueDeserializationException.InvalidArgumentValueDeserializationException(Wilgysef.CommandLine.Parsers.ArgumentToken! argToken, string! deserializationMessage, System.Exception? innerException = null) -> void
+Wilgysef.CommandLine.Exceptions.InvalidOptionException
+Wilgysef.CommandLine.Exceptions.InvalidOptionException.InvalidOptionException(string! optionName, string? message) -> void
+Wilgysef.CommandLine.Exceptions.InvalidOptionException.InvalidOptionException(string! optionName, string? message, System.Exception? innerException) -> void
+Wilgysef.CommandLine.Exceptions.InvalidOptionException.InvalidOptionException(string? message) -> void
+Wilgysef.CommandLine.Exceptions.InvalidOptionException.InvalidOptionException(string? message, System.Exception? innerException) -> void
+Wilgysef.CommandLine.Exceptions.InvalidOptionException.OptionName.get -> string?
+Wilgysef.CommandLine.Exceptions.MultipleUniqueOptionException
+Wilgysef.CommandLine.Exceptions.MultipleUniqueOptionException.MultipleUniqueOptionException(Wilgysef.CommandLine.Parsers.ArgumentToken! argToken, int otherArgumentPosition) -> void
+Wilgysef.CommandLine.Exceptions.MultipleUniqueOptionException.OtherArgumentPosition.get -> int
+Wilgysef.CommandLine.Exceptions.OptionGroupOptionMismatchException
+Wilgysef.CommandLine.Exceptions.OptionGroupOptionMismatchException.ArgumentTokens.get -> System.Collections.Generic.ICollection<Wilgysef.CommandLine.Parsers.ArgumentToken!>!
+Wilgysef.CommandLine.Exceptions.OptionGroupOptionMismatchException.MissingRequiredOption.get -> bool
+Wilgysef.CommandLine.Exceptions.OptionGroupOptionMismatchException.MutuallyExclusiveOptions.get -> bool
+Wilgysef.CommandLine.Exceptions.OptionGroupOptionMismatchException.OptionGroup.get -> Wilgysef.CommandLine.Options.IOptionGroup?
+Wilgysef.CommandLine.Exceptions.OptionGroupOptionMismatchException.OptionGroupOptionMismatchException(Wilgysef.CommandLine.Options.IOptionGroup? optionGroup, System.Collections.Generic.ICollection<Wilgysef.CommandLine.Options.IOption!>! options, System.Collections.Generic.ICollection<Wilgysef.CommandLine.Parsers.ArgumentToken!>! argumentTokens, string! message, System.Exception? innerException = null) -> void
+Wilgysef.CommandLine.Exceptions.OptionGroupOptionMismatchException.Options.get -> System.Collections.Generic.ICollection<Wilgysef.CommandLine.Options.IOption!>!
+Wilgysef.CommandLine.Exceptions.OptionUnexpectedKeyValueException
+Wilgysef.CommandLine.Exceptions.OptionUnexpectedKeyValueException.OptionUnexpectedKeyValueException(string! argument, int argumentPosition, string? message = null) -> void
+Wilgysef.CommandLine.Exceptions.OptionValuesOutOfRangeException
+Wilgysef.CommandLine.Exceptions.OptionValuesOutOfRangeException.ActualValues.get -> int
+Wilgysef.CommandLine.Exceptions.OptionValuesOutOfRangeException.ExpectedMaxValues.get -> int?
+Wilgysef.CommandLine.Exceptions.OptionValuesOutOfRangeException.ExpectedMinValues.get -> int
+Wilgysef.CommandLine.Exceptions.OptionValuesOutOfRangeException.OptionValuesOutOfRangeException(string! argument, int argumentPosition, int expectedMin, int? expectedMax, int actual) -> void
+Wilgysef.CommandLine.Exceptions.ShortOptionUnexpectedKeyValueException
+Wilgysef.CommandLine.Exceptions.ShortOptionUnexpectedKeyValueException.ShortName.get -> char
+Wilgysef.CommandLine.Exceptions.ShortOptionUnexpectedKeyValueException.ShortOptionUnexpectedKeyValueException(string! argument, int argumentPosition, char shortOpt) -> void
+Wilgysef.CommandLine.Exceptions.TooManyValuesException
+Wilgysef.CommandLine.Exceptions.TooManyValuesException.MaxValuesExpected.get -> int
+Wilgysef.CommandLine.Exceptions.TooManyValuesException.TooManyValuesException(string! argument, int argumentPosition, int maxValuesExpected, string! unexpectedValue) -> void
+Wilgysef.CommandLine.Exceptions.TooManyValuesException.UnexpectedValue.get -> string!
+Wilgysef.CommandLine.Exceptions.UnknownCommandException
+Wilgysef.CommandLine.Exceptions.UnknownCommandException.ExpectedCommands.get -> System.Collections.Generic.IEnumerable<Wilgysef.CommandLine.Commands.ICommandConfiguration!>!
+Wilgysef.CommandLine.Exceptions.UnknownCommandException.UnknownCommandException(string! argument, int argumentPosition, System.Collections.Generic.IEnumerable<Wilgysef.CommandLine.Commands.ICommandConfiguration!>! expectedCommands) -> void
+Wilgysef.CommandLine.Exceptions.UnknownOptionException
+Wilgysef.CommandLine.Exceptions.UnknownOptionException.ExpectedOptions.get -> System.Collections.Generic.IEnumerable<Wilgysef.CommandLine.Options.IOption!>!
+Wilgysef.CommandLine.Exceptions.UnknownOptionException.UnknownOptionException(string! argument, int argumentPosition, System.Collections.Generic.IEnumerable<Wilgysef.CommandLine.Options.IOption!>! expectedOptions, string? message = null, System.Exception? innerException = null) -> void
+Wilgysef.CommandLine.Exceptions.UnknownShortOptionException
+Wilgysef.CommandLine.Exceptions.UnknownShortOptionException.ShortName.get -> char
+Wilgysef.CommandLine.Exceptions.UnknownShortOptionException.UnknownShortOptionException(string! argument, int argumentPosition, char shortOpt, System.Collections.Generic.IEnumerable<Wilgysef.CommandLine.Options.IOption!>! expectedOptions, System.Exception? innerException = null) -> void
+Wilgysef.CommandLine.Extensions.ArgumentRegistrationPropertiesExtensions
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.ApplicationName.get -> string?
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.ApplicationName.set -> void
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.CommandList.get -> System.Collections.Generic.IReadOnlyList<Wilgysef.CommandLine.Commands.ICommandConfiguration!>?
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.Commands.get -> System.Collections.Generic.ICollection<Wilgysef.CommandLine.Commands.ICommandConfiguration!>!
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.CommandsHeader.get -> string?
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.CommandsHeader.set -> void
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.Description.get -> string?
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.Description.set -> void
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.DescriptionHeader.get -> string?
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.DescriptionHeader.set -> void
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.HelpMenuProvider(Wilgysef.CommandLine.Parsers.ArgumentParser! argParser, System.Collections.Generic.IReadOnlyList<Wilgysef.CommandLine.Commands.ICommandConfiguration!>? commandList = null) -> void
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.IndentSize.get -> int
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.IndentSize.set -> void
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.MaxRowLength.get -> int
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.MaxRowLength.set -> void
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.OptionNamesSeparator.get -> string!
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.OptionNamesSeparator.set -> void
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.Options.get -> System.Collections.Generic.ICollection<Wilgysef.CommandLine.Options.IOption!>!
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.OptionsHeader.get -> string?
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.OptionsHeader.set -> void
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.OptionValueOptionalPrefix.get -> string!
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.OptionValueOptionalPrefix.set -> void
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.OptionValueOptionalSuffix.get -> string!
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.OptionValueOptionalSuffix.set -> void
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.OptionValuePrefix.get -> string!
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.OptionValuePrefix.set -> void
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.OptionValueSuffix.get -> string!
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.OptionValueSuffix.set -> void
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.Parser.get -> Wilgysef.CommandLine.Parsers.ArgumentParser!
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.SimilarValueDistance.get -> int
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.SimilarValueDistance.set -> void
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.TableColumnSpacing.get -> int
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.TableColumnSpacing.set -> void
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.UsageCommandPlaceholder.get -> string!
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.UsageCommandPlaceholder.set -> void
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.UsageHeader.get -> string?
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.UsageHeader.set -> void
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.UsageOptionPlaceholder.get -> string!
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.UsageOptionPlaceholder.set -> void
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.ValueContinued.get -> string!
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.ValueContinued.set -> void
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.ValueNamePrefix.get -> string!
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.ValueNamePrefix.set -> void
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.ValueNameSuffix.get -> string!
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.ValueNameSuffix.set -> void
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.Values.get -> System.Collections.Generic.ICollection<Wilgysef.CommandLine.Values.IValue!>!
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.ValuesHeader.get -> string?
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.ValuesHeader.set -> void
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.ValueUsagePlaceholder.get -> string!
+Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.ValueUsagePlaceholder.set -> void
+Wilgysef.CommandLine.Options.IOption
+Wilgysef.CommandLine.Options.IOption.CanHaveValues.get -> bool
+Wilgysef.CommandLine.Options.IOption.Counter.get -> bool
+Wilgysef.CommandLine.Options.IOption.Counter.set -> void
+Wilgysef.CommandLine.Options.IOption.Description.get -> string?
+Wilgysef.CommandLine.Options.IOption.Description.set -> void
+Wilgysef.CommandLine.Options.IOption.GetOptionArgument(string! shortNamePrefixDefault = "-", string! longNamePrefixDefault = "--") -> string!
+Wilgysef.CommandLine.Options.IOption.GroupNames.get -> System.Collections.Generic.ICollection<string!>?
+Wilgysef.CommandLine.Options.IOption.GroupNames.set -> void
+Wilgysef.CommandLine.Options.IOption.HasLongNames.get -> bool
+Wilgysef.CommandLine.Options.IOption.HasShortNames.get -> bool
+Wilgysef.CommandLine.Options.IOption.Hidden.get -> bool
+Wilgysef.CommandLine.Options.IOption.Hidden.set -> void
+Wilgysef.CommandLine.Options.IOption.LongNames.get -> System.Collections.Generic.ICollection<string!>?
+Wilgysef.CommandLine.Options.IOption.LongNames.set -> void
+Wilgysef.CommandLine.Options.IOption.MatchesLongName(string! argName, out bool switchNegated, bool ignoreCaseDefault = false) -> bool
+Wilgysef.CommandLine.Options.IOption.MatchesShortName(char ch, out bool switchNegated) -> bool
+Wilgysef.CommandLine.Options.IOption.Name.get -> string!
+Wilgysef.CommandLine.Options.IOption.Name.set -> void
+Wilgysef.CommandLine.Options.IOption.Required.get -> bool
+Wilgysef.CommandLine.Options.IOption.Required.set -> void
+Wilgysef.CommandLine.Options.IOption.ShortNames.get -> System.Collections.Generic.ICollection<char>?
+Wilgysef.CommandLine.Options.IOption.ShortNames.set -> void
+Wilgysef.CommandLine.Options.IOption.Switch.get -> bool
+Wilgysef.CommandLine.Options.IOption.Switch.set -> void
+Wilgysef.CommandLine.Options.IOption.SwitchNegateLongPrefix.get -> string?
+Wilgysef.CommandLine.Options.IOption.SwitchNegateLongPrefix.set -> void
+Wilgysef.CommandLine.Options.IOption.SwitchNegateShortNames.get -> System.Collections.Generic.ICollection<char>?
+Wilgysef.CommandLine.Options.IOption.SwitchNegateShortNames.set -> void
+Wilgysef.CommandLine.Options.IOption.Unique.get -> bool
+Wilgysef.CommandLine.Options.IOption.Unique.set -> void
+Wilgysef.CommandLine.Options.IOption.Validate() -> void
+Wilgysef.CommandLine.Options.IOption.ValueCountRange.get -> Wilgysef.CommandLine.Options.ValueRange?
+Wilgysef.CommandLine.Options.IOption.ValueCountRange.set -> void
+Wilgysef.CommandLine.Options.IOption.ValueNames.get -> System.Collections.Generic.ICollection<string!>?
+Wilgysef.CommandLine.Options.IOption.ValueNames.set -> void
+Wilgysef.CommandLine.Options.IOptionGroup
+Wilgysef.CommandLine.Options.IOptionGroup.IsMutuallyExclusive.get -> bool
+Wilgysef.CommandLine.Options.IOptionGroup.IsRequired.get -> bool
+Wilgysef.CommandLine.Options.IOptionGroup.MatchesCount(int count, int optionsInGroup) -> bool
+Wilgysef.CommandLine.Options.IOptionGroup.Max.get -> int?
+Wilgysef.CommandLine.Options.IOptionGroup.Max.set -> void
+Wilgysef.CommandLine.Options.IOptionGroup.Min.get -> int?
+Wilgysef.CommandLine.Options.IOptionGroup.Min.set -> void
+Wilgysef.CommandLine.Options.IOptionGroup.Name.get -> string!
+Wilgysef.CommandLine.Options.IOptionGroup.Name.set -> void
+Wilgysef.CommandLine.Options.IOptionGroup.Validate() -> void
+Wilgysef.CommandLine.Options.IOptionProperties
+Wilgysef.CommandLine.Options.IOptionProperties.KeepFirstValue.get -> bool?
+Wilgysef.CommandLine.Options.IOptionProperties.KeepFirstValue.set -> void
+Wilgysef.CommandLine.Options.IOptionProperties.KeyValueSeparators.get -> System.Collections.Generic.ICollection<string!>?
+Wilgysef.CommandLine.Options.IOptionProperties.KeyValueSeparators.set -> void
+Wilgysef.CommandLine.Options.IOptionProperties.LongNameCaseInsensitive.get -> bool?
+Wilgysef.CommandLine.Options.IOptionProperties.LongNameCaseInsensitive.set -> void
+Wilgysef.CommandLine.Options.IOptionProperties.LongNamePrefix.get -> string?
+Wilgysef.CommandLine.Options.IOptionProperties.LongNamePrefix.set -> void
+Wilgysef.CommandLine.Options.IOptionProperties.ShortNameImmediateValue.get -> bool?
+Wilgysef.CommandLine.Options.IOptionProperties.ShortNameImmediateValue.set -> void
+Wilgysef.CommandLine.Options.IOptionProperties.ShortNamePrefix.get -> string?
+Wilgysef.CommandLine.Options.IOptionProperties.ShortNamePrefix.set -> void
+Wilgysef.CommandLine.Options.Option
+Wilgysef.CommandLine.Options.Option.CanHaveValues.get -> bool
+Wilgysef.CommandLine.Options.Option.Counter.get -> bool
+Wilgysef.CommandLine.Options.Option.Counter.set -> void
+Wilgysef.CommandLine.Options.Option.Description.get -> string?
+Wilgysef.CommandLine.Options.Option.Description.set -> void
+Wilgysef.CommandLine.Options.Option.GetOptionArgument(string! shortNamePrefixDefault = "-", string! longNamePrefixDefault = "--") -> string!
+Wilgysef.CommandLine.Options.Option.GroupNames.get -> System.Collections.Generic.ICollection<string!>?
+Wilgysef.CommandLine.Options.Option.GroupNames.set -> void
+Wilgysef.CommandLine.Options.Option.HasLongNames.get -> bool
+Wilgysef.CommandLine.Options.Option.HasShortNames.get -> bool
+Wilgysef.CommandLine.Options.Option.Hidden.get -> bool
+Wilgysef.CommandLine.Options.Option.Hidden.set -> void
+Wilgysef.CommandLine.Options.Option.KeepFirstValue.get -> bool?
+Wilgysef.CommandLine.Options.Option.KeepFirstValue.set -> void
+Wilgysef.CommandLine.Options.Option.KeyValueSeparators.get -> System.Collections.Generic.ICollection<string!>?
+Wilgysef.CommandLine.Options.Option.KeyValueSeparators.set -> void
+Wilgysef.CommandLine.Options.Option.LongNameCaseInsensitive.get -> bool?
+Wilgysef.CommandLine.Options.Option.LongNameCaseInsensitive.set -> void
+Wilgysef.CommandLine.Options.Option.LongNamePrefix.get -> string?
+Wilgysef.CommandLine.Options.Option.LongNamePrefix.set -> void
+Wilgysef.CommandLine.Options.Option.LongNames.get -> System.Collections.Generic.ICollection<string!>?
+Wilgysef.CommandLine.Options.Option.LongNames.set -> void
+Wilgysef.CommandLine.Options.Option.MatchesLongName(string! argName, out bool switchNegated, bool ignoreCaseDefault = false) -> bool
+Wilgysef.CommandLine.Options.Option.MatchesShortName(char ch, out bool switchNegated) -> bool
+Wilgysef.CommandLine.Options.Option.Name.get -> string!
+Wilgysef.CommandLine.Options.Option.Name.set -> void
+Wilgysef.CommandLine.Options.Option.Option(string! name) -> void
+Wilgysef.CommandLine.Options.Option.Required.get -> bool
+Wilgysef.CommandLine.Options.Option.Required.set -> void
+Wilgysef.CommandLine.Options.Option.ShortNameImmediateValue.get -> bool?
+Wilgysef.CommandLine.Options.Option.ShortNameImmediateValue.set -> void
+Wilgysef.CommandLine.Options.Option.ShortNamePrefix.get -> string?
+Wilgysef.CommandLine.Options.Option.ShortNamePrefix.set -> void
+Wilgysef.CommandLine.Options.Option.ShortNames.get -> System.Collections.Generic.ICollection<char>?
+Wilgysef.CommandLine.Options.Option.ShortNames.set -> void
+Wilgysef.CommandLine.Options.Option.Switch.get -> bool
+Wilgysef.CommandLine.Options.Option.Switch.set -> void
+Wilgysef.CommandLine.Options.Option.SwitchNegateLongPrefix.get -> string?
+Wilgysef.CommandLine.Options.Option.SwitchNegateLongPrefix.set -> void
+Wilgysef.CommandLine.Options.Option.SwitchNegateShortNames.get -> System.Collections.Generic.ICollection<char>?
+Wilgysef.CommandLine.Options.Option.SwitchNegateShortNames.set -> void
+Wilgysef.CommandLine.Options.Option.Unique.get -> bool
+Wilgysef.CommandLine.Options.Option.Unique.set -> void
+Wilgysef.CommandLine.Options.Option.Validate() -> void
+Wilgysef.CommandLine.Options.Option.ValueCountRange.get -> Wilgysef.CommandLine.Options.ValueRange?
+Wilgysef.CommandLine.Options.Option.ValueCountRange.set -> void
+Wilgysef.CommandLine.Options.Option.ValueNames.get -> System.Collections.Generic.ICollection<string!>?
+Wilgysef.CommandLine.Options.Option.ValueNames.set -> void
+Wilgysef.CommandLine.Options.OptionBuilder
+Wilgysef.CommandLine.Options.OptionGroup
+Wilgysef.CommandLine.Options.OptionGroup.IsMutuallyExclusive.get -> bool
+Wilgysef.CommandLine.Options.OptionGroup.IsRequired.get -> bool
+Wilgysef.CommandLine.Options.OptionGroup.MatchesCount(int count, int optionsInGroup) -> bool
+Wilgysef.CommandLine.Options.OptionGroup.Max.get -> int?
+Wilgysef.CommandLine.Options.OptionGroup.Max.set -> void
+Wilgysef.CommandLine.Options.OptionGroup.Min.get -> int?
+Wilgysef.CommandLine.Options.OptionGroup.Min.set -> void
+Wilgysef.CommandLine.Options.OptionGroup.Name.get -> string!
+Wilgysef.CommandLine.Options.OptionGroup.Name.set -> void
+Wilgysef.CommandLine.Options.OptionGroup.OptionGroup(string! name, int? min, int? max) -> void
+Wilgysef.CommandLine.Options.OptionGroup.Validate() -> void
+Wilgysef.CommandLine.Options.ValueRange
+Wilgysef.CommandLine.Options.ValueRange.InRange(int value) -> bool
+Wilgysef.CommandLine.Options.ValueRange.Max.get -> int?
+Wilgysef.CommandLine.Options.ValueRange.Max.set -> void
+Wilgysef.CommandLine.Options.ValueRange.Min.get -> int
+Wilgysef.CommandLine.Options.ValueRange.Min.set -> void
+Wilgysef.CommandLine.Options.ValueRange.UnderMax(int value) -> bool
+Wilgysef.CommandLine.Options.ValueRange.ValueRange(int min, int? max) -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ArgumentDeserializerStrategy<T>
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ArgumentDeserializerStrategy<T>.ArgumentDeserializerStrategy() -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ArgumentValueListDeserializerStrategy
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ArgumentValueListDeserializerStrategy.ArgumentValueListDeserializerStrategy() -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ArgumentValueListDeserializerStrategyContext
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ArgumentValueListDeserializerStrategyContext.ArgumentToken.get -> Wilgysef.CommandLine.Parsers.ArgumentToken!
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ArgumentValueListDeserializerStrategyContext.ArgumentToken.init -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ArgumentValueListDeserializerStrategyContext.ArgumentValueListDeserializerStrategyContext(Wilgysef.CommandLine.Parsers.ArgumentToken! ArgumentToken, System.Type! Type, System.Collections.Generic.IReadOnlyList<string!>! Values, string! ValueName, bool KeepFirstValue, System.Collections.Generic.IEnumerable<Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.IArgumentDeserializerStrategy!>! Deserializers) -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ArgumentValueListDeserializerStrategyContext.Deserializers.get -> System.Collections.Generic.IEnumerable<Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.IArgumentDeserializerStrategy!>!
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ArgumentValueListDeserializerStrategyContext.Deserializers.init -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ArgumentValueListDeserializerStrategyContext.KeepFirstValue.get -> bool
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ArgumentValueListDeserializerStrategyContext.KeepFirstValue.init -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ArgumentValueListDeserializerStrategyContext.Type.get -> System.Type!
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ArgumentValueListDeserializerStrategyContext.Type.init -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ArgumentValueListDeserializerStrategyContext.ValueName.get -> string!
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ArgumentValueListDeserializerStrategyContext.ValueName.init -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ArgumentValueListDeserializerStrategyContext.Values.get -> System.Collections.Generic.IReadOnlyList<string!>!
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ArgumentValueListDeserializerStrategyContext.Values.init -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.BoolDeserializerStrategy
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.BoolDeserializerStrategy.BoolDeserializerStrategy() -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ByteDeserializerStrategy
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ByteDeserializerStrategy.ByteDeserializerStrategy() -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.CharDeserializerStrategy
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.CharDeserializerStrategy.CharDeserializerStrategy() -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.DateOnlyDeserializerStrategy
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.DateOnlyDeserializerStrategy.DateOnlyDeserializerStrategy() -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.DateTimeDeserializerStrategies
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.DateTimeDeserializerStrategy
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.DateTimeDeserializerStrategy.DateTimeDeserializerStrategy() -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.DateTimeOffsetDeserializerStrategy
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.DateTimeOffsetDeserializerStrategy.DateTimeOffsetDeserializerStrategy() -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.DecimalDeserializerStrategy
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.DecimalDeserializerStrategy.DecimalDeserializerStrategy() -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.DoubleDeserializerStrategy
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.DoubleDeserializerStrategy.DoubleDeserializerStrategy() -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.EnumDeserializerStrategy
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.EnumDeserializerStrategy.EnumDeserializerStrategy() -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.FloatDeserializerStrategy
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.FloatDeserializerStrategy.FloatDeserializerStrategy() -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.IArgumentDeserializerStrategy
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.IArgumentDeserializerStrategy.Deserialize(System.Type! type, string! value) -> object?
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.IArgumentDeserializerStrategy.MatchesType(System.Type! type) -> bool
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.IArgumentDeserializerStrategy<T>
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.IArgumentDeserializerStrategy<T>.Deserialize(System.Type! type, string! value) -> T?
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.IArgumentValueListDeserializerStrategy
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.IArgumentValueListDeserializerStrategy.Deserialize(Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ArgumentValueListDeserializerStrategyContext! context, out object? result) -> bool
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.Int128DeserializerStrategy
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.Int128DeserializerStrategy.Int128DeserializerStrategy() -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.IntDeserializerStrategy
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.IntDeserializerStrategy.IntDeserializerStrategy() -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.LongDeserializerStrategy
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.LongDeserializerStrategy.LongDeserializerStrategy() -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.NIntDeserializerStrategy
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.NIntDeserializerStrategy.NIntDeserializerStrategy() -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.NUIntDeserializerStrategy
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.NUIntDeserializerStrategy.NUIntDeserializerStrategy() -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ObjectDeserializerStrategy
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ObjectDeserializerStrategy.ObjectDeserializerStrategy() -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.PrimitiveDeserializerStrategies
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.SByteDeserializerStrategy
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.SByteDeserializerStrategy.SByteDeserializerStrategy() -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ShortDeserializerStrategy
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ShortDeserializerStrategy.ShortDeserializerStrategy() -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.StringDeserializerStrategy
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.StringDeserializerStrategy.StringDeserializerStrategy() -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.TimeOnlyDeserializerStrategy
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.TimeOnlyDeserializerStrategy.TimeOnlyDeserializerStrategy() -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.UInt128DeserializerStrategy
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.UInt128DeserializerStrategy.UInt128DeserializerStrategy() -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.UIntDeserializerStrategy
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.UIntDeserializerStrategy.UIntDeserializerStrategy() -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ULongDeserializerStrategy
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.ULongDeserializerStrategy.ULongDeserializerStrategy() -> void
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.UShortDeserializerStrategy
+Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.UShortDeserializerStrategy.UShortDeserializerStrategy() -> void
+Wilgysef.CommandLine.Parsers.ArgumentParser
+Wilgysef.CommandLine.Parsers.ArgumentParser.ArgumentLiteralSeparator.get -> string!
+Wilgysef.CommandLine.Parsers.ArgumentParser.ArgumentLiteralSeparator.set -> void
+Wilgysef.CommandLine.Parsers.ArgumentParser.ArgumentParseErrorHandler.get -> System.Action<System.Exception!>?
+Wilgysef.CommandLine.Parsers.ArgumentParser.ArgumentParseErrorHandler.set -> void
+Wilgysef.CommandLine.Parsers.ArgumentParser.ArgumentParser() -> void
+Wilgysef.CommandLine.Parsers.ArgumentParser.Commands.get -> System.Collections.Generic.ICollection<Wilgysef.CommandLine.Commands.ICommandConfiguration!>!
+Wilgysef.CommandLine.Parsers.ArgumentParser.Commands.set -> void
+Wilgysef.CommandLine.Parsers.ArgumentParser.Deserializers.get -> System.Collections.Generic.ICollection<Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.IArgumentDeserializerStrategy!>!
+Wilgysef.CommandLine.Parsers.ArgumentParser.Deserializers.set -> void
+Wilgysef.CommandLine.Parsers.ArgumentParser.Execute(System.Collections.Generic.IEnumerable<string!>! args) -> int
+Wilgysef.CommandLine.Parsers.ArgumentParser.Execute<TRootInstance>(System.Collections.Generic.IEnumerable<string!>! args, System.Action<Wilgysef.CommandLine.Commands.CommandExecutionContext!, TRootInstance!>? rootHandler, System.Func<TRootInstance!>? rootFactory = null, System.Collections.Generic.ICollection<Wilgysef.CommandLine.Parsers.IArgumentValueAggregator<TRootInstance!>!>? rootValueAggregators = null, Wilgysef.CommandLine.Parsers.InstanceValueHandlers.IInstanceValueHandler<TRootInstance!>? rootInstanceValueHandler = null) -> int
+Wilgysef.CommandLine.Parsers.ArgumentParser.Execute<TRootInstance>(Wilgysef.CommandLine.Parsers.TokenizedArguments! tokenizedArgs, System.Collections.Generic.IReadOnlyList<object?>! instances, System.Action<Wilgysef.CommandLine.Commands.CommandExecutionContext!, TRootInstance!>? rootHandler) -> int
+Wilgysef.CommandLine.Parsers.ArgumentParser.Execute<TRootInstance>(Wilgysef.CommandLine.Parsers.TokenizedArguments! tokenizedArgs, System.Collections.Generic.IReadOnlyList<object?>! instances, System.Action<Wilgysef.CommandLine.Commands.CommandExecutionContext!, TRootInstance!>? rootHandler, System.Collections.Generic.IEnumerable<string!>? args) -> int
+Wilgysef.CommandLine.Parsers.ArgumentParser.ExecuteAsync(System.Collections.Generic.IEnumerable<string!>! args) -> System.Threading.Tasks.Task<int>!
+Wilgysef.CommandLine.Parsers.ArgumentParser.ExecuteAsync(System.Collections.Generic.IEnumerable<string!>! args, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<int>!
+Wilgysef.CommandLine.Parsers.ArgumentParser.ExecuteAsync<TRootInstance>(System.Collections.Generic.IEnumerable<string!>! args, System.Func<Wilgysef.CommandLine.Commands.CommandExecutionContext!, TRootInstance!, System.Threading.Tasks.Task!>? rootHandler, System.Func<TRootInstance!>? rootFactory = null, System.Collections.Generic.ICollection<Wilgysef.CommandLine.Parsers.IArgumentValueAggregator<TRootInstance!>!>? rootValueAggregators = null, Wilgysef.CommandLine.Parsers.InstanceValueHandlers.IInstanceValueHandler<TRootInstance!>? rootInstanceValueHandler = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<int>!
+Wilgysef.CommandLine.Parsers.ArgumentParser.ExecuteAsync<TRootInstance>(Wilgysef.CommandLine.Parsers.TokenizedArguments! tokenizedArgs, System.Collections.Generic.IReadOnlyList<object?>! instances, System.Func<Wilgysef.CommandLine.Commands.CommandExecutionContext!, TRootInstance!, System.Threading.Tasks.Task!>? rootHandler) -> System.Threading.Tasks.Task<int>!
+Wilgysef.CommandLine.Parsers.ArgumentParser.ExecuteAsync<TRootInstance>(Wilgysef.CommandLine.Parsers.TokenizedArguments! tokenizedArgs, System.Collections.Generic.IReadOnlyList<object?>! instances, System.Func<Wilgysef.CommandLine.Commands.CommandExecutionContext!, TRootInstance!, System.Threading.Tasks.Task!>? rootHandler, System.Collections.Generic.IEnumerable<string!>? args) -> System.Threading.Tasks.Task<int>!
+Wilgysef.CommandLine.Parsers.ArgumentParser.ExecuteAsync<TRootInstance>(Wilgysef.CommandLine.Parsers.TokenizedArguments! tokenizedArgs, System.Collections.Generic.IReadOnlyList<object?>! instances, System.Func<Wilgysef.CommandLine.Commands.CommandExecutionContext!, TRootInstance!, System.Threading.Tasks.Task!>? rootHandler, System.Collections.Generic.IEnumerable<string!>? args, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<int>!
+Wilgysef.CommandLine.Parsers.ArgumentParser.ExecuteAsync<TRootInstance>(Wilgysef.CommandLine.Parsers.TokenizedArguments! tokenizedArgs, System.Collections.Generic.IReadOnlyList<object?>! instances, System.Func<Wilgysef.CommandLine.Commands.CommandExecutionContext!, TRootInstance!, System.Threading.Tasks.Task!>? rootHandler, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<int>!
+Wilgysef.CommandLine.Parsers.ArgumentParser.ExecutePostOptionInitializationStage.get -> System.Func<System.Collections.Generic.IReadOnlyList<object?>!, (System.Collections.Generic.IReadOnlyList<object?>! Instances, int? ExitCode)>?
+Wilgysef.CommandLine.Parsers.ArgumentParser.ExecutePostOptionInitializationStage.set -> void
+Wilgysef.CommandLine.Parsers.ArgumentParser.ExecutePostTokenizeStage.get -> System.Func<Wilgysef.CommandLine.Parsers.TokenizedArguments!, (Wilgysef.CommandLine.Parsers.TokenizedArguments! TokenizedArguments, int? ExitCode)>?
+Wilgysef.CommandLine.Parsers.ArgumentParser.ExecutePostTokenizeStage.set -> void
+Wilgysef.CommandLine.Parsers.ArgumentParser.HelpMenuProviderFactory.get -> System.Func<Wilgysef.CommandLine.Parsers.ArgumentParser!, System.Collections.Generic.IReadOnlyList<Wilgysef.CommandLine.Commands.ICommandConfiguration!>!, Wilgysef.CommandLine.HelpMenus.HelpMenuProvider!>!
+Wilgysef.CommandLine.Parsers.ArgumentParser.HelpMenuProviderFactory.set -> void
+Wilgysef.CommandLine.Parsers.ArgumentParser.HelpOption.get -> Wilgysef.CommandLine.Options.IOption?
+Wilgysef.CommandLine.Parsers.ArgumentParser.HelpOption.set -> void
+Wilgysef.CommandLine.Parsers.ArgumentParser.IgnoreUnknownOptions.get -> bool
+Wilgysef.CommandLine.Parsers.ArgumentParser.IgnoreUnknownOptions.set -> void
+Wilgysef.CommandLine.Parsers.ArgumentParser.KeepFirstValue.get -> bool
+Wilgysef.CommandLine.Parsers.ArgumentParser.KeepFirstValue.set -> void
+Wilgysef.CommandLine.Parsers.ArgumentParser.KeyValueSeparatorsDefault.get -> System.Collections.Generic.ICollection<string!>!
+Wilgysef.CommandLine.Parsers.ArgumentParser.KeyValueSeparatorsDefault.set -> void
+Wilgysef.CommandLine.Parsers.ArgumentParser.ListDeserializers.get -> System.Collections.Generic.ICollection<Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.IArgumentValueListDeserializerStrategy!>!
+Wilgysef.CommandLine.Parsers.ArgumentParser.ListDeserializers.set -> void
+Wilgysef.CommandLine.Parsers.ArgumentParser.LongNameCaseInsensitiveDefault.get -> bool
+Wilgysef.CommandLine.Parsers.ArgumentParser.LongNameCaseInsensitiveDefault.set -> void
+Wilgysef.CommandLine.Parsers.ArgumentParser.LongNamePrefixDefault.get -> string!
+Wilgysef.CommandLine.Parsers.ArgumentParser.LongNamePrefixDefault.set -> void
+Wilgysef.CommandLine.Parsers.ArgumentParser.OptionGroups.get -> System.Collections.Generic.ICollection<Wilgysef.CommandLine.Options.IOptionGroup!>!
+Wilgysef.CommandLine.Parsers.ArgumentParser.OptionGroups.set -> void
+Wilgysef.CommandLine.Parsers.ArgumentParser.Options.get -> System.Collections.Generic.ICollection<Wilgysef.CommandLine.Options.IOption!>!
+Wilgysef.CommandLine.Parsers.ArgumentParser.Options.set -> void
+Wilgysef.CommandLine.Parsers.ArgumentParser.OutputWriter.get -> System.IO.TextWriter!
+Wilgysef.CommandLine.Parsers.ArgumentParser.OutputWriter.set -> void
+Wilgysef.CommandLine.Parsers.ArgumentParser.ParseTo<TInstance>(System.Collections.Generic.IEnumerable<string!>! args) -> TInstance!
+Wilgysef.CommandLine.Parsers.ArgumentParser.ParseTo<TInstance>(System.Collections.Generic.IEnumerable<string!>! args, System.Func<TInstance!>? factory) -> TInstance!
+Wilgysef.CommandLine.Parsers.ArgumentParser.ParseTo<TInstance>(System.Collections.Generic.IEnumerable<string!>! args, System.Func<TInstance!>? factory, System.Collections.Generic.ICollection<Wilgysef.CommandLine.Parsers.IArgumentValueAggregator<TInstance!>!>? valueAggregators) -> TInstance!
+Wilgysef.CommandLine.Parsers.ArgumentParser.ParseTo<TInstance>(System.Collections.Generic.IEnumerable<string!>! args, System.Func<TInstance!>? factory, System.Collections.Generic.ICollection<Wilgysef.CommandLine.Parsers.IArgumentValueAggregator<TInstance!>!>? valueAggregators, Wilgysef.CommandLine.Parsers.InstanceValueHandlers.IInstanceValueHandler<TInstance!>? instanceValueHandler) -> TInstance!
+Wilgysef.CommandLine.Parsers.ArgumentParser.ParseTo<TInstance>(System.Collections.Generic.IEnumerable<Wilgysef.CommandLine.Parsers.ArgumentToken!>! argTokens) -> TInstance!
+Wilgysef.CommandLine.Parsers.ArgumentParser.ParseTo<TInstance>(System.Collections.Generic.IEnumerable<Wilgysef.CommandLine.Parsers.ArgumentToken!>! argTokens, System.Func<TInstance!>? factory) -> TInstance!
+Wilgysef.CommandLine.Parsers.ArgumentParser.ParseTo<TInstance>(System.Collections.Generic.IEnumerable<Wilgysef.CommandLine.Parsers.ArgumentToken!>! argTokens, System.Func<TInstance!>? factory, System.Collections.Generic.ICollection<Wilgysef.CommandLine.Parsers.IArgumentValueAggregator<TInstance!>!>? valueAggregators) -> TInstance!
+Wilgysef.CommandLine.Parsers.ArgumentParser.ParseTo<TInstance>(System.Collections.Generic.IEnumerable<Wilgysef.CommandLine.Parsers.ArgumentToken!>! argTokens, System.Func<TInstance!>? factory, System.Collections.Generic.ICollection<Wilgysef.CommandLine.Parsers.IArgumentValueAggregator<TInstance!>!>? valueAggregators, Wilgysef.CommandLine.Parsers.InstanceValueHandlers.IInstanceValueHandler<TInstance!>? instanceValueHandler) -> TInstance!
+Wilgysef.CommandLine.Parsers.ArgumentParser.ParseTo<TRootInstance>(Wilgysef.CommandLine.Parsers.TokenizedArguments! tokenizedArgs) -> System.Collections.Generic.IReadOnlyList<object?>!
+Wilgysef.CommandLine.Parsers.ArgumentParser.ParseTo<TRootInstance>(Wilgysef.CommandLine.Parsers.TokenizedArguments! tokenizedArgs, System.Func<TRootInstance!>? rootFactory) -> System.Collections.Generic.IReadOnlyList<object?>!
+Wilgysef.CommandLine.Parsers.ArgumentParser.ParseTo<TRootInstance>(Wilgysef.CommandLine.Parsers.TokenizedArguments! tokenizedArgs, System.Func<TRootInstance!>? rootFactory, System.Collections.Generic.ICollection<Wilgysef.CommandLine.Parsers.IArgumentValueAggregator<TRootInstance!>!>? rootValueAggregators) -> System.Collections.Generic.IReadOnlyList<object?>!
+Wilgysef.CommandLine.Parsers.ArgumentParser.ParseTo<TRootInstance>(Wilgysef.CommandLine.Parsers.TokenizedArguments! tokenizedArgs, System.Func<TRootInstance!>? rootFactory, System.Collections.Generic.ICollection<Wilgysef.CommandLine.Parsers.IArgumentValueAggregator<TRootInstance!>!>? rootValueAggregators, Wilgysef.CommandLine.Parsers.InstanceValueHandlers.IInstanceValueHandler<TRootInstance!>? rootInstanceValueHandler) -> System.Collections.Generic.IReadOnlyList<object?>!
+Wilgysef.CommandLine.Parsers.ArgumentParser.PropagateDeserializationExceptions.get -> bool
+Wilgysef.CommandLine.Parsers.ArgumentParser.PropagateDeserializationExceptions.set -> void
+Wilgysef.CommandLine.Parsers.ArgumentParser.ShortNameImmediateValue.get -> bool
+Wilgysef.CommandLine.Parsers.ArgumentParser.ShortNameImmediateValue.set -> void
+Wilgysef.CommandLine.Parsers.ArgumentParser.ShortNamePrefixDefault.get -> string!
+Wilgysef.CommandLine.Parsers.ArgumentParser.ShortNamePrefixDefault.set -> void
+Wilgysef.CommandLine.Parsers.ArgumentParser.ThrowOnArgumentUnexpectedKeyValue.get -> bool
+Wilgysef.CommandLine.Parsers.ArgumentParser.ThrowOnArgumentUnexpectedKeyValue.set -> void
+Wilgysef.CommandLine.Parsers.ArgumentParser.ThrowOnMissingProperty.get -> bool
+Wilgysef.CommandLine.Parsers.ArgumentParser.ThrowOnMissingProperty.set -> void
+Wilgysef.CommandLine.Parsers.ArgumentParser.ThrowOnTooManyValues.get -> bool
+Wilgysef.CommandLine.Parsers.ArgumentParser.ThrowOnTooManyValues.set -> void
+Wilgysef.CommandLine.Parsers.ArgumentParser.ThrowOnUnknownOptions.get -> bool
+Wilgysef.CommandLine.Parsers.ArgumentParser.ThrowOnUnknownOptions.set -> void
+Wilgysef.CommandLine.Parsers.ArgumentParser.ThrowOnUnknownShortOptions.get -> bool
+Wilgysef.CommandLine.Parsers.ArgumentParser.ThrowOnUnknownShortOptions.set -> void
+Wilgysef.CommandLine.Parsers.ArgumentParser.Tokenize(System.Collections.Generic.IEnumerable<string!>! args) -> Wilgysef.CommandLine.Parsers.TokenizedArguments!
+Wilgysef.CommandLine.Parsers.ArgumentParser.Values.get -> System.Collections.Generic.ICollection<Wilgysef.CommandLine.Values.IValue!>!
+Wilgysef.CommandLine.Parsers.ArgumentParser.Values.set -> void
+Wilgysef.CommandLine.Parsers.ArgumentToken
+Wilgysef.CommandLine.Parsers.ArgumentToken.Argument.get -> string!
+Wilgysef.CommandLine.Parsers.ArgumentToken.ArgumentIsKeyValue.get -> bool
+Wilgysef.CommandLine.Parsers.ArgumentToken.ArgumentMatch.get -> string!
+Wilgysef.CommandLine.Parsers.ArgumentToken.ArgumentPosition.get -> int
+Wilgysef.CommandLine.Parsers.ArgumentToken.IsOption.get -> bool
+Wilgysef.CommandLine.Parsers.ArgumentToken.IsValue.get -> bool
+Wilgysef.CommandLine.Parsers.ArgumentToken.Option.get -> Wilgysef.CommandLine.Options.IOption?
+Wilgysef.CommandLine.Parsers.ArgumentToken.Values.get -> System.Collections.Generic.IReadOnlyList<string!>?
+Wilgysef.CommandLine.Parsers.ArgumentTokenGroup
+Wilgysef.CommandLine.Parsers.ArgumentTokenGroup.Arguments.get -> System.Collections.Generic.IReadOnlyList<Wilgysef.CommandLine.Parsers.ArgumentToken!>!
+Wilgysef.CommandLine.Parsers.ArgumentTokenGroup.Arguments.init -> void
+Wilgysef.CommandLine.Parsers.ArgumentTokenGroup.ArgumentTokenGroup(System.Collections.Generic.IReadOnlyList<Wilgysef.CommandLine.Parsers.ArgumentToken!>! Arguments, Wilgysef.CommandLine.Parsers.CommandMatch? CommandMatch) -> void
+Wilgysef.CommandLine.Parsers.ArgumentTokenGroup.Command.get -> Wilgysef.CommandLine.Commands.ICommandConfiguration?
+Wilgysef.CommandLine.Parsers.ArgumentTokenGroup.CommandMatch.get -> Wilgysef.CommandLine.Parsers.CommandMatch?
+Wilgysef.CommandLine.Parsers.ArgumentTokenGroup.CommandMatch.init -> void
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregator
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregator.ArgumentValueAggregator() -> void
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregator<T>
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregator<T>.ArgumentValueAggregator() -> void
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext.ArgumentToken.get -> Wilgysef.CommandLine.Parsers.ArgumentToken!
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext.ArgumentToken.init -> void
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext.ArgumentValueAggregatorContext(object! Instance, Wilgysef.CommandLine.Parsers.ArgumentToken! ArgumentToken, Wilgysef.CommandLine.Parsers.InstanceValueHandlers.IInstanceValueHandler! InstanceValueHandler, string! ValueName, object? Value, System.Action<string!, object?>! SetValue) -> void
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext.Instance.get -> object!
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext.Instance.init -> void
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext.InstanceValueHandler.get -> Wilgysef.CommandLine.Parsers.InstanceValueHandlers.IInstanceValueHandler!
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext.InstanceValueHandler.init -> void
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext.SetValue.get -> System.Action<string!, object?>!
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext.SetValue.init -> void
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext.Value.get -> object?
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext.Value.init -> void
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext.ValueName.get -> string!
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext.ValueName.init -> void
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext<T>
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext<T>.ArgumentToken.get -> Wilgysef.CommandLine.Parsers.ArgumentToken!
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext<T>.ArgumentToken.init -> void
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext<T>.ArgumentValueAggregatorContext(T! Instance, Wilgysef.CommandLine.Parsers.ArgumentToken! ArgumentToken, Wilgysef.CommandLine.Parsers.InstanceValueHandlers.IInstanceValueHandler<T!>! InstanceValueHandler, string! ValueName, object? Value, System.Action<string!, object?>! SetValue) -> void
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext<T>.Instance.get -> T!
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext<T>.Instance.init -> void
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext<T>.InstanceValueHandler.get -> Wilgysef.CommandLine.Parsers.InstanceValueHandlers.IInstanceValueHandler<T!>!
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext<T>.InstanceValueHandler.init -> void
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext<T>.SetValue.get -> System.Action<string!, object?>!
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext<T>.SetValue.init -> void
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext<T>.Value.get -> object?
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext<T>.Value.init -> void
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext<T>.ValueName.get -> string!
+Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext<T>.ValueName.init -> void
+Wilgysef.CommandLine.Parsers.CommandMatch
+Wilgysef.CommandLine.Parsers.CommandMatch.Argument.get -> string!
+Wilgysef.CommandLine.Parsers.CommandMatch.Argument.init -> void
+Wilgysef.CommandLine.Parsers.CommandMatch.ArgumentPosition.get -> int
+Wilgysef.CommandLine.Parsers.CommandMatch.ArgumentPosition.init -> void
+Wilgysef.CommandLine.Parsers.CommandMatch.Command.get -> Wilgysef.CommandLine.Commands.ICommandConfiguration!
+Wilgysef.CommandLine.Parsers.CommandMatch.Command.init -> void
+Wilgysef.CommandLine.Parsers.CommandMatch.CommandMatch(Wilgysef.CommandLine.Commands.ICommandConfiguration! Command, string! Argument, int ArgumentPosition) -> void
+Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties
+Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties.Commands.get -> System.Collections.Generic.ICollection<Wilgysef.CommandLine.Commands.ICommandConfiguration!>!
+Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties.Commands.set -> void
+Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties.OptionGroups.get -> System.Collections.Generic.ICollection<Wilgysef.CommandLine.Options.IOptionGroup!>!
+Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties.OptionGroups.set -> void
+Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties.Options.get -> System.Collections.Generic.ICollection<Wilgysef.CommandLine.Options.IOption!>!
+Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties.Options.set -> void
+Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties.Values.get -> System.Collections.Generic.ICollection<Wilgysef.CommandLine.Values.IValue!>!
+Wilgysef.CommandLine.Parsers.IArgumentRegistrationProperties.Values.set -> void
+Wilgysef.CommandLine.Parsers.IArgumentValueAggregator
+Wilgysef.CommandLine.Parsers.IArgumentValueAggregator.MatchesInstanceType(System.Type! type) -> bool
+Wilgysef.CommandLine.Parsers.IArgumentValueAggregator.SetValue(Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext! context) -> bool
+Wilgysef.CommandLine.Parsers.IArgumentValueAggregator<T>
+Wilgysef.CommandLine.Parsers.IArgumentValueAggregator<T>.SetValue(Wilgysef.CommandLine.Parsers.ArgumentValueAggregatorContext<T!>! context) -> bool
+Wilgysef.CommandLine.Parsers.IDeserializationOptions
+Wilgysef.CommandLine.Parsers.IDeserializationOptions.Deserializers.get -> System.Collections.Generic.ICollection<Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.IArgumentDeserializerStrategy!>!
+Wilgysef.CommandLine.Parsers.IDeserializationOptions.Deserializers.set -> void
+Wilgysef.CommandLine.Parsers.IDeserializationOptions.ListDeserializers.get -> System.Collections.Generic.ICollection<Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies.IArgumentValueListDeserializerStrategy!>!
+Wilgysef.CommandLine.Parsers.IDeserializationOptions.ListDeserializers.set -> void
+Wilgysef.CommandLine.Parsers.IInstanceHandlerOptions
+Wilgysef.CommandLine.Parsers.IInstanceHandlerOptions.InstanceValueHandler.get -> Wilgysef.CommandLine.Parsers.InstanceValueHandlers.IInstanceValueHandler?
+Wilgysef.CommandLine.Parsers.IInstanceHandlerOptions.InstanceValueHandler.set -> void
+Wilgysef.CommandLine.Parsers.IInstanceHandlerOptions.ThrowOnMissingProperty.get -> bool?
+Wilgysef.CommandLine.Parsers.IInstanceHandlerOptions.ThrowOnMissingProperty.set -> void
+Wilgysef.CommandLine.Parsers.IInstanceHandlerOptions.ThrowOnTooManyValues.get -> bool?
+Wilgysef.CommandLine.Parsers.IInstanceHandlerOptions.ThrowOnTooManyValues.set -> void
+Wilgysef.CommandLine.Parsers.IInstanceHandlerOptions.ValueAggregators.get -> System.Collections.Generic.ICollection<Wilgysef.CommandLine.Parsers.IArgumentValueAggregator!>!
+Wilgysef.CommandLine.Parsers.IInstanceHandlerOptions.ValueAggregators.set -> void
+Wilgysef.CommandLine.Parsers.InstanceValueHandlers.IInstanceValueHandler
+Wilgysef.CommandLine.Parsers.InstanceValueHandlers.IInstanceValueHandler.GetValue(object! instance, string! name) -> object?
+Wilgysef.CommandLine.Parsers.InstanceValueHandlers.IInstanceValueHandler.GetValueType(object! instance, string! name) -> System.Type!
+Wilgysef.CommandLine.Parsers.InstanceValueHandlers.IInstanceValueHandler.HasValueName(string! name) -> bool
+Wilgysef.CommandLine.Parsers.InstanceValueHandlers.IInstanceValueHandler.SetValue(object! instance, string! name, object? value) -> void
+Wilgysef.CommandLine.Parsers.InstanceValueHandlers.IInstanceValueHandler<T>
+Wilgysef.CommandLine.Parsers.InstanceValueHandlers.IInstanceValueHandler<T>.GetValue(T instance, string! name) -> object?
+Wilgysef.CommandLine.Parsers.InstanceValueHandlers.IInstanceValueHandler<T>.GetValueType(T instance, string! name) -> System.Type!
+Wilgysef.CommandLine.Parsers.InstanceValueHandlers.IInstanceValueHandler<T>.SetValue(T instance, string! name, object? value) -> void
+Wilgysef.CommandLine.Parsers.InstanceValueHandlers.InstancePropertyHandler<T>
+Wilgysef.CommandLine.Parsers.InstanceValueHandlers.InstancePropertyHandler<T>.InstancePropertyHandler() -> void
+Wilgysef.CommandLine.Parsers.InstanceValueHandlers.InstanceValueHandler<T>
+Wilgysef.CommandLine.Parsers.InstanceValueHandlers.InstanceValueHandler<T>.InstanceValueHandler() -> void
+Wilgysef.CommandLine.Parsers.IParserOptions
+Wilgysef.CommandLine.Parsers.IParserOptions.ArgumentLiteralSeparator.get -> string?
+Wilgysef.CommandLine.Parsers.IParserOptions.ArgumentLiteralSeparator.set -> void
+Wilgysef.CommandLine.Parsers.IParserOptions.IgnoreUnknownOptions.get -> bool?
+Wilgysef.CommandLine.Parsers.IParserOptions.IgnoreUnknownOptions.set -> void
+Wilgysef.CommandLine.Parsers.IParserOptions.ThrowOnArgumentUnexpectedKeyValue.get -> bool?
+Wilgysef.CommandLine.Parsers.IParserOptions.ThrowOnArgumentUnexpectedKeyValue.set -> void
+Wilgysef.CommandLine.Parsers.IParserOptions.ThrowOnUnknownOptions.get -> bool?
+Wilgysef.CommandLine.Parsers.IParserOptions.ThrowOnUnknownOptions.set -> void
+Wilgysef.CommandLine.Parsers.IParserOptions.ThrowOnUnknownShortOptions.get -> bool?
+Wilgysef.CommandLine.Parsers.IParserOptions.ThrowOnUnknownShortOptions.set -> void
+Wilgysef.CommandLine.Parsers.TokenizedArguments
+Wilgysef.CommandLine.Parsers.TokenizedArguments.ArgumentGroups.get -> System.Collections.Generic.IReadOnlyList<Wilgysef.CommandLine.Parsers.ArgumentTokenGroup!>!
+Wilgysef.CommandLine.Parsers.TokenizedArguments.ArgumentGroups.init -> void
+Wilgysef.CommandLine.Parsers.TokenizedArguments.TokenizedArguments(System.Collections.Generic.IReadOnlyList<Wilgysef.CommandLine.Parsers.ArgumentTokenGroup!>! ArgumentGroups) -> void
+Wilgysef.CommandLine.Values.IValue
+Wilgysef.CommandLine.Values.IValue.Description.get -> string?
+Wilgysef.CommandLine.Values.IValue.Description.set -> void
+Wilgysef.CommandLine.Values.IValue.EndIndex.get -> int?
+Wilgysef.CommandLine.Values.IValue.EndIndex.set -> void
+Wilgysef.CommandLine.Values.IValue.Name.get -> string!
+Wilgysef.CommandLine.Values.IValue.Name.set -> void
+Wilgysef.CommandLine.Values.IValue.StartIndex.get -> int
+Wilgysef.CommandLine.Values.IValue.StartIndex.set -> void
+Wilgysef.CommandLine.Values.IValue.Validate() -> void
+Wilgysef.CommandLine.Values.IValue.ValueName.get -> string?
+Wilgysef.CommandLine.Values.IValue.ValueName.set -> void
+Wilgysef.CommandLine.Values.Value
+Wilgysef.CommandLine.Values.Value.Description.get -> string?
+Wilgysef.CommandLine.Values.Value.Description.set -> void
+Wilgysef.CommandLine.Values.Value.EndIndex.get -> int?
+Wilgysef.CommandLine.Values.Value.EndIndex.set -> void
+Wilgysef.CommandLine.Values.Value.Name.get -> string!
+Wilgysef.CommandLine.Values.Value.Name.set -> void
+Wilgysef.CommandLine.Values.Value.StartIndex.get -> int
+Wilgysef.CommandLine.Values.Value.StartIndex.set -> void
+Wilgysef.CommandLine.Values.Value.Validate() -> void
+Wilgysef.CommandLine.Values.Value.Value(string! name, int startIndex, int? endIndex) -> void
+Wilgysef.CommandLine.Values.Value.ValueName.get -> string?
+Wilgysef.CommandLine.Values.Value.ValueName.set -> void
+Wilgysef.CommandLine.Values.ValueBuilder
+Wilgysef.CommandLine.Values.ValueBuilder.ValueBuilder() -> void

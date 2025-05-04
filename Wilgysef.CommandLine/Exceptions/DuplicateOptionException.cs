@@ -26,7 +26,7 @@ public class DuplicateOptionException(
     /// </summary>
     /// <param name="name">Option name.</param>
     /// <returns>Exception.</returns>
-    public static DuplicateOptionException Name(string name)
+    internal static DuplicateOptionException Name(string name)
         => new(name, name, $"The option \"{name}\" has already been declared");
 
     /// <summary>
@@ -34,7 +34,7 @@ public class DuplicateOptionException(
     /// </summary>
     /// <param name="name">Command name.</param>
     /// <returns>Exception.</returns>
-    public static DuplicateOptionException CommandName(string name)
+    internal static DuplicateOptionException CommandName(string name)
         => new(name, name, $"The command \"{name}\" has already been declared");
 
     /// <summary>
@@ -44,7 +44,7 @@ public class DuplicateOptionException(
     /// <param name="otherOptionName">Other option name.</param>
     /// <param name="shortOpt">Short option.</param>
     /// <returns>Exception.</returns>
-    public static DuplicateOptionException ShortOption(string optionName, string otherOptionName, char shortOpt)
+    internal static DuplicateOptionException ShortOption(string optionName, string otherOptionName, char shortOpt)
         => new(optionName, otherOptionName, $"The short option '{shortOpt}' in \"{otherOptionName}\" was already declared in \"{optionName}\"");
 
     /// <summary>
@@ -54,6 +54,6 @@ public class DuplicateOptionException(
     /// <param name="otherOptionName">Other option name.</param>
     /// <param name="longOpt">Long option.</param>
     /// <returns>Exception.</returns>
-    public static DuplicateOptionException LongOption(string optionName, string otherOptionName, string longOpt)
+    internal static DuplicateOptionException LongOption(string optionName, string otherOptionName, string longOpt)
         => new(optionName, otherOptionName, $"The option '{longOpt}' in \"{otherOptionName}\" was already declared in \"{optionName}\"");
 }

@@ -86,7 +86,7 @@ internal class ParserInstanceFactory<TInstance>(ArgumentParser parser)
         {
             if (prop.CanWrite && prop.GetCustomAttribute<DefaultValueAttribute>() is DefaultValueAttribute attr)
             {
-                context.SetValue(prop.Name, attr.Value);
+                context.SetDefaultValue(prop.Name, attr.Value);
             }
         }
 
@@ -170,11 +170,11 @@ internal class ParserInstanceFactory<TInstance>(ArgumentParser parser)
     {
         private readonly HashSet<string> _valueNamesSet = [];
 
-        public ArgumentToken ArgumentToken { get; private set; } = null!;
+        private ArgumentToken? ArgumentToken { get; set; } = null;
 
-        public string ValueName { get; private set; } = null!;
+        private string ValueName { get; set; } = null!;
 
-        public bool KeepFirstValue { get; private set; }
+        private bool KeepFirstValue { get; set; }
 
         public void Deserialize(ArgumentToken argToken, string valueName, bool keepFirstValue)
         {
@@ -198,34 +198,34 @@ internal class ParserInstanceFactory<TInstance>(ArgumentParser parser)
                     deserializedResult = ArgumentToken.Values;
                 }
 
-                SetValueInternal(deserializedResult);
+                SetValue(deserializedResult);
             }
             else if (option?.Switch ?? false)
             {
                 if (option.HasLongNames
                     && option.MatchesLongName(ArgumentToken.ArgumentMatch, out bool switchNegated, parser.LongNameCaseInsensitiveDefault))
                 {
-                    SetValueInternal(!switchNegated);
+                    SetValue(!switchNegated);
                 }
                 else
                 {
                     option.MatchesShortName(ArgumentToken.ArgumentMatch[0], out bool shortSwitchNegated);
-                    SetValueInternal(!shortSwitchNegated);
+                    SetValue(!shortSwitchNegated);
                 }
             }
             else if (option?.Counter ?? false)
             {
                 var propValue = (int?)instanceValueHandler.GetValue(instance, ValueName) ?? 0;
-                SetValueInternal(propValue + 1);
+                SetValue(propValue + 1);
             }
             else if (instanceValueType == typeof(bool) || instanceValueType == typeof(bool?))
             {
                 // if option is none of the above but is a bool, assume it is a switch
-                SetValueInternal(true);
+                SetValue(true);
             }
         }
 
-        public void SetValue(string valueName, object? value)
+        internal void SetDefaultValue(string valueName, object? value)
         {
             ArgumentToken = null;
             ValueName = valueName;
@@ -234,14 +234,14 @@ internal class ParserInstanceFactory<TInstance>(ArgumentParser parser)
             SetValueInternal(ValueName, value);
         }
 
-        private void SetValueInternal(object? value)
+        private void SetValue(object? value)
         {
             foreach (var valueAggregate in valueAggregators)
             {
                 if (valueAggregate.MatchesInstanceType(typeof(TInstance))
                     && valueAggregate.SetValue(new ArgumentValueAggregatorContext(
                         instance,
-                        ArgumentToken,
+                        ArgumentToken!,
                         instanceValueHandler,
                         ValueName,
                         value,
@@ -325,7 +325,7 @@ internal class ParserInstanceFactory<TInstance>(ArgumentParser parser)
             {
                 if (deserializer.Deserialize(
                     new ArgumentValueListDeserializerStrategyContext(
-                        ArgumentToken,
+                        ArgumentToken!,
                         type,
                         values,
                         ValueName,
@@ -742,6 +742,15 @@ internal class ParserInstanceFactory<TInstance>(ArgumentParser parser)
             => Error($"The type '{expected.Name}' was expected for {ValueName}, but received '{actual?.Name ?? "null"}'");
 
         private InvalidArgumentValueDeserializationException Error(string message, Exception? innerException = null)
-            => new(ArgumentToken, message, innerException);
+        {
+            if (ArgumentToken != null)
+            {
+                return new(ArgumentToken, message, innerException);
+            }
+            else
+            {
+                return new(message, innerException);
+            }
+        }
     }
 }

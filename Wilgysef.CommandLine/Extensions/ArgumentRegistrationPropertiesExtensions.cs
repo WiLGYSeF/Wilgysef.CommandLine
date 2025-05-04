@@ -95,13 +95,28 @@ public static class ArgumentRegistrationPropertiesExtensions
     /// <param name="registration">Registration.</param>
     /// <param name="name">Command name.</param>
     /// <param name="action">Command execution action.</param>
+    /// <returns><paramref name="registration"/>.</returns>
+    public static IArgumentRegistrationProperties AddCommand<T>(
+        this IArgumentRegistrationProperties registration,
+        string name,
+        Func<ICommandExecutionContext, T, Task> action)
+        where T : class
+        => AddCommand(registration, name, action, null);
+
+    /// <summary>
+    /// Configures <paramref name="registration"/> with a new command.
+    /// </summary>
+    /// <typeparam name="T">Command options type.</typeparam>
+    /// <param name="registration">Registration.</param>
+    /// <param name="name">Command name.</param>
+    /// <param name="action">Command execution action.</param>
     /// <param name="configure">Command configuration.</param>
     /// <returns><paramref name="registration"/>.</returns>
     public static IArgumentRegistrationProperties AddCommand<T>(
         this IArgumentRegistrationProperties registration,
         string name,
         Func<ICommandExecutionContext, T, Task> action,
-        Action<ICommandConfiguration>? configure = null)
+        Action<ICommandConfiguration>? configure)
         where T : class
     {
         var command = new AsyncDelegateCommand<T>(name, action);
@@ -118,13 +133,28 @@ public static class ArgumentRegistrationPropertiesExtensions
     /// <param name="registration">Registration.</param>
     /// <param name="name">Command name.</param>
     /// <param name="action">Command execution action.</param>
+    /// <returns><paramref name="registration"/>.</returns>
+    public static IArgumentRegistrationProperties AddCommand<T>(
+        this IArgumentRegistrationProperties registration,
+        string name,
+        Action<ICommandExecutionContext, T> action)
+        where T : class
+        => AddCommand(registration, name, action, null);
+
+    /// <summary>
+    /// Configures <paramref name="registration"/> with a new command.
+    /// </summary>
+    /// <typeparam name="T">Command options type.</typeparam>
+    /// <param name="registration">Registration.</param>
+    /// <param name="name">Command name.</param>
+    /// <param name="action">Command execution action.</param>
     /// <param name="configure">Command configuration.</param>
     /// <returns><paramref name="registration"/>.</returns>
     public static IArgumentRegistrationProperties AddCommand<T>(
         this IArgumentRegistrationProperties registration,
         string name,
         Action<ICommandExecutionContext, T> action,
-        Action<ICommandConfiguration>? configure = null)
+        Action<ICommandConfiguration>? configure)
         where T : class
     {
         var command = new DelegateCommand<T>(name, action);
@@ -140,13 +170,26 @@ public static class ArgumentRegistrationPropertiesExtensions
     /// <param name="registration">Registration.</param>
     /// <param name="name">Command name.</param>
     /// <param name="action">Command execution action.</param>
+    /// <returns><paramref name="registration"/>.</returns>
+    public static IArgumentRegistrationProperties AddCommand(
+        this IArgumentRegistrationProperties registration,
+        string name,
+        Func<ICommandExecutionContext, Task> action)
+        => AddCommand(registration, name, action, null);
+
+    /// <summary>
+    /// Configures <paramref name="registration"/> with a new command.
+    /// </summary>
+    /// <param name="registration">Registration.</param>
+    /// <param name="name">Command name.</param>
+    /// <param name="action">Command execution action.</param>
     /// <param name="configure">Command configuration.</param>
     /// <returns><paramref name="registration"/>.</returns>
     public static IArgumentRegistrationProperties AddCommand(
         this IArgumentRegistrationProperties registration,
         string name,
         Func<ICommandExecutionContext, Task> action,
-        Action<ICommandConfiguration>? configure = null)
+        Action<ICommandConfiguration>? configure)
     {
         var command = new AsyncDelegateCommand(name, action);
         configure?.Invoke(command);
@@ -161,13 +204,26 @@ public static class ArgumentRegistrationPropertiesExtensions
     /// <param name="registration">Registration.</param>
     /// <param name="name">Command name.</param>
     /// <param name="action">Command execution action.</param>
+    /// <returns><paramref name="registration"/>.</returns>
+    public static IArgumentRegistrationProperties AddCommand(
+        this IArgumentRegistrationProperties registration,
+        string name,
+        Action<ICommandExecutionContext> action)
+        => AddCommand(registration, name, action, null);
+
+    /// <summary>
+    /// Configures <paramref name="registration"/> with a new command.
+    /// </summary>
+    /// <param name="registration">Registration.</param>
+    /// <param name="name">Command name.</param>
+    /// <param name="action">Command execution action.</param>
     /// <param name="configure">Command configuration.</param>
     /// <returns><paramref name="registration"/>.</returns>
     public static IArgumentRegistrationProperties AddCommand(
         this IArgumentRegistrationProperties registration,
         string name,
         Action<ICommandExecutionContext> action,
-        Action<ICommandConfiguration>? configure = null)
+        Action<ICommandConfiguration>? configure)
     {
         var command = new DelegateCommand(name, action);
         configure?.Invoke(command);

@@ -203,6 +203,45 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
     /// </summary>
     /// <typeparam name="TInstance">Option nstance type.</typeparam>
     /// <param name="args">Arguments.</param>
+    /// <returns>Option instance.</returns>
+    /// <exception cref="ArgumentParseException">Thrown if multiple argument groups were parsed instead of just one.</exception>
+    public TInstance ParseTo<TInstance>(IEnumerable<string> args)
+        where TInstance : class
+        => ParseTo<TInstance>(args, null, null, null);
+
+    /// <summary>
+    /// Parses arguments into an <typeparamref name="TInstance"/> option instance.
+    /// </summary>
+    /// <typeparam name="TInstance">Option nstance type.</typeparam>
+    /// <param name="args">Arguments.</param>
+    /// <param name="factory">Option instance factory.</param>
+    /// <returns>Option instance.</returns>
+    /// <exception cref="ArgumentParseException">Thrown if multiple argument groups were parsed instead of just one.</exception>
+    public TInstance ParseTo<TInstance>(IEnumerable<string> args, Func<TInstance>? factory)
+        where TInstance : class
+        => ParseTo(args, factory, null, null);
+
+    /// <summary>
+    /// Parses arguments into an <typeparamref name="TInstance"/> option instance.
+    /// </summary>
+    /// <typeparam name="TInstance">Option nstance type.</typeparam>
+    /// <param name="args">Arguments.</param>
+    /// <param name="factory">Option instance factory.</param>
+    /// <param name="valueAggregators">Option instance value aggregators.</param>
+    /// <returns>Option instance.</returns>
+    /// <exception cref="ArgumentParseException">Thrown if multiple argument groups were parsed instead of just one.</exception>
+    public TInstance ParseTo<TInstance>(
+        IEnumerable<string> args,
+        Func<TInstance>? factory,
+        ICollection<IArgumentValueAggregator<TInstance>>? valueAggregators)
+        where TInstance : class
+        => ParseTo(args, factory, valueAggregators, null);
+
+    /// <summary>
+    /// Parses arguments into an <typeparamref name="TInstance"/> option instance.
+    /// </summary>
+    /// <typeparam name="TInstance">Option nstance type.</typeparam>
+    /// <param name="args">Arguments.</param>
     /// <param name="factory">Option instance factory.</param>
     /// <param name="valueAggregators">Option instance value aggregators.</param>
     /// <param name="instanceValueHandler">Option instance value handler.</param>
@@ -210,9 +249,9 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
     /// <exception cref="ArgumentParseException">Thrown if multiple argument groups were parsed instead of just one.</exception>
     public TInstance ParseTo<TInstance>(
         IEnumerable<string> args,
-        Func<TInstance>? factory = null,
-        ICollection<IArgumentValueAggregator<TInstance>>? valueAggregators = null,
-        IInstanceValueHandler<TInstance>? instanceValueHandler = null)
+        Func<TInstance>? factory,
+        ICollection<IArgumentValueAggregator<TInstance>>? valueAggregators,
+        IInstanceValueHandler<TInstance>? instanceValueHandler)
         where TInstance : class
     {
         var result = Tokenize(args);
@@ -247,20 +286,97 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
     /// </summary>
     /// <typeparam name="TInstance">Option instance type.</typeparam>
     /// <param name="argTokens">Argument tokens.</param>
+    /// <returns>Option instance.</returns>
+    public TInstance ParseTo<TInstance>(IEnumerable<ArgumentToken> argTokens)
+        where TInstance : class
+        => ParseTo<TInstance>(argTokens, null, null, null);
+
+    /// <summary>
+    /// Parses arguments into an <typeparamref name="TInstance"/> option instance.
+    /// </summary>
+    /// <typeparam name="TInstance">Option instance type.</typeparam>
+    /// <param name="argTokens">Argument tokens.</param>
+    /// <param name="factory">Option instance factory.</param>
+    /// <returns>Option instance.</returns>
+    public TInstance ParseTo<TInstance>(IEnumerable<ArgumentToken> argTokens, Func<TInstance>? factory)
+        where TInstance : class
+        => ParseTo(argTokens, factory, null, null);
+
+    /// <summary>
+    /// Parses arguments into an <typeparamref name="TInstance"/> option instance.
+    /// </summary>
+    /// <typeparam name="TInstance">Option instance type.</typeparam>
+    /// <param name="argTokens">Argument tokens.</param>
+    /// <param name="factory">Option instance factory.</param>
+    /// <param name="valueAggregators">Option instance value aggregators.</param>
+    /// <returns>Option instance.</returns>
+    public TInstance ParseTo<TInstance>(
+        IEnumerable<ArgumentToken> argTokens,
+        Func<TInstance>? factory,
+        ICollection<IArgumentValueAggregator<TInstance>>? valueAggregators)
+        where TInstance : class
+        => ParseTo(argTokens, factory, valueAggregators, null);
+
+    /// <summary>
+    /// Parses arguments into an <typeparamref name="TInstance"/> option instance.
+    /// </summary>
+    /// <typeparam name="TInstance">Option instance type.</typeparam>
+    /// <param name="argTokens">Argument tokens.</param>
     /// <param name="factory">Option instance factory.</param>
     /// <param name="valueAggregators">Option instance value aggregators.</param>
     /// <param name="instanceValueHandler">Option instance value handler.</param>
     /// <returns>Option instance.</returns>
     public TInstance ParseTo<TInstance>(
         IEnumerable<ArgumentToken> argTokens,
-        Func<TInstance>? factory = null,
-        ICollection<IArgumentValueAggregator<TInstance>>? valueAggregators = null,
-        IInstanceValueHandler<TInstance>? instanceValueHandler = null)
+        Func<TInstance>? factory,
+        ICollection<IArgumentValueAggregator<TInstance>>? valueAggregators,
+        IInstanceValueHandler<TInstance>? instanceValueHandler)
         where TInstance : class
     {
         return CreateRootParserInstanceFactory<TInstance>(valueAggregators, instanceValueHandler)
             .Parse(argTokens, factory);
     }
+
+    /// <summary>
+    /// Parses arguments into option instances.
+    /// </summary>
+    /// <typeparam name="TRootInstance">Option instance type of the first argument group (root instance).</typeparam>
+    /// <param name="tokenizedArgs">Tokenized arguments.</param>
+    /// <returns>Option instances.</returns>
+    /// <exception cref="ArgumentException">Thrown if <paramref name="tokenizedArgs"/> is invalid.</exception>
+    public IReadOnlyList<object?> ParseTo<TRootInstance>(TokenizedArguments tokenizedArgs)
+        where TRootInstance : class
+        => ParseTo<TRootInstance>(tokenizedArgs, null, null, null);
+
+    /// <summary>
+    /// Parses arguments into option instances.
+    /// </summary>
+    /// <typeparam name="TRootInstance">Option instance type of the first argument group (root instance).</typeparam>
+    /// <param name="tokenizedArgs">Tokenized arguments.</param>
+    /// <param name="rootFactory">Root option instance factory.</param>
+    /// <returns>Option instances.</returns>
+    /// <exception cref="ArgumentException">Thrown if <paramref name="tokenizedArgs"/> is invalid.</exception>
+    public IReadOnlyList<object?> ParseTo<TRootInstance>(
+        TokenizedArguments tokenizedArgs,
+        Func<TRootInstance>? rootFactory)
+        where TRootInstance : class
+        => ParseTo(tokenizedArgs, rootFactory, null, null);
+
+    /// <summary>
+    /// Parses arguments into option instances.
+    /// </summary>
+    /// <typeparam name="TRootInstance">Option instance type of the first argument group (root instance).</typeparam>
+    /// <param name="tokenizedArgs">Tokenized arguments.</param>
+    /// <param name="rootFactory">Root option instance factory.</param>
+    /// <param name="rootValueAggregators">Root option instance value aggregators.</param>
+    /// <returns>Option instances.</returns>
+    /// <exception cref="ArgumentException">Thrown if <paramref name="tokenizedArgs"/> is invalid.</exception>
+    public IReadOnlyList<object?> ParseTo<TRootInstance>(
+        TokenizedArguments tokenizedArgs,
+        Func<TRootInstance>? rootFactory,
+        ICollection<IArgumentValueAggregator<TRootInstance>>? rootValueAggregators)
+        where TRootInstance : class
+        => ParseTo(tokenizedArgs, rootFactory, rootValueAggregators, null);
 
     /// <summary>
     /// Parses arguments into option instances.
@@ -274,9 +390,9 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
     /// <exception cref="ArgumentException">Thrown if <paramref name="tokenizedArgs"/> is invalid.</exception>
     public IReadOnlyList<object?> ParseTo<TRootInstance>(
         TokenizedArguments tokenizedArgs,
-        Func<TRootInstance>? rootFactory = null,
-        ICollection<IArgumentValueAggregator<TRootInstance>>? rootValueAggregators = null,
-        IInstanceValueHandler<TRootInstance>? rootInstanceValueHandler = null)
+        Func<TRootInstance>? rootFactory,
+        ICollection<IArgumentValueAggregator<TRootInstance>>? rootValueAggregators,
+        IInstanceValueHandler<TRootInstance>? rootInstanceValueHandler)
         where TRootInstance : class
     {
         var instances = new List<object?>();
@@ -404,13 +520,28 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
     /// <param name="tokenizedArgs">Tokenized arguments.</param>
     /// <param name="instances">Argument group instances.</param>
     /// <param name="rootHandler">Root option instance handler.</param>
+    /// <returns>Exit code from executed commands.</returns>
+    public int Execute<TRootInstance>(
+        TokenizedArguments tokenizedArgs,
+        IReadOnlyList<object?> instances,
+        Action<CommandExecutionContext, TRootInstance>? rootHandler)
+        where TRootInstance : class
+        => Execute(tokenizedArgs, instances, rootHandler, null);
+
+    /// <summary>
+    /// Parses arguments and executes commands.
+    /// </summary>
+    /// <typeparam name="TRootInstance">Option instance type of the first argument group (root instance).</typeparam>
+    /// <param name="tokenizedArgs">Tokenized arguments.</param>
+    /// <param name="instances">Argument group instances.</param>
+    /// <param name="rootHandler">Root option instance handler.</param>
     /// <param name="args">Arguments.</param>
     /// <returns>Exit code from executed commands.</returns>
     public int Execute<TRootInstance>(
         TokenizedArguments tokenizedArgs,
         IReadOnlyList<object?> instances,
         Action<CommandExecutionContext, TRootInstance>? rootHandler,
-        IEnumerable<string>? args = null)
+        IEnumerable<string>? args)
         where TRootInstance : class
     {
         using var tokenSource = new CancellationTokenSource();
@@ -480,12 +611,67 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
     /// Parses arguments and executes commands.
     /// </summary>
     /// <param name="args">Arguments.</param>
+    /// <returns>Exit code from executed commands.</returns>
+    public Task<int> ExecuteAsync(IEnumerable<string> args)
+        => ExecuteAsync<object>(args, null, default);
+
+    /// <summary>
+    /// Parses arguments and executes commands.
+    /// </summary>
+    /// <param name="args">Arguments.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Exit code from executed commands.</returns>
-    public Task<int> ExecuteAsync(
-        IEnumerable<string> args,
-        CancellationToken cancellationToken = default)
+    public Task<int> ExecuteAsync(IEnumerable<string> args, CancellationToken cancellationToken)
         => ExecuteAsync<object>(args, null, cancellationToken: cancellationToken);
+
+    /// <summary>
+    /// Parses arguments and executes commands.
+    /// </summary>
+    /// <typeparam name="TRootInstance">Option instance type of the first argument group (root instance).</typeparam>
+    /// <param name="tokenizedArgs">Tokenized arguments.</param>
+    /// <param name="instances">Argument group instances.</param>
+    /// <param name="rootHandler">Root option instance handler.</param>
+    /// <returns>Exit code from executed commands.</returns>
+    public Task<int> ExecuteAsync<TRootInstance>(
+        TokenizedArguments tokenizedArgs,
+        IReadOnlyList<object?> instances,
+        Func<CommandExecutionContext, TRootInstance, Task>? rootHandler)
+        where TRootInstance : class
+        => ExecuteAsync(tokenizedArgs, instances, rootHandler, null, default);
+
+    /// <summary>
+    /// Parses arguments and executes commands.
+    /// </summary>
+    /// <typeparam name="TRootInstance">Option instance type of the first argument group (root instance).</typeparam>
+    /// <param name="tokenizedArgs">Tokenized arguments.</param>
+    /// <param name="instances">Argument group instances.</param>
+    /// <param name="rootHandler">Root option instance handler.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Exit code from executed commands.</returns>
+    public Task<int> ExecuteAsync<TRootInstance>(
+        TokenizedArguments tokenizedArgs,
+        IReadOnlyList<object?> instances,
+        Func<CommandExecutionContext, TRootInstance, Task>? rootHandler,
+        CancellationToken cancellationToken)
+        where TRootInstance : class
+        => ExecuteAsync(tokenizedArgs, instances, rootHandler, null, cancellationToken);
+
+    /// <summary>
+    /// Parses arguments and executes commands.
+    /// </summary>
+    /// <typeparam name="TRootInstance">Option instance type of the first argument group (root instance).</typeparam>
+    /// <param name="tokenizedArgs">Tokenized arguments.</param>
+    /// <param name="instances">Argument group instances.</param>
+    /// <param name="rootHandler">Root option instance handler.</param>
+    /// <param name="args">Arguments.</param>
+    /// <returns>Exit code from executed commands.</returns>
+    public Task<int> ExecuteAsync<TRootInstance>(
+        TokenizedArguments tokenizedArgs,
+        IReadOnlyList<object?> instances,
+        Func<CommandExecutionContext, TRootInstance, Task>? rootHandler,
+        IEnumerable<string>? args)
+        where TRootInstance : class
+        => ExecuteAsync(tokenizedArgs, instances, rootHandler, args, default);
 
     /// <summary>
     /// Parses arguments and executes commands.
@@ -501,8 +687,8 @@ public class ArgumentParser : IArgumentRegistrationProperties, IDeserializationO
         TokenizedArguments tokenizedArgs,
         IReadOnlyList<object?> instances,
         Func<CommandExecutionContext, TRootInstance, Task>? rootHandler,
-        IEnumerable<string>? args = null,
-        CancellationToken cancellationToken = default)
+        IEnumerable<string>? args,
+        CancellationToken cancellationToken)
         where TRootInstance : class
     {
         using var tokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);

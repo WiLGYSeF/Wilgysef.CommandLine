@@ -53,7 +53,7 @@ public class OptionGroupOptionMismatchException(
     /// </summary>
     /// <param name="option">Option.</param>
     /// <returns><see cref="OptionGroupOptionMismatchException"/>.</returns>
-    public static OptionGroupOptionMismatchException RequiredOptionMissing(IOption option)
+    internal static OptionGroupOptionMismatchException RequiredOptionMissing(IOption option)
     {
         var message = $"The option \"{option.GetOptionArgument()}\" is required";
         return new OptionGroupOptionMismatchException(null, [option], Array.Empty<ArgumentToken>(), message)
@@ -68,7 +68,7 @@ public class OptionGroupOptionMismatchException(
     /// <param name="group">Option group.</param>
     /// <param name="options">Options in option group.</param>
     /// <returns><see cref="OptionGroupOptionMismatchException"/>.</returns>
-    public static OptionGroupOptionMismatchException RequiredOptionMissing(
+    internal static OptionGroupOptionMismatchException RequiredOptionMissing(
         IOptionGroup group,
         ICollection<IOption> options)
     {
@@ -86,7 +86,7 @@ public class OptionGroupOptionMismatchException(
     /// <param name="options">Options in option group.</param>
     /// <param name="argTokens">Argument tokens of options.</param>
     /// <returns><see cref="OptionGroupOptionMismatchException"/>.</returns>
-    public static OptionGroupOptionMismatchException MutuallyExclusiveOption(
+    internal static OptionGroupOptionMismatchException MutuallyExclusiveOption(
         IOptionGroup group,
         ICollection<IOption> options,
         ICollection<ArgumentToken> argTokens)
@@ -108,7 +108,7 @@ public class OptionGroupOptionMismatchException(
     /// <param name="options">Options in option group.</param>
     /// <param name="argTokens">Argument tokens of options.</param>
     /// <returns><see cref="OptionGroupOptionMismatchException"/>.</returns>
-    public static OptionGroupOptionMismatchException OptionMismatch(
+    internal static OptionGroupOptionMismatchException OptionMismatch(
         IOptionGroup group,
         ICollection<IOption> options,
         ICollection<ArgumentToken> argTokens)
