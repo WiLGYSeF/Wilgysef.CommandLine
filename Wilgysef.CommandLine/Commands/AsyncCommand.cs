@@ -1,4 +1,6 @@
-﻿namespace Wilgysef.CommandLine.Commands;
+﻿using Wilgysef.CommandLine.Extensions;
+
+namespace Wilgysef.CommandLine.Commands;
 
 /// <summary>
 /// Asynchronous command.
@@ -7,6 +9,22 @@
 public abstract class AsyncCommand<T> : AsyncCommand, IAsyncCommand<T>, ICommand<T>
     where T : class
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AsyncCommand"/> class.
+    /// </summary>
+    protected AsyncCommand()
+    {
+        if (AddOptionsValues)
+        {
+            this.WithOptionsValuesFrom<T>();
+        }
+    }
+
+    /// <summary>
+    /// Indicates if the options and values attributes should be added from <typeparamref name="T"/>.
+    /// </summary>
+    protected virtual bool AddOptionsValues => true;
+
     /// <inheritdoc/>
     public virtual T OptionsFactory()
     {

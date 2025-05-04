@@ -1,4 +1,5 @@
-﻿using Wilgysef.CommandLine.Options;
+﻿using Wilgysef.CommandLine.Extensions;
+using Wilgysef.CommandLine.Options;
 using Wilgysef.CommandLine.Parsers;
 using Wilgysef.CommandLine.Parsers.ArgumentDeserializerStrategies;
 using Wilgysef.CommandLine.Parsers.InstanceValueHandlers;
@@ -13,6 +14,22 @@ namespace Wilgysef.CommandLine.Commands;
 public abstract class Command<T> : Command, ICommand<T>
     where T : class
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Command"/> class.
+    /// </summary>
+    protected Command()
+    {
+        if (AddOptionsValues)
+        {
+            this.WithOptionsValuesFrom<T>();
+        }
+    }
+
+    /// <summary>
+    /// Indicates if the options and values attributes should be added from <typeparamref name="T"/>.
+    /// </summary>
+    protected virtual bool AddOptionsValues => true;
+
     /// <inheritdoc/>
     public virtual T OptionsFactory()
     {

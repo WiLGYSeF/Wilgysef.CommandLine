@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Wilgysef.CommandLine.Attributes;
 using Wilgysef.CommandLine.Commands;
 using Wilgysef.CommandLine.Exceptions;
 using Wilgysef.CommandLine.Extensions;
@@ -408,7 +409,7 @@ public class ExecuteTest
     [Fact]
     public async Task ExecuteAsync_Error()
     {
-        string[] args = ["abc", "-a"];
+        string[] args = ["abc", "-b"];
 
         var parser = new ArgumentParser();
         parser.AddCommand<ExecuteTestOptions>("abc", (context, options) => { });
@@ -421,7 +422,7 @@ public class ExecuteTest
     [Fact]
     public void Execute_Error()
     {
-        string[] args = ["abc", "-a"];
+        string[] args = ["abc", "-b"];
 
         var parser = new ArgumentParser();
         parser.AddCommand<ExecuteTestOptions>("abc", (context, options) => { });
@@ -558,11 +559,6 @@ public class ExecuteTest
         public ExecuteAsyncTestCommand(Action<ICommandExecutionContext, ExecuteTestOptions> executeCallback)
         {
             _executeCallback = executeCallback;
-
-            Options =
-            [
-                Option.ShortOptionSwitch("ShortOptA", 'a'),
-            ];
         }
 
         public override string Name => "abc";
@@ -576,6 +572,8 @@ public class ExecuteTest
 
     private class ExecuteTestOptions
     {
+        [Option]
+        [ShortName('a')]
         public bool ShortOptA { get; set; }
     }
 

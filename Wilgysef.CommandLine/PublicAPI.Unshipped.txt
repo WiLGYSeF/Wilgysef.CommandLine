@@ -122,9 +122,11 @@ static Wilgysef.CommandLine.Values.Value.Single(string! name, int index) -> Wilg
 static Wilgysef.CommandLine.Values.Value.StartingAt(string! name, int index) -> Wilgysef.CommandLine.Values.Value!
 static Wilgysef.CommandLine.Values.ValueBuilder.BuildValues(System.Type! type) -> System.Collections.Generic.List<Wilgysef.CommandLine.Values.Value!>!
 static Wilgysef.CommandLine.Values.ValueBuilder.BuildValues<T>() -> System.Collections.Generic.List<Wilgysef.CommandLine.Values.Value!>!
+virtual Wilgysef.CommandLine.Commands.AsyncCommand<T>.AddOptionsValues.get -> bool
 virtual Wilgysef.CommandLine.Commands.AsyncCommand<T>.Execute(Wilgysef.CommandLine.Commands.ICommandExecutionContext! context, T! options) -> void
 virtual Wilgysef.CommandLine.Commands.AsyncCommand<T>.OptionsFactory() -> T!
 virtual Wilgysef.CommandLine.Commands.Command.Matches(string! arg) -> bool
+virtual Wilgysef.CommandLine.Commands.Command<T>.AddOptionsValues.get -> bool
 virtual Wilgysef.CommandLine.Commands.Command<T>.OptionsFactory() -> T!
 virtual Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.GetCommandDescription(Wilgysef.CommandLine.Commands.ICommandConfiguration! command) -> string!
 virtual Wilgysef.CommandLine.HelpMenus.HelpMenuProvider.GetCommandName(Wilgysef.CommandLine.Commands.ICommandConfiguration! command) -> string!
